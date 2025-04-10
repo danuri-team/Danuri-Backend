@@ -15,6 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
   datasource:
     url: ${DB_URL}
@@ -38,8 +39,8 @@ spring:
       ddl-auto: update
     show-sql: true
 
-ACCESS_EXPIRE_TIME: 26297460000 #10?
-REFRESH_EXPIRE_TIME: 315569520000 #10?
+ACCESS_EXPIRE_TIME: 26297460000 #10달
+REFRESH_EXPIRE_TIME: 315569520000 #10년
 
 ---
 spring:
@@ -50,5 +51,5 @@ spring:
     hibernate:
       ddl-auto: validate
 
-ACCESS_EXPIRE_TIME: 1800000 # 30?
-REFRESH_EXPIRE_TIME: 8640000000 # 100?
+ACCESS_EXPIRE_TIME: 1800000 # 30분
+REFRESH_EXPIRE_TIME: 8640000000 # 100분
