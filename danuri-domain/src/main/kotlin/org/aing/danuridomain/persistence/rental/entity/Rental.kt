@@ -1,4 +1,4 @@
-package org.aing.danuridomain.persistence.admin.entity
+package org.aing.danuridomain.persistence.rental.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -7,30 +7,31 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToOne
 import org.aing.danuridomain.persistence.company.entity.Company
-import org.hibernate.annotations.UpdateTimestamp
-import org.springframework.data.annotation.CreatedDate
+import org.aing.danuridomain.persistence.item.entity.Item
+import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-data class Admin(
+data class Rental(
     @Id
     @GeneratedValue
     val id: UUID? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company,
-    @Column(nullable = false, length = 10)
-    val name: String,
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    val item: Item,
+    @OneToOne
+    @JoinColumn(name = "usage_id")
+    val usage: UsageHistory,
     @Column(nullable = false)
-    val email: String,
+    val borrowedAt: LocalDateTime,
+    @Column
+    val returnedAt: LocalDateTime? = null,
     @Column(nullable = false)
-    val phone: String,
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    val createdAt: LocalDateTime,
-    @UpdateTimestamp
-    @Column(nullable = false)
-    val updatedAt: LocalDateTime,
+    val isReturned: Boolean,
 )
