@@ -7,4 +7,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @Configuration
 @EnableJpaRepositories(basePackages = ["org.aing.danuridomain.persistence"])
 @EntityScan(basePackages = ["org.aing.danuridomain.persistence"])
-public class JpaConfiguration
+class JpaConfiguration
