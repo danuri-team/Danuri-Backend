@@ -10,7 +10,8 @@ class GetAvailableSpaceUsecase(
     private val spaceRepository: SpaceRepository,
 ) {
     fun execute(companyId: UUID): List<Space> =
-        spaceRepository.getAvailableSpace(
-            companyId = companyId,
-        )
+        spaceRepository
+            .getAvailableSpace(
+                companyId = companyId,
+            )
 }
