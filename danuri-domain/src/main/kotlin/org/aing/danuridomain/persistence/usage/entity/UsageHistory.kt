@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToOne
 import org.aing.danuridomain.persistence.space.entity.Space
 import org.aing.danuridomain.persistence.user.entity.User
 import java.time.LocalDateTime
@@ -20,7 +19,7 @@ data class UsageHistory(
     @ManyToOne
     @JoinColumn(name = "user_id")
     val user: User,
-    @OneToOne(mappedBy = "usage")
+    @ManyToOne
     @JoinColumn(name = "space_id")
     val space: Space,
     @Column(name = "start_at")
