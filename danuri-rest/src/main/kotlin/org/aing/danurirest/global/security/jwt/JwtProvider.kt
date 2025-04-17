@@ -13,10 +13,13 @@ import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.global.security.serivce.AuthDetailService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
+import java.util.Base64
+import java.util.Date
+import java.util.UUID
 
 class JwtProvider(
     @Value("\${jwt.access-token-key}")
@@ -35,10 +38,10 @@ class JwtProvider(
 
         val userDetails = authDetailsService.loadUserByUsername(UUID.fromString(payload.subject))
 
-        return UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+        return UsernamePasswordAuthenticationToken(userDetails, null, mutableListOf(SimpleGrantedAuthority(userDetails.role.toString())))
     }
 
-    fun resolveToken(token: String?): String? =
+    private fun resolveToken(token: String?): String? =
         if (token == null || !token.startsWith("Bearer ")) {
             null
         } else {
@@ -47,7 +50,7 @@ class JwtProvider(
 
     fun getIdByRefreshToken(refreshToken: String): String = getPayload(refreshToken, TokenType.REFRESH_TOKEN).subject
 
-    fun getPayload(
+    private fun getPayload(
         token: String?,
         tokenType: TokenType,
     ): Claims {
