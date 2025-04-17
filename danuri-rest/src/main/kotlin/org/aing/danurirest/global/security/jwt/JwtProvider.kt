@@ -14,6 +14,7 @@ import org.aing.danurirest.global.security.serivce.AuthDetailService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -21,6 +22,7 @@ import java.util.Base64
 import java.util.Date
 import java.util.UUID
 
+@Component
 class JwtProvider(
     @Value("\${jwt.access-token-key}")
     private val accessTokenKey: String,
