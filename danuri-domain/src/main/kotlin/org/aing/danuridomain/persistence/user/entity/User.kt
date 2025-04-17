@@ -44,7 +44,9 @@ data class User(
     val phone: String,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val userState: Role = Role.ROLE_USER,
+    val role: Role = Role.ROLE_USER,
+    @Column
+    val password: String? = null,
     @CreatedDate
     @Column(nullable = false, updatable = false)
     val create_at: LocalDateTime,
