@@ -6,9 +6,11 @@ import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
 
+@Service
 class CreateSpaceUsageUsecase(
     private val usageHistoryRepository: UsageHistoryRepository,
     private val spaceRepository: SpaceRepository,
