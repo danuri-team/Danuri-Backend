@@ -31,5 +31,5 @@ data class UsageHistory(
     @Column(name = "start_at", nullable = false)
     val start_at: LocalDateTime,
     @Column(name = "end_at", nullable = true)
-    val end_at: LocalDateTime? = null,
+    val end_at: LocalDateTime?,
 )
