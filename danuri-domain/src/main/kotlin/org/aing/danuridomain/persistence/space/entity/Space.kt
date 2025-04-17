@@ -2,6 +2,7 @@ package org.aing.danuridomain.persistence.space.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -17,13 +18,13 @@ data class Space(
     @Id
     @GeneratedValue
     val id: UUID? = null,
-    @OneToMany(mappedBy = "space")
+    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
     val usage: List<UsageHistory> = emptyList(),
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company,
     @Column(nullable = false)
-    val startAt: LocalTime,
+    val start_at: LocalTime,
     @Column(nullable = false)
-    val endAt: LocalTime,
+    val end_at: LocalTime,
 )

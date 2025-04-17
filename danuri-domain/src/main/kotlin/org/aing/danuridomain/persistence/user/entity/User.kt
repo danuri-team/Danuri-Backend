@@ -16,7 +16,7 @@ import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import org.aing.danuridomain.persistence.user.enum.Age
 import org.aing.danuridomain.persistence.user.enum.Sex
 import org.hibernate.annotations.UpdateTimestamp
-import org.springframework.data.annotation.CreatedBy
+import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -41,10 +41,10 @@ data class User(
     val age: Age,
     @Column(nullable = false, length = 30)
     val phone: String,
-    @CreatedBy
+    @CreatedDate
     @Column(nullable = false, updatable = false)
-    val createAt: LocalDateTime,
+    val create_at: LocalDateTime,
     @UpdateTimestamp
     @Column(nullable = false)
-    val updateAt: LocalDateTime,
+    val update_at: LocalDateTime,
 )

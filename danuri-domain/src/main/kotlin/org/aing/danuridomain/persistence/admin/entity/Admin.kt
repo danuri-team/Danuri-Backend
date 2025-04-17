@@ -29,8 +29,8 @@ data class Admin(
     val phone: String,
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    val createdAt: LocalDateTime,
+    val create_at: LocalDateTime,
     @UpdateTimestamp
     @Column(nullable = false)
-    val updatedAt: LocalDateTime,
+    val update_at: LocalDateTime,
 )

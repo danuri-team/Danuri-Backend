@@ -21,18 +21,17 @@ data class Item(
     @Id
     @GeneratedValue
     val id: UUID? = null,
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company,
-    @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    @Column(nullable = false)
+    @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL])
     val rentals: List<Rental> = emptyList(),
     @Column(nullable = false, length = 10)
     val name: String,
     @Column(nullable = false)
-    val totalQuantity: Int,
+    val total_quantity: Int,
     @Column(nullable = false)
-    val borrowedQuantity: Int,
+    val borrowed_quantity: Int,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     val status: ItemStatus,
