@@ -39,8 +39,11 @@ spring:
       ddl-auto: update
     show-sql: true
 
-ACCESS_EXPIRE_TIME: 26297460000 #10?
-REFRESH_EXPIRE_TIME: 315569520000 #10?
+jwt:
+  access-token-key: ${ACCESS_TOKEN_KEY}
+  refresh-token-key: ${REFRESH_TOKEN_KEY}
+  access-token-expires: 26297460000 # 10 month
+  refresh-token-expires: 315569520000 # 10 years
 
 ---
 spring:
@@ -51,5 +54,8 @@ spring:
     hibernate:
       ddl-auto: validate
 
-ACCESS_EXPIRE_TIME: 1800000 # 30?
-REFRESH_EXPIRE_TIME: 8640000000 # 100?
+jwt:
+  access-token-key: ${ACCESS_TOKEN_KEY}
+  refresh-token-key: ${REFRESH_TOKEN_KEY}
+  access-token-expires: 1800000 # 30 minutes
+  refresh-token-expires: 4320000000 # 1 day
