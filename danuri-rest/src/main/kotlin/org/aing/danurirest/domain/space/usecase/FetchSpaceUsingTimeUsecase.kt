@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class GetSpaceUsingTimeUsecase(
+class FetchSpaceUsingTimeUsecase(
     private val usageHistoryRepositoryImpl: UsageHistoryRepositoryImpl,
 ) {
     fun execute(spaceId: UUID): List<UsageHistory> =
