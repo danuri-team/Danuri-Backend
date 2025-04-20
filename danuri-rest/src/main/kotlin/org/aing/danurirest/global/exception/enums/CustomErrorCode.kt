@@ -18,6 +18,7 @@ enum class CustomErrorCode(
     PARAMETER_ERROR(HttpStatus.BAD_REQUEST, "유효하지 않는 구성의 파라미터 요청 값 입니다."),
 
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
+    WRONG_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다"),
 
     // 공간
     USAGE_CONFLICT_SPACE(HttpStatus.CONFLICT, "공간을 이용할 수 없습니다. 이용 가능 시간과 예약 현황을 확인해 주세요."),

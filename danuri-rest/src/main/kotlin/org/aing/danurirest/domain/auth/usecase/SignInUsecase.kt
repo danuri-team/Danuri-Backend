@@ -8,16 +8,21 @@ import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider
 import org.aing.danurirest.global.security.jwt.enum.TokenType
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class SignInUsecase(
     private val adminRepository: AdminRepository,
     private val jwtProvider: JwtProvider,
+    private val passwordEncoder: PasswordEncoder,
 ) {
     fun execute(request: SignInRequest): SignInResponse {
         val user: Admin = adminRepository.findByEmail(request.email).orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
-        // 비밀번호 검증 추가 필요
+        if (!passwordEncoder.matches(request.password, user.password)) {
+            throw CustomException(CustomErrorCode.WRONG_PASSWORD)
+        }
+
         val accessToken =
             jwtProvider.generateToken(
                 user.id!!,
