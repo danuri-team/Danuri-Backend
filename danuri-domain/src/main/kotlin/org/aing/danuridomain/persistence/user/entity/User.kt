@@ -14,12 +14,11 @@ import jakarta.persistence.OneToMany
 import org.aing.danuridomain.persistence.company.entity.Company
 import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import org.aing.danuridomain.persistence.user.enum.Age
-import org.aing.danuridomain.persistence.user.enum.Role
 import org.aing.danuridomain.persistence.user.enum.Sex
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 @Entity
 data class User(
@@ -42,11 +41,6 @@ data class User(
     val age: Age,
     @Column(nullable = false, length = 30)
     val phone: String,
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    val role: Role = Role.ROLE_USER,
-    @Column
-    val password: String? = null,
     @CreatedDate
     @Column(nullable = false, updatable = false)
     val create_at: LocalDateTime,

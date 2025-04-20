@@ -1,4 +1,4 @@
-package org.aing.danuridomain.persistence.device.entity
+package org.aing.danuridomain.persistence.admin.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -11,24 +11,23 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import org.aing.danuridomain.persistence.company.entity.Company
 import org.aing.danuridomain.persistence.user.enum.Role
-import org.springframework.data.annotation.CreatedDate
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-data class Device(
+data class Admin(
     @Id
     @GeneratedValue
     val id: UUID? = null,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     val company: Company,
+    @Column(nullable = false)
+    val email: String,
+    @Column(nullable = false)
+    val password: String,
+    @Column(nullable = false)
+    val phone: String,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val role: Role = Role.ROLE_DEVICE,
-    @CreatedDate
-    @Column(nullable = false)
-    val create_at: LocalDateTime,
-    @Column(nullable = true)
-    val end_at: LocalDateTime? = null,
+    val role: Role = Role.ROLE_ADMIN,
 )
