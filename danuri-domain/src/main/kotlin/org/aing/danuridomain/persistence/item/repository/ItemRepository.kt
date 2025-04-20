@@ -6,5 +6,6 @@ import java.util.UUID
 
 interface ItemRepository {
     fun save(admin: Item): Item
+
     fun findById(id: UUID): Optional<Item>
 }
