@@ -32,14 +32,18 @@ class SecurityConfiguration(
                 it
                     .requestMatchers(HttpMethod.GET, "/")
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/auth/refresh")
+                    .requestMatchers(HttpMethod.POST, "/admin/auth/sign-in")
                     .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/admin/auth/refresh")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/admin/auth/info")
+                    .hasAuthority(Role.ROLE_ADMIN.name)
                     .requestMatchers(HttpMethod.GET, "/actuator/prometheus")
                     .hasAuthority(Role.ROLE_ADMIN.name)
                     .requestMatchers("/admin/**")
                     .hasAuthority(Role.ROLE_ADMIN.name)
                     .anyRequest()
-                    .hasAuthority(Role.ROLE_USER.name)
+                    .hasAuthority(Role.ROLE_ADMIN.name)
             }.csrf {
                 it.disable()
             }.formLogin {

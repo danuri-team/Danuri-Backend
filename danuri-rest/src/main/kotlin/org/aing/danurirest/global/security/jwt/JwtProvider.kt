@@ -6,8 +6,10 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
+import org.aing.danuridomain.persistence.user.enum.Role
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.global.security.jwt.dto.ContextDto
 import org.aing.danurirest.global.security.jwt.dto.JwtDetails
 import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.global.security.serivce.AuthDetailService
@@ -38,9 +40,21 @@ class JwtProvider(
         val resolvedToken = resolveToken(token)
         val payload = getPayload(resolvedToken, TokenType.ACCESS_TOKEN)
 
-        val userDetails = authDetailsService.loadUserByUsername(UUID.fromString(payload.subject))
+        val userDetails =
+            when (Role.valueOf(payload["role"] as String)) {
+                Role.ROLE_ADMIN -> {
+                    ContextDto.from(authDetailsService.loadAdminByToken(UUID.fromString(payload.subject.toString())))
+                }
+                Role.ROLE_DEVICE -> {
+                    ContextDto.from(authDetailsService.loadDeviceByToken(UUID.fromString(payload.subject.toString())))
+                }
+            }
 
-        return UsernamePasswordAuthenticationToken(userDetails, null, mutableListOf(SimpleGrantedAuthority(userDetails.role.toString())))
+        return UsernamePasswordAuthenticationToken(
+            userDetails,
+            null,
+            mutableListOf(SimpleGrantedAuthority(userDetails.role.toString())),
+        )
     }
 
     private fun resolveToken(token: String?): String? =
@@ -52,7 +66,7 @@ class JwtProvider(
 
     fun getIdByRefreshToken(refreshToken: String): String = getPayload(refreshToken, TokenType.REFRESH_TOKEN).subject
 
-    private fun getPayload(
+    fun getPayload(
         token: String?,
         tokenType: TokenType,
     ): Claims {
@@ -85,6 +99,7 @@ class JwtProvider(
     fun generateToken(
         id: UUID,
         tokenType: TokenType,
+        role: Role,
     ): JwtDetails {
         val tokenExpires = if (tokenType == TokenType.ACCESS_TOKEN) accessTokenExpires else refreshTokenExpires
         val expiredAt =
@@ -104,6 +119,7 @@ class JwtProvider(
             Jwts
                 .builder()
                 .subject(id.toString())
+                .claim("role", role)
                 .signWith(signingKey)
                 .issuedAt(Date())
                 .expiration(expiredAt)
