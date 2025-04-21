@@ -8,12 +8,14 @@ import org.aing.danuridomain.persistence.user.enum.Role
 import org.aing.danurirest.domain.auth.dto.SignUpAdminRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class SignUpUsecase(
     private val adminRepository: AdminRepository,
     private val companyRepository: CompanyRepository,
+    private val passwordEncoder: PasswordEncoder,
 ) {
     fun execute(signUpAdminRequest: SignUpAdminRequest) {
         if (adminRepository.existsByEmail(signUpAdminRequest.email)) {
@@ -29,7 +31,7 @@ class SignUpUsecase(
             Admin(
                 company = company,
                 email = signUpAdminRequest.email,
-                password = signUpAdminRequest.password,
+                password = passwordEncoder.encode(signUpAdminRequest.password),
                 phone = signUpAdminRequest.phone,
                 role = Role.ROLE_ADMIN,
             ),
