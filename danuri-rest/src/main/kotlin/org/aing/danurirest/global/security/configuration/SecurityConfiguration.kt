@@ -32,16 +32,26 @@ class SecurityConfiguration(
                 it
                     .requestMatchers(HttpMethod.GET, "/")
                     .permitAll()
+                    // 관리자
                     .requestMatchers(HttpMethod.POST, "/admin/auth/sign-in")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/admin/auth/sign-up")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/admin/auth/refresh")
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/admin/auth/info")
                     .hasAuthority(Role.ROLE_ADMIN.name)
+                    // 공간 디바이스
+                    .requestMatchers(HttpMethod.POST, "/space/")
+                    .hasAuthority(Role.ROLE_DEVICE.name)
+                    .requestMatchers(HttpMethod.GET, "/space/")
+                    .hasAuthority(Role.ROLE_DEVICE.name)
+                    .requestMatchers(HttpMethod.GET, "/space/in-use/")
+                    .hasAuthority(Role.ROLE_DEVICE.name)
+                    // 모니터링
                     .requestMatchers(HttpMethod.GET, "/actuator/prometheus")
                     .hasAuthority(Role.ROLE_ADMIN.name)
-                    .requestMatchers("/admin/**")
-                    .hasAuthority(Role.ROLE_ADMIN.name)
+                    // 기타 요청
                     .anyRequest()
                     .hasAuthority(Role.ROLE_ADMIN.name)
             }.csrf {
