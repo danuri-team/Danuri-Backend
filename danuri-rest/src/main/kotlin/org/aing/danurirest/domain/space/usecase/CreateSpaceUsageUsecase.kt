@@ -4,8 +4,11 @@ import org.aing.danuridomain.persistence.space.entity.Space
 import org.aing.danuridomain.persistence.space.repository.SpaceRepository
 import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
+import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.global.security.jwt.dto.ContextDto
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -14,6 +17,7 @@ import java.util.UUID
 class CreateSpaceUsageUsecase(
     private val usageHistoryRepository: UsageHistoryRepository,
     private val spaceRepository: SpaceRepository,
+    private val userRepository: UserRepository,
 ) {
     fun execute(spaceId: UUID): Boolean {
         val space: Space =
@@ -42,9 +46,20 @@ class CreateSpaceUsageUsecase(
             throw CustomException(CustomErrorCode.USAGE_CONFLICT_SPACE)
         }
 
+        val userContext: ContextDto =
+            SecurityContextHolder
+                .getContext()
+                .authentication.principal
+                as ContextDto
+
+        val user =
+            userRepository.findById(userContext.id!!).orElseThrow {
+                throw CustomException(CustomErrorCode.VALIDATION_ERROR)
+            }
+
         usageHistoryRepository.createSpaceUsage(
             space = space,
-            user = TODO(),
+            user = user,
         )
 
         return true

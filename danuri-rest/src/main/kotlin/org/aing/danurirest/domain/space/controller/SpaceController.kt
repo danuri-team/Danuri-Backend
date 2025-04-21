@@ -37,11 +37,11 @@ class SpaceController(
             ResponseEntity.ok(SpaceUsingInfoResponse.from(this))
         }
 
-    @PostMapping("{usageId}")
+    @PostMapping("{spaceId}")
     fun useSpace(
-        @PathVariable("usageId") usageId: UUID,
+        @PathVariable("spaceId") spaceId: UUID,
     ): ResponseEntity<IsUsingSpaceResponse> =
-        createSpaceUsageUsecase.execute(usageId).run {
+        createSpaceUsageUsecase.execute(spaceId).run {
             ResponseEntity.ok(IsUsingSpaceResponse(true))
         }
 }
