@@ -1,11 +1,13 @@
 package org.aing.danurirest.domain.auth.controller
 
 import org.aing.danurirest.domain.auth.dto.AdminInfoResponse
+import org.aing.danurirest.domain.auth.dto.RegisterDeviceRequest
 import org.aing.danurirest.domain.auth.dto.SignInRequest
 import org.aing.danurirest.domain.auth.dto.SignInResponse
 import org.aing.danurirest.domain.auth.dto.SignUpAdminRequest
 import org.aing.danurirest.domain.auth.dto.TokenRefreshRequest
 import org.aing.danurirest.domain.auth.usecase.FetchAdminInfoUsecase
+import org.aing.danurirest.domain.auth.usecase.RegisterDeviceUsecase
 import org.aing.danurirest.domain.auth.usecase.SignInUsecase
 import org.aing.danurirest.domain.auth.usecase.SignUpUsecase
 import org.aing.danurirest.domain.auth.usecase.TokenRefreshUsecase
@@ -23,6 +25,7 @@ class AuthController(
     private val refreshTokenUsecase: TokenRefreshUsecase,
     private val fetchAdminInfoUsecase: FetchAdminInfoUsecase,
     private val signUpUsecase: SignUpUsecase,
+    private val registerDeviceUsecase: RegisterDeviceUsecase,
 ) {
     @PostMapping("sign-in")
     fun signIn(
@@ -50,4 +53,12 @@ class AuthController(
 
     @GetMapping("info")
     fun getAdminInfo(): ResponseEntity<AdminInfoResponse> = fetchAdminInfoUsecase.execute().run { ResponseEntity.ok(this) }
+
+    @PostMapping("register-device")
+    fun registerDevice(
+        @RequestBody registerDeviceRequest: RegisterDeviceRequest,
+    ): ResponseEntity<Unit> =
+        registerDeviceUsecase.execute(registerDeviceRequest).run {
+            ResponseEntity.noContent().build()
+        }
 }

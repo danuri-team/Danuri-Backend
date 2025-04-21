@@ -6,4 +6,6 @@ import java.util.UUID
 
 interface DeviceRepository {
     fun findByDeviceId(deviceId: UUID): Optional<Device>
+
+    fun save(device: Device): Device
 }

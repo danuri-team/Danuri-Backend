@@ -12,4 +12,6 @@ class DeviceRepositoryImpl(
     private val deviceJpaRepository: DeviceJpaRepository,
 ) : DeviceRepository {
     override fun findByDeviceId(deviceId: UUID): Optional<Device> = deviceJpaRepository.findById(deviceId)
+
+    override fun save(device: Device): Device = deviceJpaRepository.save(device)
 }
