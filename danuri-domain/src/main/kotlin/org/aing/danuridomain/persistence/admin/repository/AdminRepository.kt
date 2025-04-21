@@ -8,4 +8,8 @@ interface AdminRepository {
     fun findByID(adminId: UUID): Optional<Admin>
 
     fun findByEmail(email: String): Optional<Admin>
+
+    fun existsByEmail(email: String): Boolean
+
+    fun save(admin: Admin): Admin
 }

@@ -14,4 +14,8 @@ class AdminRepositoryImpl(
     override fun findByID(adminId: UUID): Optional<Admin> = adminJpaRepository.findById(adminId)
 
     override fun findByEmail(email: String): Optional<Admin> = adminJpaRepository.findByEmail(email)
+
+    override fun existsByEmail(email: String): Boolean = adminJpaRepository.existsByEmail(email)
+
+    override fun save(admin: Admin): Admin = adminJpaRepository.save(admin)
 }
