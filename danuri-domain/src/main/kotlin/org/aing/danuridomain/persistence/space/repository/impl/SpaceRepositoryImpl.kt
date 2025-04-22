@@ -12,4 +12,6 @@ class SpaceRepositoryImpl(
     private val spaceJpaRepository: SpaceJpaRepository,
 ) : SpaceRepository {
     override fun findById(spaceId: UUID): Optional<Space> = spaceJpaRepository.findById(spaceId)
+
+    override fun existsById(spaceId: UUID): Boolean = spaceJpaRepository.existsById(spaceId)
 }

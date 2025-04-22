@@ -14,17 +14,19 @@ class FetchSpaceUsingInfoUsecase(
     private val usageHistoryRepository: UsageHistoryRepository,
 ) {
     fun execute(usageId: UUID): UsageHistory {
-        val user: ContextDto =
-            SecurityContextHolder
-                .getContext()
-                .authentication.principal
-                as ContextDto
-        return usageHistoryRepository
-            .spaceUsingInfo(
-                usageId = usageId,
-                userId = user.id!!,
-            ).orElseThrow {
-                throw CustomException(CustomErrorCode.NOT_FOUND)
-            }
+        val userId = getCurrentUserId()
+        return findUsageHistory(usageId, userId)
     }
+
+    private fun getCurrentUserId(): UUID {
+        val user = getCurrentUser()
+        return user.id ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
+    }
+
+    private fun getCurrentUser(): ContextDto =
+        SecurityContextHolder.getContext().authentication.principal as ContextDto
+
+    private fun findUsageHistory(usageId: UUID, userId: UUID): UsageHistory =
+        usageHistoryRepository.spaceUsingInfo(usageId, userId)
+            .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND) }
 }

@@ -6,4 +6,6 @@ import java.util.UUID
 
 interface SpaceRepository {
     fun findById(spaceId: UUID): Optional<Space>
+
+    fun existsById(spaceId: UUID): Boolean
 }

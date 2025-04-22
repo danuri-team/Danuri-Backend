@@ -14,6 +14,7 @@ enum class CustomErrorCode(
     MISSING_REQUEST_BODY(HttpStatus.BAD_REQUEST, "본문 요청이 비어있거나 잘못된 형식입니다."),
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "유효하지 않는 구성의 바디 요청 값 입니다."),
     PARAMETER_ERROR(HttpStatus.BAD_REQUEST, "유효하지 않는 구성의 파라미터 요청 값 입니다."),
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요."),
 
     // 인증 & 인가
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 토큰이 존재하지 않습니다."),
@@ -27,4 +28,5 @@ enum class CustomErrorCode(
 
     // 디바이스
     DEVICE_ALREADY_REGISTERED(HttpStatus.CONFLICT, "이미 등록 된 기기입니다."),
+    DEVICE_NOT_FOUND(HttpStatus.NOT_FOUND, "기기를 찾을 수 없습니다."),
 }

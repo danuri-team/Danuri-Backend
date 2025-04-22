@@ -1,7 +1,7 @@
-package org.aing.danurirest.domain.auth.usecase
+package org.aing.danurirest.domain.auth.admin.usecase
 
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
-import org.aing.danurirest.domain.auth.dto.AdminInfoResponse
+import org.aing.danurirest.domain.auth.admin.dto.AdminInfoResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
