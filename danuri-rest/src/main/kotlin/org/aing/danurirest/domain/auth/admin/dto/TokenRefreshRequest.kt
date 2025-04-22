@@ -1,4 +1,4 @@
-package org.aing.danurirest.domain.auth.dto
+package org.aing.danurirest.domain.auth.admin.dto
 
 import jakarta.validation.constraints.NotNull
 

@@ -1,4 +1,4 @@
-package org.aing.danurirest.domain.auth.dto
+package org.aing.danurirest.domain.auth.admin.dto
 
 import org.aing.danuridomain.persistence.admin.entity.Admin
 
