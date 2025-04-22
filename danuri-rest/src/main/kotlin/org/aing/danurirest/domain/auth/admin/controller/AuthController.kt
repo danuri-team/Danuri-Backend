@@ -1,16 +1,18 @@
-package org.aing.danurirest.domain.auth.controller
+package org.aing.danurirest.domain.auth.admin.controller
 
-import org.aing.danurirest.domain.auth.dto.AdminInfoResponse
-import org.aing.danurirest.domain.auth.dto.RegisterDeviceRequest
-import org.aing.danurirest.domain.auth.dto.SignInRequest
-import org.aing.danurirest.domain.auth.dto.SignInResponse
-import org.aing.danurirest.domain.auth.dto.SignUpAdminRequest
-import org.aing.danurirest.domain.auth.dto.TokenRefreshRequest
-import org.aing.danurirest.domain.auth.usecase.FetchAdminInfoUsecase
-import org.aing.danurirest.domain.auth.usecase.RegisterDeviceUsecase
-import org.aing.danurirest.domain.auth.usecase.SignInUsecase
-import org.aing.danurirest.domain.auth.usecase.SignUpUsecase
-import org.aing.danurirest.domain.auth.usecase.TokenRefreshUsecase
+import org.aing.danurirest.domain.auth.admin.dto.AdminInfoResponse
+import org.aing.danurirest.domain.auth.admin.dto.DeviceSignInRequest
+import org.aing.danurirest.domain.auth.admin.dto.RegisterDeviceRequest
+import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
+import org.aing.danurirest.domain.auth.admin.dto.SignInResponse
+import org.aing.danurirest.domain.auth.admin.dto.SignUpAdminRequest
+import org.aing.danurirest.domain.auth.admin.dto.TokenRefreshRequest
+import org.aing.danurirest.domain.auth.admin.usecase.DeviceSignInUsecase
+import org.aing.danurirest.domain.auth.admin.usecase.FetchAdminInfoUsecase
+import org.aing.danurirest.domain.auth.admin.usecase.RegisterDeviceUsecase
+import org.aing.danurirest.domain.auth.admin.usecase.SignInUsecase
+import org.aing.danurirest.domain.auth.admin.usecase.SignUpUsecase
+import org.aing.danurirest.domain.auth.admin.usecase.TokenRefreshUsecase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -26,6 +28,7 @@ class AuthController(
     private val fetchAdminInfoUsecase: FetchAdminInfoUsecase,
     private val signUpUsecase: SignUpUsecase,
     private val registerDeviceUsecase: RegisterDeviceUsecase,
+    private val deviceSignInUsecase: DeviceSignInUsecase,
 ) {
     @PostMapping("sign-in")
     fun signIn(
@@ -36,7 +39,7 @@ class AuthController(
         }
 
     @PostMapping("sign-up")
-    fun signIp(
+    fun signUp(
         @RequestBody signUpAdminRequest: SignUpAdminRequest,
     ): ResponseEntity<Unit> =
         signUpUsecase.execute(signUpAdminRequest).run {
@@ -60,5 +63,13 @@ class AuthController(
     ): ResponseEntity<Unit> =
         registerDeviceUsecase.execute(registerDeviceRequest).run {
             ResponseEntity.noContent().build()
+        }
+
+    @PostMapping("use-device")
+    fun useDevice(
+        @RequestBody deviceRegisterRequest: DeviceSignInRequest,
+    ): ResponseEntity<SignInResponse> =
+        deviceSignInUsecase.execute(deviceRegisterRequest).run {
+            ResponseEntity.ok(this)
         }
 }
