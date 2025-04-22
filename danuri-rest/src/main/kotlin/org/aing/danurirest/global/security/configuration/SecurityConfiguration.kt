@@ -42,11 +42,11 @@ class SecurityConfiguration(
                     .requestMatchers(HttpMethod.GET, "/admin/auth/info")
                     .hasAuthority(Role.ROLE_ADMIN.name)
                     // 공간 디바이스
-                    .requestMatchers(HttpMethod.POST, "/space/")
+                    .requestMatchers(HttpMethod.POST, "/space/**")
                     .hasAuthority(Role.ROLE_DEVICE.name)
-                    .requestMatchers(HttpMethod.GET, "/space/")
+                    .requestMatchers(HttpMethod.GET, "/space/**")
                     .hasAuthority(Role.ROLE_DEVICE.name)
-                    .requestMatchers(HttpMethod.GET, "/space/in-use/")
+                    .requestMatchers(HttpMethod.POST, "/item/**")
                     .hasAuthority(Role.ROLE_DEVICE.name)
                     // 모니터링
                     .requestMatchers(HttpMethod.GET, "/actuator/prometheus")
