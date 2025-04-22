@@ -15,3 +15,7 @@ allOpen {
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
 }
+
+tasks.getByName("bootJar") {
+    enabled = false
+}
