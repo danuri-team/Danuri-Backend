@@ -27,7 +27,7 @@ data class RentalSimpleResponse(
                 name = rental.item.name,
                 borrowedAt = rental.borrowed_at,
                 returnedAt = rental.returned_at,
-                isReturned = rental.isReturned,
+                isReturned = rental.returned_at != null,
             )
     }
 }
