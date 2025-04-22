@@ -31,8 +31,8 @@ data class Item(
     @Column(nullable = false)
     val total_quantity: Int,
     @Column(nullable = false)
-    val borrowed_quantity: Int,
+    var available_quantity: Int,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val status: ItemStatus,
+    var status: ItemStatus,
 )

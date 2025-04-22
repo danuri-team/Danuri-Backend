@@ -24,9 +24,11 @@ data class Rental(
     @JoinColumn(name = "usage_id")
     val usage: UsageHistory,
     @Column(nullable = false)
+    val quantity: Int,
+    @Column(nullable = false)
     val borrowed_at: LocalDateTime,
     @Column(nullable = true)
-    val returned_at: LocalDateTime? = null,
+    var returned_at: LocalDateTime? = null,
     @Column(nullable = false)
-    val isReturned: Boolean,
+    var returned_quantity: Int = 0,
 )

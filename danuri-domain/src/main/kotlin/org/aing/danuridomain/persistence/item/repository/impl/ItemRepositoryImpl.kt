@@ -3,8 +3,11 @@ package org.aing.danuridomain.persistence.item.repository.impl
 import org.aing.danuridomain.persistence.item.entity.Item
 import org.aing.danuridomain.persistence.item.repository.ItemJpaRepository
 import org.aing.danuridomain.persistence.item.repository.ItemRepository
-import java.util.*
+import org.springframework.stereotype.Repository
+import java.util.Optional
+import java.util.UUID
 
+@Repository
 class ItemRepositoryImpl(
     private val itemJpaRepository: ItemJpaRepository,
 ) : ItemRepository {

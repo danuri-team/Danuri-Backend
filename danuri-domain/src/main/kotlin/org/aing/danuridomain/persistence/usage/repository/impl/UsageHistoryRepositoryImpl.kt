@@ -44,4 +44,6 @@ class UsageHistoryRepositoryImpl(
                 end_at = LocalDateTime.now().plusMinutes(30),
             ),
         )
+
+    override fun findById(usageId: UUID): Optional<UsageHistory> = usageHistoryJpaRepository.findById(usageId)
 }

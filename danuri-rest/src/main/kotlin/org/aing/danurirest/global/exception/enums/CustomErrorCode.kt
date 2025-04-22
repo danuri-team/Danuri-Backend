@@ -25,6 +25,14 @@ enum class CustomErrorCode(
 
     // 공간
     USAGE_CONFLICT_SPACE(HttpStatus.CONFLICT, "공간을 이용할 수 없습니다. 이용 가능 시간과 예약 현황을 확인해 주세요."),
+    NO_OWN_SPACE_OR_AVAILABLE(HttpStatus.BAD_REQUEST, "존재하지 않는 대여 기록입니다."),
+    ALREADY_END(HttpStatus.BAD_REQUEST, "이미 종료된 공간 사용 기록입니다."),
+
+    // 아이템
+    ALREADY_RETURNED(HttpStatus.BAD_REQUEST, "이미 반납된 대여 기록입니다."),
+    OVER_QUANTITY(HttpStatus.BAD_REQUEST, "반납 수량이 대여 수량을 초과합니다."),
+    ITEM_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "현재 대여할 수 없는 아이템입니다."),
+    INSUFFICIENT_ITEM_QUANTITY(HttpStatus.BAD_REQUEST, "남은 수량이 부족합니다."),
 
     // 디바이스
     DEVICE_ALREADY_REGISTERED(HttpStatus.CONFLICT, "이미 등록 된 기기입니다."),

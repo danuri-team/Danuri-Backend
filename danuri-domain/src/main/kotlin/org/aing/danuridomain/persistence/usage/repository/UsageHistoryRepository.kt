@@ -25,4 +25,6 @@ interface UsageHistoryRepository {
         startAt: LocalDateTime = LocalDateTime.now(),
         endAt: LocalDateTime = LocalDateTime.now().plusMinutes(30),
     ): UsageHistory
+
+    fun findById(usageId: UUID): Optional<UsageHistory>
 }
