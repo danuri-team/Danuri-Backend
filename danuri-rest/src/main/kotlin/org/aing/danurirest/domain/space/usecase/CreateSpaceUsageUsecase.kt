@@ -5,10 +5,9 @@ import org.aing.danuridomain.persistence.space.repository.SpaceRepository
 import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danuridomain.persistence.user.repository.UserRepository
+import org.aing.danurirest.domain.space.dto.UseSpaceRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.security.jwt.dto.ContextDto
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -24,15 +23,14 @@ class CreateSpaceUsageUsecase(
         private const val USAGE_DURATION_MINUTES = 30L
     }
 
-    fun execute(spaceId: UUID): Boolean {
-        val space = findSpaceById(spaceId)
-        val currentUsage = findCurrentUsage(spaceId)
+    fun execute(useSpaceRequest: UseSpaceRequest): Boolean {
+        val space = findSpaceById(useSpaceRequest.spaceId)
+        val currentUsage = findCurrentUsage(useSpaceRequest.spaceId)
         val now = LocalDateTime.now()
 
         validateUsageTime(space, currentUsage, now)
 
-        val user = findCurrentUser()
-        createSpaceUsage(space, user)
+        createSpaceUsage(space, useSpaceRequest.userId)
 
         return true
     }
@@ -67,25 +65,26 @@ class CreateSpaceUsageUsecase(
         startTime: LocalTime,
         endTime: LocalTime,
         currentTime: LocalTime,
-    ): Boolean = !startTime.isAfter(currentTime) && !endTime.isBefore(currentTime.plusMinutes(USAGE_DURATION_MINUTES))
+    ): Boolean {
+        val endOfUsage = currentTime.plusMinutes(USAGE_DURATION_MINUTES)
+        return startTime.isAfter(currentTime) && endTime.isBefore(endOfUsage)
+    }
 
     private fun isOverlappingWithCurrentUsage(
         usageTime: List<UsageHistory>,
         now: LocalDateTime,
     ): Boolean =
         usageTime.any { ut ->
-            !ut.start_at.isAfter(now) && (ut.end_at?.isAfter(now) ?: false)
+            !ut.start_at.isAfter(now) && ((ut.end_at?.isAfter(now) ?: false))
         }
-
-    private fun findCurrentUser(): ContextDto = SecurityContextHolder.getContext().authentication.principal as ContextDto
 
     private fun createSpaceUsage(
         space: Space,
-        userContext: ContextDto,
+        userId: UUID,
     ) {
         val user =
             userRepository
-                .findById(userContext.id!!)
+                .findById(userId)
                 .orElseThrow { CustomException(CustomErrorCode.VALIDATION_ERROR) }
 
         usageHistoryRepository.createSpaceUsage(space, user)
