@@ -1,0 +1,771 @@
+{
+  "info": {
+    "_postman_id": "123e4567-e89b-12d3-a456-426614174000",
+    "name": "Danuri Admin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "다누리 어드민 API 엔드포인트"
+  },
+  "item": [
+    {
+      "name": "관리자 아이템",
+      "item": [
+        {
+          "name": "아이템 생성",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"테스트 아이템\",\n  \"description\": \"아이템 설명\",\n  \"barcode\": \"1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "items"
+              ]
+            },
+            "description": "새로운 아이템을 생성합니다."
+          }
+        },
+        {
+          "name": "아이템 수정",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"수정된 아이템\",\n  \"description\": \"수정된 설명\",\n  \"barcode\": \"1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "items",
+                "{{itemId}}"
+              ]
+            },
+            "description": "아이템 정보를 수정합니다."
+          }
+        },
+        {
+          "name": "아이템 삭제",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "items",
+                "{{itemId}}"
+              ]
+            },
+            "description": "아이템을 삭제합니다."
+          }
+        },
+        {
+          "name": "아이템 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/items/{{itemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "items",
+                "{{itemId}}"
+              ]
+            },
+            "description": "특정 아이템의 정보를 조회합니다."
+          }
+        },
+        {
+          "name": "회사별 아이템 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/items/company/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "items",
+                "company",
+                "{{companyId}}"
+              ]
+            },
+            "description": "특정 회사의 모든 아이템을 조회합니다."
+          }
+        },
+        {
+          "name": "현재 회사 아이템 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/items/current-company",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "items",
+                "current-company"
+              ]
+            },
+            "description": "현재 로그인한 관리자가 속한 회사의 모든 아이템을 조회합니다."
+          }
+        }
+      ]
+    },
+    {
+      "name": "관리자 사용자 관리",
+      "item": [
+        {
+          "name": "사용자 생성",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"사용자 이름\",\n  \"email\": \"user@example.com\",\n  \"phone\": \"010-1234-5678\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users"
+              ]
+            },
+            "description": "새로운 사용자를 생성합니다."
+          }
+        },
+        {
+          "name": "사용자 수정",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"수정된 사용자 이름\",\n  \"email\": \"user@example.com\",\n  \"phone\": \"010-1234-5678\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "사용자 정보를 수정합니다."
+          }
+        },
+        {
+          "name": "사용자 삭제",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "사용자를 삭제합니다."
+          }
+        },
+        {
+          "name": "사용자 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "특정 사용자의 정보를 조회합니다."
+          }
+        },
+        {
+          "name": "회사별 사용자 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/company/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "company",
+                "{{companyId}}"
+              ]
+            },
+            "description": "특정 회사의 모든 사용자를 조회합니다."
+          }
+        },
+        {
+          "name": "현재 회사 사용자 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/current-company",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "current-company"
+              ]
+            },
+            "description": "현재 로그인한 관리자가 속한 회사의 모든 사용자를 조회합니다."
+          }
+        }
+      ]
+    },
+    {
+      "name": "관리자 공간 관리",
+      "item": [
+        {
+          "name": "공간 생성",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"회의실 A\",\n  \"description\": \"10인 회의실\",\n  \"location\": \"3층 복도 끝\",\n  \"capacity\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/spaces",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "spaces"
+              ]
+            },
+            "description": "새로운 공간을 생성합니다."
+          }
+        },
+        {
+          "name": "공간 수정",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"회의실 A (수정)\",\n  \"description\": \"12인 회의실\",\n  \"location\": \"3층 복도 끝\",\n  \"capacity\": 12\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/spaces/{{spaceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "spaces",
+                "{{spaceId}}"
+              ]
+            },
+            "description": "공간 정보를 수정합니다."
+          }
+        },
+        {
+          "name": "공간 삭제",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/spaces/{{spaceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "spaces",
+                "{{spaceId}}"
+              ]
+            },
+            "description": "공간을 삭제합니다."
+          }
+        },
+        {
+          "name": "공간 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/spaces/{{spaceId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "spaces",
+                "{{spaceId}}"
+              ]
+            },
+            "description": "특정 공간의 정보를 조회합니다."
+          }
+        },
+        {
+          "name": "회사별 공간 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/spaces/company/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "spaces",
+                "company",
+                "{{companyId}}"
+              ]
+            },
+            "description": "특정 회사의 모든 공간을 조회합니다."
+          }
+        },
+        {
+          "name": "현재 회사 공간 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/spaces/current-company",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "spaces",
+                "current-company"
+              ]
+            },
+            "description": "현재 로그인한 관리자가 속한 회사의 모든 공간을 조회합니다."
+          }
+        }
+      ]
+    },
+    {
+      "name": "관리자 사용량 관리",
+      "item": [
+        {
+          "name": "사용 기록 검색",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startDate\": \"2023-01-01T00:00:00\",\n  \"endDate\": \"2023-12-31T23:59:59\",\n  \"spaceId\": null,\n  \"userId\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/usage/search",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "usage",
+                "search"
+              ]
+            },
+            "description": "기간별, 공간별, 사용자별 사용 기록을 검색합니다."
+          }
+        },
+        {
+          "name": "사용 기록 상세 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/usage/{{usageId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "usage",
+                "{{usageId}}"
+              ]
+            },
+            "description": "특정 사용 기록의 상세 정보를 조회합니다."
+          }
+        },
+        {
+          "name": "사용 기록 엑셀 내보내기",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"startDate\": \"2023-01-01T00:00:00\",\n  \"endDate\": \"2023-12-31T23:59:59\",\n  \"spaceId\": null,\n  \"userId\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/usage/export",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "usage",
+                "export"
+              ]
+            },
+            "description": "사용 기록을 엑셀 파일로 내보냅니다."
+          }
+        }
+      ]
+    },
+    {
+      "name": "관리자 계정 관리",
+      "item": [
+        {
+          "name": "내 정보 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/management/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "management",
+                "me"
+              ]
+            },
+            "description": "현재 로그인한 관리자의 정보를 조회합니다."
+          }
+        },
+        {
+          "name": "관리자 정보 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/management/{{adminId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "management",
+                "{{adminId}}"
+              ]
+            },
+            "description": "특정 관리자의 정보를 조회합니다."
+          }
+        },
+        {
+          "name": "회사별 관리자 조회",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/management/company/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "management",
+                "company",
+                "{{companyId}}"
+              ]
+            },
+            "description": "특정 회사의 모든 관리자를 조회합니다."
+          }
+        },
+        {
+          "name": "관리자 정보 수정",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"수정된 관리자 이름\",\n  \"email\": \"admin@example.com\",\n  \"phone\": \"010-1234-5678\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/management/{{adminId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "management",
+                "{{adminId}}"
+              ]
+            },
+            "description": "관리자 정보를 수정합니다."
+          }
+        },
+        {
+          "name": "비밀번호 변경",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"현재비밀번호\",\n  \"newPassword\": \"새비밀번호123!\",\n  \"confirmPassword\": \"새비밀번호123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/management/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "management",
+                "password"
+              ]
+            },
+            "description": "관리자 비밀번호를 변경합니다."
+          }
+        },
+        {
+          "name": "관리자 삭제",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/management/{{adminId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "management",
+                "{{adminId}}"
+              ]
+            },
+            "description": "관리자 계정을 삭제합니다."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+} 
