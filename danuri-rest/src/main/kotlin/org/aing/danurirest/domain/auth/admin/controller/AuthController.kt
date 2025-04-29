@@ -1,16 +1,13 @@
 package org.aing.danurirest.domain.auth.admin.controller
 
-import org.aing.danurirest.domain.auth.admin.dto.AdminInfoResponse
 import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
 import org.aing.danurirest.domain.auth.admin.dto.SignInResponse
 import org.aing.danurirest.domain.auth.admin.dto.SignUpAdminRequest
 import org.aing.danurirest.domain.auth.admin.dto.TokenRefreshRequest
-import org.aing.danurirest.domain.auth.admin.usecase.FetchAdminInfoUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.SignInUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.SignUpUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.TokenRefreshUsecase
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(
     private val signInUsecase: SignInUsecase,
     private val refreshTokenUsecase: TokenRefreshUsecase,
-    private val fetchAdminInfoUsecase: FetchAdminInfoUsecase,
     private val signUpUsecase: SignUpUsecase,
 ) {
     @PostMapping("sign-in")
@@ -47,7 +43,4 @@ class AuthController(
         refreshTokenUsecase.execute(refreshRequest).run {
             ResponseEntity.ok(this)
         }
-
-    @GetMapping("info")
-    fun getAdminInfo(): ResponseEntity<AdminInfoResponse> = fetchAdminInfoUsecase.execute().run { ResponseEntity.ok(this) }
 }
