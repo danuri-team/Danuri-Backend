@@ -29,11 +29,16 @@ class SecurityConfiguration(
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
             .authorizeHttpRequests {
-                it.requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                // 인증/인가
+                it.requestMatchers(HttpMethod.POST, "/admin/auth/**").permitAll()
+                it.requestMatchers(HttpMethod.POST, "/auth/user/**").permitAll()
+                // 헬스체크
                 it.requestMatchers(HttpMethod.GET, "/health").permitAll()
-                it.requestMatchers(HttpMethod.GET, "/auth/device/**").hasRole("DEVICE")
+                // 디바이스단
+                it.requestMatchers(HttpMethod.POST, "/admin/devices/token").permitAll()
+                it.requestMatchers(HttpMethod.GET, "/admin/devices/space/").hasRole("DEVICE")
                 it.requestMatchers("/admin/**").hasRole("ADMIN")
-                it.requestMatchers("/auth/admin/**").hasRole("ADMIN")
+                it.requestMatchers("/").hasRole("ADMIN")
                 it.anyRequest().authenticated()
             }.build()
 

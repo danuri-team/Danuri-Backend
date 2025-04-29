@@ -20,6 +20,8 @@ enum class CustomErrorCode(
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 access token 입니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 refresh token 입니다."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 refresh token 입니다."),
+    INVALID_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 인증번호입니다."),
+    EXPIRED_AUTH_CODE(HttpStatus.BAD_REQUEST, "만료된 인증번호입니다."),
     TOO_MANY_REQUESTS(HttpStatus.BAD_REQUEST, "잠시 후에 다시 시도 해주세요."),
     WRONG_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 비밀번호입니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
@@ -48,11 +50,13 @@ enum class CustomErrorCode(
     // Space
     NOT_FOUND_SPACE(HttpStatus.NOT_FOUND, "해당 공간을 찾을 수 없습니다."),
     SPACE_IN_USE(HttpStatus.BAD_REQUEST, "공간이 현재 사용 중입니다."),
+    SPACE_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "현재 이용 가능한 시간이 아닙니다."),
     NO_OWN_SPACE_OR_AVAILABLE(HttpStatus.BAD_REQUEST, "존재하지 않는 대여 기록입니다."),
     ALREADY_END(HttpStatus.BAD_REQUEST, "이미 종료된 공간 사용 기록입니다."),
 
     // Usage
-    USAGE_CONFLICT_SPACE(HttpStatus.CONFLICT, "이용 충돌이 발생 했습니다."),
+    USAGE_CONFLICT_SPACE(HttpStatus.CONFLICT, "공간 이용 충돌이 발생 했습니다."),
+    USAGE_CONFLICT_USER(HttpStatus.CONFLICT, "이미 다른 공간을 사용 중입니다."),
 
     // Device
     NOT_FOUND_DEVICE(HttpStatus.NOT_FOUND, "해당 기기를 찾을 수 없습니다."),
