@@ -13,6 +13,10 @@ interface UserRepository {
     
     fun findByPhoneAndCompanyId(phone: String, companyId: UUID): Optional<User>
     
+    fun findByPhone(phone: String): Optional<User>
+    
+    fun existsByPhone(phone: String): Boolean
+    
     fun delete(userId: UUID)
     
     fun update(user: User): User

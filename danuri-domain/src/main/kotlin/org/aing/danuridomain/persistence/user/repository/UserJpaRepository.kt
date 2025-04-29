@@ -7,6 +7,13 @@ import java.util.UUID
 
 interface UserJpaRepository : JpaRepository<User, UUID> {
     fun findAllByCompanyId(companyId: UUID): List<User>
-    
-    fun findByPhoneAndCompanyId(phone: String, companyId: UUID): Optional<User>
+
+    fun findByPhone(phone: String): Optional<User>
+
+    fun existsByPhone(phone: String): Boolean
+
+    fun findByPhoneAndCompanyId(
+        phone: String,
+        companyId: UUID,
+    ): Optional<User>
 }

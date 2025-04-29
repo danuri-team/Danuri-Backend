@@ -48,6 +48,9 @@ class JwtProvider(
                 Role.ROLE_DEVICE -> {
                     ContextDto.from(authDetailsService.loadDeviceByToken(UUID.fromString(payload.subject.toString())))
                 }
+                Role.ROLE_USER -> {
+                    ContextDto.from(authDetailsService.loadUserByToken(UUID.fromString(payload.subject.toString())))
+                }
             }
 
         return UsernamePasswordAuthenticationToken(

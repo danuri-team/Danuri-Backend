@@ -2,6 +2,7 @@ package org.aing.danurirest.global.security.jwt.dto
 
 import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.device.entity.Device
+import org.aing.danuridomain.persistence.user.entity.User
 import org.aing.danuridomain.persistence.user.enum.Role
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
@@ -23,6 +24,11 @@ data class ContextDto(
                     ContextDto(
                         id = entity.id,
                         role = entity.role,
+                    )
+                is User ->
+                    ContextDto(
+                        id = entity.id,
+                        role = Role.ROLE_USER,
                     )
                 else -> throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
             }
