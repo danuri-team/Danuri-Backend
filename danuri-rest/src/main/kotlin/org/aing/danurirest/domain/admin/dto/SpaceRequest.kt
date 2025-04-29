@@ -7,8 +7,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 data class SpaceRequest(
-    @field:NotNull(message = "회사 ID는 필수 입력값입니다.")
-    val companyId: UUID,
+    val companyId: UUID? = null,
     
     @field:NotBlank(message = "공간 이름은 필수 입력값입니다.")
     @field:Size(min = 1, max = 50, message = "공간 이름은 1-50자여야 합니다.")
