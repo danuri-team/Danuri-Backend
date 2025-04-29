@@ -40,8 +40,8 @@ class UsageHistoryRepositoryImpl(
             UsageHistory(
                 user = user,
                 space = space,
-                start_at = LocalDateTime.now(),
-                end_at = LocalDateTime.now().plusMinutes(30),
+                start_at = startAt,
+                end_at = endAt,
             ),
         )
 

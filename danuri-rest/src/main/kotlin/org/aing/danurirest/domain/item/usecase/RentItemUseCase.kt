@@ -40,7 +40,7 @@ class RentItemUseCase(
                     userId = user.id!!,
                 ).orElseThrow { CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE) }
 
-        if (usage.end_at != null) {
+        if (usage.end_at?.isAfter(LocalDateTime.now()) != true) {
             throw CustomException(CustomErrorCode.ALREADY_END)
         }
 

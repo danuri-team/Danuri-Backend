@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.auth.admin.usecase
 
+import org.aing.danuridomain.persistence.admin.Status
 import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
 import org.aing.danuridomain.persistence.company.entity.Company
@@ -34,6 +35,7 @@ class SignUpUsecase(
                 password = passwordEncoder.encode(signUpAdminRequest.password),
                 phone = signUpAdminRequest.phone,
                 role = Role.ROLE_ADMIN,
+                status = Status.NEED_COMPANY_APPROVE,
             ),
         )
     }
