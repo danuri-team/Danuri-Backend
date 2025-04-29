@@ -14,9 +14,18 @@ import java.util.UUID
 @Service
 class UserManagementUsecase(
     private val userRepository: UserRepository,
-    private val companyRepository: CompanyRepository
+    private val companyRepository: CompanyRepository,
+    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase
 ) {
     fun createUser(request: UserRequest): UserResponse {
+        // 현재 관리자의 회사 ID 가져오기
+        val adminCompanyId = getAdminCompanyIdUsecase.execute()
+        
+        // 요청된 회사 ID가 관리자의 회사와 일치하는지 확인
+        if (request.companyId != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
+        
         val company = companyRepository.findById(request.companyId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY) }
         
@@ -39,8 +48,21 @@ class UserManagementUsecase(
     }
     
     fun updateUser(userId: UUID, request: UserRequest): UserResponse {
+        // 현재 관리자의 회사 ID 가져오기
+        val adminCompanyId = getAdminCompanyIdUsecase.execute()
+        
         val user = userRepository.findById(userId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
+        
+        // 현재 사용자가 관리자의 회사에 속하는지 확인
+        if (user.company.id != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
+        
+        // 요청된 회사 ID가 관리자의 회사와 일치하는지 확인
+        if (request.companyId != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
         
         // 회사가 변경되었는지 확인
         val company = if (user.company.id != request.companyId) {
@@ -72,8 +94,16 @@ class UserManagementUsecase(
     }
     
     fun deleteUser(userId: UUID) {
+        // 현재 관리자의 회사 ID 가져오기
+        val adminCompanyId = getAdminCompanyIdUsecase.execute()
+        
         val user = userRepository.findById(userId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
+        
+        // 사용자가 관리자의 회사에 속하는지 확인
+        if (user.company.id != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
         
         // 이용 내역이 있는지 확인
         if (user.usages.isNotEmpty()) {
@@ -84,13 +114,36 @@ class UserManagementUsecase(
     }
     
     fun getUser(userId: UUID): UserResponse {
+        // 현재 관리자의 회사 ID 가져오기
+        val adminCompanyId = getAdminCompanyIdUsecase.execute()
+        
         val user = userRepository.findById(userId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
+        
+        // 사용자가 관리자의 회사에 속하는지 확인
+        if (user.company.id != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
         
         return UserResponse.from(user)
     }
     
     fun getUsersByCompany(companyId: UUID): List<UserResponse> {
+        // 현재 관리자의 회사 ID 가져오기
+        val adminCompanyId = getAdminCompanyIdUsecase.execute()
+        
+        // 요청된 회사 ID가 관리자의 회사와 일치하는지 확인
+        if (companyId != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
+        
+        val users = userRepository.findByCompanyId(companyId)
+        return users.map { UserResponse.from(it) }
+    }
+    
+    // 현재 관리자의 회사에 속한 사용자 목록 조회
+    fun getCurrentAdminCompanyUsers(): List<UserResponse> {
+        val companyId = getAdminCompanyIdUsecase.execute()
         val users = userRepository.findByCompanyId(companyId)
         return users.map { UserResponse.from(it) }
     }

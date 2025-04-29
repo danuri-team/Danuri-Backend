@@ -48,8 +48,16 @@ class AdminItemController(
         }
     
     @GetMapping("/company/{companyId}")
-    fun getItemsByCompany(@PathVariable companyId: UUID): ResponseEntity<List<ItemResponse>> =
+    fun getItemsByCompany(
+        @PathVariable companyId: UUID,
+    ): ResponseEntity<List<ItemResponse>> =
         itemManagementUsecase.getItemsByCompany(companyId).run {
+            ResponseEntity.ok(this)
+        }
+        
+    @GetMapping("/current-company")
+    fun getCurrentCompanyItems(): ResponseEntity<List<ItemResponse>> =
+        itemManagementUsecase.getCurrentAdminCompanyItems().run {
             ResponseEntity.ok(this)
         }
 } 

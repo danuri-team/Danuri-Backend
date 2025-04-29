@@ -52,4 +52,10 @@ class AdminUserController(
         userManagementUsecase.getUsersByCompany(companyId).run {
             ResponseEntity.ok(this)
         }
+        
+    @GetMapping("/current-company")
+    fun getCurrentCompanyUsers(): ResponseEntity<List<UserResponse>> =
+        userManagementUsecase.getCurrentAdminCompanyUsers().run {
+            ResponseEntity.ok(this)
+        }
 } 
