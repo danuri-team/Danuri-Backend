@@ -4,7 +4,6 @@ import org.aing.danurirest.domain.space.dto.IsUsingSpaceResponse
 import org.aing.danurirest.domain.space.dto.SpaceUsageResponse
 import org.aing.danurirest.domain.space.dto.SpaceUsingInfoResponse
 import org.aing.danurirest.domain.space.dto.UseSpaceRequest
-import org.aing.danurirest.domain.space.dto.UsingSpaceInfoRequest
 import org.aing.danurirest.domain.space.usecase.CreateSpaceUsageUsecase
 import org.aing.danurirest.domain.space.usecase.FetchSpaceUsingInfoUsecase
 import org.aing.danurirest.domain.space.usecase.FetchSpaceUsingTimeUsecase
@@ -33,10 +32,8 @@ class SpaceController(
         }
 
     @PostMapping("in-use")
-    fun getSpaceUsingInfo(
-        @RequestBody spaceInfoRequest: UsingSpaceInfoRequest,
-    ): ResponseEntity<SpaceUsingInfoResponse> =
-        getSpaceUsingInfoUsecase.execute(spaceInfoRequest).run {
+    fun getSpaceUsingInfo(): ResponseEntity<SpaceUsingInfoResponse> =
+        getSpaceUsingInfoUsecase.execute().run {
             ResponseEntity.ok(SpaceUsingInfoResponse.from(this))
         }
 
