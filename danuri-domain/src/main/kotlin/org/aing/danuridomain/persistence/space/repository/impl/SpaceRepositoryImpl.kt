@@ -14,4 +14,14 @@ class SpaceRepositoryImpl(
     override fun findById(spaceId: UUID): Optional<Space> = spaceJpaRepository.findById(spaceId)
 
     override fun existsById(spaceId: UUID): Boolean = spaceJpaRepository.existsById(spaceId)
+
+    override fun save(space: Space): Space = spaceJpaRepository.save(space)
+    
+    override fun findByCompanyId(companyId: UUID): List<Space> = spaceJpaRepository.findAllByCompanyId(companyId)
+    
+    override fun delete(spaceId: UUID) {
+        spaceJpaRepository.deleteById(spaceId)
+    }
+    
+    override fun update(space: Space): Space = spaceJpaRepository.save(space)
 }

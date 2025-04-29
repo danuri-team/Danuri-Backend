@@ -12,4 +12,17 @@ class UserRepositoryImpl(
     private val userJpaRepository: UserJpaRepository,
 ) : UserRepository {
     override fun findById(userId: UUID): Optional<User> = userJpaRepository.findById(userId)
+
+    override fun save(user: User): User = userJpaRepository.save(user)
+    
+    override fun findByCompanyId(companyId: UUID): List<User> = userJpaRepository.findAllByCompanyId(companyId)
+    
+    override fun findByPhoneAndCompanyId(phone: String, companyId: UUID): Optional<User> = 
+        userJpaRepository.findByPhoneAndCompanyId(phone, companyId)
+    
+    override fun delete(userId: UUID) {
+        userJpaRepository.deleteById(userId)
+    }
+    
+    override fun update(user: User): User = userJpaRepository.save(user)
 }

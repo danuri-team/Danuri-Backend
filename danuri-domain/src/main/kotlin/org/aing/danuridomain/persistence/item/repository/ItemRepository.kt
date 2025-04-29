@@ -5,7 +5,13 @@ import java.util.Optional
 import java.util.UUID
 
 interface ItemRepository {
-    fun save(admin: Item): Item
+    fun findById(itemId: UUID): Optional<Item>
 
-    fun findById(id: UUID): Optional<Item>
+    fun save(item: Item): Item
+    
+    fun findByCompanyId(companyId: UUID): List<Item>
+    
+    fun delete(itemId: UUID)
+    
+    fun update(item: Item): Item
 }

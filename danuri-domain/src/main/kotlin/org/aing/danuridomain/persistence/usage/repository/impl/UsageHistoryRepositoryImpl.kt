@@ -46,4 +46,28 @@ class UsageHistoryRepositoryImpl(
         )
 
     override fun findById(usageId: UUID): Optional<UsageHistory> = usageHistoryJpaRepository.findById(usageId)
+    
+    override fun findAllByCompanyId(companyId: UUID): List<UsageHistory> = 
+        usageHistoryJpaRepository.findAllByCompanyId(companyId)
+    
+    override fun findAllByCompanyIdAndDateRange(
+        companyId: UUID, 
+        startDate: LocalDateTime, 
+        endDate: LocalDateTime
+    ): List<UsageHistory> = 
+        usageHistoryJpaRepository.findAllByCompanyIdAndDateRange(companyId, startDate, endDate)
+    
+    override fun findAllBySpaceIdAndDateRange(
+        spaceId: UUID, 
+        startDate: LocalDateTime, 
+        endDate: LocalDateTime
+    ): List<UsageHistory> = 
+        usageHistoryJpaRepository.findAllBySpaceIdAndDateRange(spaceId, startDate, endDate)
+    
+    override fun findAllByUserIdAndDateRange(
+        userId: UUID, 
+        startDate: LocalDateTime, 
+        endDate: LocalDateTime
+    ): List<UsageHistory> = 
+        usageHistoryJpaRepository.findAllByUserIdAndDateRange(userId, startDate, endDate)
 }

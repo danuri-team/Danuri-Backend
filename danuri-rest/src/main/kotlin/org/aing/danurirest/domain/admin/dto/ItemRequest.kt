@@ -1,0 +1,24 @@
+package org.aing.danurirest.domain.admin.dto
+
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
+import org.aing.danuridomain.persistence.item.enum.ItemStatus
+import java.util.UUID
+
+data class ItemRequest(
+    @field:NotNull(message = "회사 ID는 필수 입력값입니다.")
+    val companyId: UUID,
+    
+    @field:NotBlank(message = "이름은 필수 입력값입니다.")
+    @field:Size(min = 1, max = 10, message = "이름은 1-10자여야 합니다.")
+    val name: String,
+    
+    @field:NotNull(message = "수량은 필수 입력값입니다.")
+    @field:Min(value = 1, message = "수량은 최소 1개 이상이어야 합니다.")
+    val totalQuantity: Int,
+    
+    @field:NotNull(message = "상태는 필수 입력값입니다.")
+    val status: ItemStatus = ItemStatus.AVAILABLE
+) 

@@ -23,12 +23,12 @@ class RegisterDeviceUsecase(
 
         val company =
             companyRepository.findById(registerDeviceRequest.companyId).orElseThrow {
-                throw CustomException(CustomErrorCode.VALIDATION_ERROR)
+                throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY)
             }
 
         val space =
             spaceRepository.findById(registerDeviceRequest.spaceId).orElseThrow {
-                throw CustomException(CustomErrorCode.VALIDATION_ERROR)
+                throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
             }
 
         deviceRepository.save(

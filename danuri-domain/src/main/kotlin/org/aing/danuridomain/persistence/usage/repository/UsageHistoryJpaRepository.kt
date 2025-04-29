@@ -29,4 +29,62 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
         id: UUID,
         userId: UUID,
     ): Optional<UsageHistory>
+    
+    @Query(
+        """
+            SELECT u FROM UsageHistory u
+            JOIN FETCH u.user
+            JOIN FETCH u.space
+            WHERE u.space.company.id = :companyId
+        """
+    )
+    fun findAllByCompanyId(@Param("companyId") companyId: UUID): List<UsageHistory>
+    
+    @Query(
+        """
+            SELECT u FROM UsageHistory u
+            JOIN FETCH u.user
+            JOIN FETCH u.space
+            WHERE u.space.company.id = :companyId
+            AND u.start_at >= :startDate
+            AND (u.end_at IS NULL OR u.end_at <= :endDate)
+        """
+    )
+    fun findAllByCompanyIdAndDateRange(
+        @Param("companyId") companyId: UUID,
+        @Param("startDate") startDate: LocalDateTime,
+        @Param("endDate") endDate: LocalDateTime
+    ): List<UsageHistory>
+    
+    @Query(
+        """
+            SELECT u FROM UsageHistory u
+            JOIN FETCH u.user
+            JOIN FETCH u.space
+            WHERE u.space.id = :spaceId
+            AND u.start_at >= :startDate
+            AND (u.end_at IS NULL OR u.end_at <= :endDate)
+        """
+    )
+    fun findAllBySpaceIdAndDateRange(
+        @Param("spaceId") spaceId: UUID,
+        @Param("startDate") startDate: LocalDateTime,
+        @Param("endDate") endDate: LocalDateTime
+    ): List<UsageHistory>
+    
+    @Query(
+        """
+            SELECT u FROM UsageHistory u
+            JOIN FETCH u.user
+            JOIN FETCH u.space
+            WHERE u.user.id = :userId
+            AND u.start_at >= :startDate
+            AND (u.end_at IS NULL OR u.end_at <= :endDate)
+        """
+    )
+    fun findAllByUserIdAndDateRange(
+        @Param("userId") userId: UUID,
+        @Param("startDate") startDate: LocalDateTime,
+        @Param("endDate") endDate: LocalDateTime
+    ): List<UsageHistory>
 }

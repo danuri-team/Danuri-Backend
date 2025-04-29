@@ -27,7 +27,7 @@ class ExceptionFilter(
                 } else {
                     CustomExceptionResponse(CustomErrorCode.UNKNOWN_SERVER_ERROR)
                 }
-            response.status = exceptionResponse.status.statusCode.value()
+            response.status = exceptionResponse.status.status.value()
             response.characterEncoding = Charsets.UTF_8.name()
             response.contentType = MediaType.APPLICATION_JSON_VALUE
             response.writer.print(objectMapper.writeValueAsString(exceptionResponse))

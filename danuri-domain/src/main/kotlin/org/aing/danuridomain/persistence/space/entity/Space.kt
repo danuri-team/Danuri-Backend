@@ -23,6 +23,8 @@ data class Space(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company,
+    @Column(nullable = false, length = 50)
+    val name: String,
     @Column(nullable = false)
     val start_at: LocalTime,
     @Column(nullable = false)

@@ -20,7 +20,7 @@ class DeviceSignInUsecase(
             deviceRepository
                 .findByDeviceId(
                     request.deviceId,
-                ).orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
+                ).orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_DEVICE) }
 
         val accessToken =
             jwtProvider.generateToken(

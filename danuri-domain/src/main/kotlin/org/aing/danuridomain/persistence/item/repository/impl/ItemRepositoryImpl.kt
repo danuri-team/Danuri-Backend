@@ -11,7 +11,15 @@ import java.util.UUID
 class ItemRepositoryImpl(
     private val itemJpaRepository: ItemJpaRepository,
 ) : ItemRepository {
-    override fun save(admin: Item): Item = itemJpaRepository.save(admin)
+    override fun findById(itemId: UUID): Optional<Item> = itemJpaRepository.findById(itemId)
 
-    override fun findById(id: UUID): Optional<Item> = itemJpaRepository.findById(id)
+    override fun save(item: Item): Item = itemJpaRepository.save(item)
+    
+    override fun findByCompanyId(companyId: UUID): List<Item> = itemJpaRepository.findAllByCompanyId(companyId)
+    
+    override fun delete(itemId: UUID) {
+        itemJpaRepository.deleteById(itemId)
+    }
+    
+    override fun update(item: Item): Item = itemJpaRepository.save(item)
 }

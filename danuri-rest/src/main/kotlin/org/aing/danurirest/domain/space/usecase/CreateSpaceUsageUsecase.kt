@@ -38,7 +38,7 @@ class CreateSpaceUsageUsecase(
     private fun findSpaceById(spaceId: UUID): Space =
         spaceRepository
             .findById(spaceId)
-            .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND) }
+            .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
 
     private fun findCurrentUsage(spaceId: UUID): List<UsageHistory> = usageHistoryRepository.spaceUsingTime(spaceId)
 
@@ -85,7 +85,7 @@ class CreateSpaceUsageUsecase(
         val user =
             userRepository
                 .findById(userId)
-                .orElseThrow { CustomException(CustomErrorCode.VALIDATION_ERROR) }
+                .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
         usageHistoryRepository.createSpaceUsage(space, user)
     }
