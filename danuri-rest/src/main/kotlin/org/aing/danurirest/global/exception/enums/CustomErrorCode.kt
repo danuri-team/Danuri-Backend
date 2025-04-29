@@ -35,6 +35,7 @@ enum class CustomErrorCode(
 
     // Company
     NOT_FOUND_COMPANY(HttpStatus.NOT_FOUND, "회사를 찾을 수 없습니다."),
+    COMPANY_MISMATCH(HttpStatus.FORBIDDEN, "해당 회사의 리소스에 접근할 권한이 없습니다."),
 
     // Item
     NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "품목을 찾을 수 없습니다."),

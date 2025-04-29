@@ -7,9 +7,9 @@ import org.aing.danurirest.domain.auth.admin.dto.SignInResponse
 import org.aing.danurirest.domain.auth.admin.dto.UpdateDeviceRequest
 import org.aing.danurirest.domain.auth.admin.usecase.DeleteDeviceUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.DeviceSignInUsecase
-import org.aing.danurirest.domain.auth.admin.usecase.GetAllDevicesUsecase
+import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyDevicesUsecase
+import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.GetDeviceUsecase
-import org.aing.danurirest.domain.auth.admin.usecase.GetDevicesByCompanyUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.GetDevicesBySpaceUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.RegisterDeviceUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.UpdateDeviceUsecase
@@ -30,11 +30,11 @@ class AdminDeviceController(
     private val registerDeviceUsecase: RegisterDeviceUsecase,
     private val deviceSignInUsecase: DeviceSignInUsecase,
     private val getDeviceUsecase: GetDeviceUsecase,
-    private val getAllDevicesUsecase: GetAllDevicesUsecase,
-    private val getDevicesByCompanyUsecase: GetDevicesByCompanyUsecase,
+    private val getAdminCompanyDevicesUsecase: GetAdminCompanyDevicesUsecase,
     private val getDevicesBySpaceUsecase: GetDevicesBySpaceUsecase,
     private val updateDeviceUsecase: UpdateDeviceUsecase,
-    private val deleteDeviceUsecase: DeleteDeviceUsecase
+    private val deleteDeviceUsecase: DeleteDeviceUsecase,
+    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase
 ) {
     @PostMapping
     fun registerDevice(
@@ -62,15 +62,7 @@ class AdminDeviceController(
         
     @GetMapping
     fun getAllDevices(): ResponseEntity<List<DeviceResponse>> = 
-        getAllDevicesUsecase.execute().run {
-            ResponseEntity.ok(this)
-        }
-        
-    @GetMapping("/company/{companyId}")
-    fun getDevicesByCompany(
-        @PathVariable companyId: UUID,
-    ): ResponseEntity<List<DeviceResponse>> = 
-        getDevicesByCompanyUsecase.execute(companyId).run {
+        getAdminCompanyDevicesUsecase.execute().run {
             ResponseEntity.ok(this)
         }
         

@@ -33,6 +33,7 @@ class SecurityConfiguration(
                 it.requestMatchers(HttpMethod.GET, "/health").permitAll()
                 it.requestMatchers(HttpMethod.GET, "/auth/device/**").hasRole("DEVICE")
                 it.requestMatchers("/admin/**").hasRole("ADMIN")
+                it.requestMatchers("/auth/admin/**").hasRole("ADMIN")
                 it.anyRequest().authenticated()
             }.build()
 

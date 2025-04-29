@@ -9,27 +9,35 @@ import org.aing.danurirest.domain.auth.admin.dto.RegisterDeviceRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class RegisterDeviceUsecase(
     private val deviceRepository: DeviceRepository,
     private val companyRepository: CompanyRepository,
     private val spaceRepository: SpaceRepository,
+    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase
 ) {
     fun execute(registerDeviceRequest: RegisterDeviceRequest) {
         if (deviceRepository.findByDeviceId(registerDeviceRequest.deviceId).isPresent) {
             throw CustomException(CustomErrorCode.DEVICE_ALREADY_REGISTERED)
         }
+        
+        // 현재 인증된 관리자의 회사 ID 가져오기
+        val companyId = getAdminCompanyIdUsecase.execute()
+        
+        val company = companyRepository.findById(companyId).orElseThrow {
+            throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY)
+        }
 
-        val company =
-            companyRepository.findById(registerDeviceRequest.companyId).orElseThrow {
-                throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY)
-            }
-
-        val space =
-            spaceRepository.findById(registerDeviceRequest.spaceId).orElseThrow {
-                throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
-            }
+        val space = spaceRepository.findById(registerDeviceRequest.spaceId).orElseThrow {
+            throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
+        }
+        
+        // 공간이 해당 회사에 속하는지 확인
+        if (space.company.id != company.id) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
 
         deviceRepository.save(
             Device(

@@ -16,17 +16,31 @@ import java.util.UUID
 class UpdateDeviceUsecase(
     private val deviceRepository: DeviceRepository,
     private val companyRepository: CompanyRepository,
-    private val spaceRepository: SpaceRepository
+    private val spaceRepository: SpaceRepository,
+    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase
 ) {
     fun execute(deviceId: UUID, request: UpdateDeviceRequest): DeviceResponse {
         val device = deviceRepository.findById(deviceId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_DEVICE) }
         
-        val company = companyRepository.findById(request.companyId)
+        // 현재 인증된 관리자의 회사 ID 가져오기
+        val companyId = getAdminCompanyIdUsecase.execute()
+        
+        // 디바이스가 관리자의 회사에 속하는지 확인
+        if (device.company.id != companyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
+        
+        val company = companyRepository.findById(companyId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY) }
         
         val space = spaceRepository.findById(request.spaceId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
+        
+        // 공간이 해당 회사에 속하는지 확인
+        if (space.company.id != companyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
         
         // 활성 상태 변경을 위한 end_at 설정
         val endAt = if (request.isActive) null else LocalDateTime.now()
