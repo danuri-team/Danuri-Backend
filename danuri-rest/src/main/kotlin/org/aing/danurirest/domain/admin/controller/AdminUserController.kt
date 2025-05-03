@@ -46,14 +46,8 @@ class AdminUserController(
         userManagementUsecase.getUser(userId).run {
             ResponseEntity.ok(this)
         }
-    
-    @GetMapping("/company/{companyId}")
-    fun getUsersByCompany(@PathVariable companyId: UUID): ResponseEntity<List<UserResponse>> =
-        userManagementUsecase.getUsersByCompany(companyId).run {
-            ResponseEntity.ok(this)
-        }
         
-    @GetMapping("/current-company")
+    @GetMapping
     fun getCurrentCompanyUsers(): ResponseEntity<List<UserResponse>> =
         userManagementUsecase.getCurrentAdminCompanyUsers().run {
             ResponseEntity.ok(this)

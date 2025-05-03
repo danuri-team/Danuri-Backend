@@ -46,16 +46,8 @@ class AdminSpaceController(
         spaceManagementUsecase.getSpace(spaceId).run {
             ResponseEntity.ok(this)
         }
-    
-    @GetMapping("/company/{companyId}")
-    fun getSpacesByCompany(
-        @PathVariable companyId: UUID,
-    ): ResponseEntity<List<SpaceResponse>> =
-        spaceManagementUsecase.getSpacesByCompany(companyId).run {
-            ResponseEntity.ok(this)
-        }
         
-    @GetMapping("/current-company")
+    @GetMapping
     fun getCurrentCompanySpaces(): ResponseEntity<List<SpaceResponse>> =
         spaceManagementUsecase.getCurrentAdminCompanySpaces().run {
             ResponseEntity.ok(this)
