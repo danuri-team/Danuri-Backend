@@ -6,5 +6,4 @@ import java.util.UUID
 
 interface CompanyRepository {
     fun findById(id: UUID) : Optional<Company>
-    fun save(company: Company) : Company
 }

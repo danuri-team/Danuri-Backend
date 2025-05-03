@@ -16,6 +16,7 @@ class GetUsageHistoryUsecase(
 ) {
     fun execute(request: UsageHistorySearchRequest): List<UsageHistoryResponse> {
         val user: ContextDto = SecurityContextHolder.getContext().authentication.principal as ContextDto
+        // TODO: 조회자 회사에 기반해서만 쿼리가 가능하도록 수정 해야함
         
         val histories = when {
             request.spaceId != null -> {
@@ -32,13 +33,6 @@ class GetUsageHistoryUsecase(
                     request.endDate
                 )
             }
-            request.companyId != null -> {
-                usageHistoryRepository.findAllByCompanyIdAndDateRange(
-                    request.companyId,
-                    request.startDate,
-                    request.endDate
-                )
-            }
             else -> {
                 throw CustomException(CustomErrorCode.VALIDATION_ERROR)
             }
@@ -50,7 +44,8 @@ class GetUsageHistoryUsecase(
     fun executeById(usageId: UUID): UsageHistoryResponse {
         val usage = usageHistoryRepository.findById(usageId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
-        
+        // TODO: 조회자 회사에 기반해서만 쿼리가 가능하도록 수정 해야함
+
         return UsageHistoryResponse.from(usage)
     }
 } 

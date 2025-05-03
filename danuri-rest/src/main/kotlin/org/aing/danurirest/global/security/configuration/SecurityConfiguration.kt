@@ -24,7 +24,9 @@ class SecurityConfiguration(
         http
             .csrf { it.disable() }
             .formLogin { it.disable() }
-            .cors {}
+            .cors {
+                corsConfig()
+            }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)

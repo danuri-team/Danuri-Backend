@@ -12,6 +12,4 @@ class CompanyRepositoryImpl(
     private val companyJpaRepository: CompanyJpaRepository,
 ) : CompanyRepository {
     override fun findById(id: UUID): Optional<Company> = companyJpaRepository.findById(id)
-
-    override fun save(company: Company): Company = companyJpaRepository.save(company)
 }

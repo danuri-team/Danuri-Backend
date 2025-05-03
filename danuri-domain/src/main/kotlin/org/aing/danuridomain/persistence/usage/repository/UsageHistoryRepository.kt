@@ -28,9 +28,6 @@ interface UsageHistoryRepository {
 
     fun findById(usageId: UUID): Optional<UsageHistory>
     
-    // 관리자용 히스토리 조회 기능 추가
-    fun findAllByCompanyId(companyId: UUID): List<UsageHistory>
-    
     fun findAllByCompanyIdAndDateRange(
         companyId: UUID,
         startDate: LocalDateTime,
