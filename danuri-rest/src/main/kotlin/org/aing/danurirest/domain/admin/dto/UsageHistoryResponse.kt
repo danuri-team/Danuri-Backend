@@ -25,7 +25,7 @@ data class UsageHistoryResponse(
                 userName = entity.user.name,
                 userPhone = entity.user.phone,
                 spaceId = entity.space.id!!,
-                spaceName = entity.space.id.toString(), // 공간 이름 속성이 없으므로 ID로 대체
+                spaceName = entity.space.id.toString(),
                 companyId = entity.space.company.id!!,
                 companyName = entity.space.company.name,
                 startAt = entity.start_at,
