@@ -43,8 +43,8 @@ data class User(
     val phone: String,
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    val create_at: LocalDateTime,
+    val create_at: LocalDateTime = LocalDateTime.now(),
     @UpdateTimestamp
     @Column(nullable = false)
-    val update_at: LocalDateTime,
+    val update_at: LocalDateTime? = null,
 )
