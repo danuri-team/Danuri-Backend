@@ -2,7 +2,6 @@ package org.aing.danurirest.domain.admin.usecase
 
 import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
-import org.aing.danuridomain.persistence.company.repository.CompanyRepository
 import org.aing.danurirest.domain.admin.dto.AdminPasswordUpdateRequest
 import org.aing.danurirest.domain.admin.dto.AdminResponse
 import org.aing.danurirest.domain.admin.dto.AdminUpdateRequest

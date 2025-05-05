@@ -22,8 +22,7 @@ class RegisterDeviceUsecase(
         if (deviceRepository.findByDeviceId(registerDeviceRequest.deviceId).isPresent) {
             throw CustomException(CustomErrorCode.DEVICE_ALREADY_REGISTERED)
         }
-        
-        // 현재 인증된 관리자의 회사 ID 가져오기
+
         val companyId = getAdminCompanyIdUsecase.execute()
         
         val company = companyRepository.findById(companyId).orElseThrow {
@@ -33,8 +32,7 @@ class RegisterDeviceUsecase(
         val space = spaceRepository.findById(registerDeviceRequest.spaceId).orElseThrow {
             throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
         }
-        
-        // 공간이 해당 회사에 속하는지 확인
+
         if (space.company.id != company.id) {
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }

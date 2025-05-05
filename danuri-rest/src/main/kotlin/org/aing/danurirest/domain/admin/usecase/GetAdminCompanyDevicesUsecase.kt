@@ -12,8 +12,7 @@ class GetAdminCompanyDevicesUsecase(
 ) {
     fun execute(): List<DeviceResponse> {
         val companyId = getAdminCompanyIdUsecase.execute()
-        
-        // 해당 회사의 디바이스 목록 조회
+
         val devices = deviceRepository.findByCompanyId(companyId)
         
         return devices.map { DeviceResponse.from(it) }

@@ -16,11 +16,9 @@ class GetDeviceUsecase(
     fun execute(deviceId: UUID): DeviceResponse {
         val device = deviceRepository.findById(deviceId)
             .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_DEVICE) }
-        
-        // 현재 인증된 관리자의 회사 ID 가져오기
+
         val companyId = getAdminCompanyIdUsecase.execute()
-        
-        // 디바이스가 관리자의 회사에 속하는지 확인
+
         if (device.company.id != companyId) {
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }

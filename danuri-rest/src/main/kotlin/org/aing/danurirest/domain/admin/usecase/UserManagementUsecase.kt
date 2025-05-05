@@ -64,7 +64,6 @@ class UserManagementUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        // 다른 사용자와 전화번호 중복 확인 (수정 시 본인 제외)
         if (user.phone != request.phone) {
             userRepository
                 .findByPhoneAndCompanyId(request.phone, request.companyId!!)
@@ -95,7 +94,6 @@ class UserManagementUsecase(
                 .findById(userId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
-        // 사용자가 관리자의 회사에 속하는지 확인
         if (user.company.id != adminCompanyId) {
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }

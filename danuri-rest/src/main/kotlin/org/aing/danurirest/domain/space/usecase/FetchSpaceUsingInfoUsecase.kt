@@ -23,10 +23,10 @@ class FetchSpaceUsingInfoUsecase(
                 userId = userId,
                 startDate = now.minusHours(1),
                 endDate = now.plusHours(1),
-            ) // 수정필요
+            ) // TODO: 로직 유효성 확인 필요
 
         return usageHistories.firstOrNull {
-            !it.start_at.isAfter(now) && (it.end_at != null && !it.end_at!!.isAfter(now)) // 수정필요
+            !it.start_at.isAfter(now) && (it.end_at != null && !it.end_at!!.isAfter(now)) // TODO: 로직 유효성 확인 필요
         } ?: throw CustomException(CustomErrorCode.NOT_FOUND)
     }
 
