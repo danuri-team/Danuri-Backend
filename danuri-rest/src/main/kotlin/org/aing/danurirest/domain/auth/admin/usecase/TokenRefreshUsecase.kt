@@ -3,8 +3,8 @@ package org.aing.danurirest.domain.auth.admin.usecase
 import io.jsonwebtoken.Claims
 import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
-import org.aing.danurirest.domain.auth.admin.dto.SignInResponse
-import org.aing.danurirest.domain.auth.admin.dto.TokenRefreshRequest
+import org.aing.danurirest.domain.auth.common.dto.SignInResponse
+import org.aing.danurirest.domain.auth.common.dto.TokenRefreshRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider

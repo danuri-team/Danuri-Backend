@@ -2,8 +2,8 @@ package org.aing.danurirest.domain.auth.admin.usecase
 
 import org.aing.danuridomain.persistence.device.entity.Device
 import org.aing.danuridomain.persistence.device.repository.DeviceRepository
-import org.aing.danurirest.domain.auth.admin.dto.DeviceSignInRequest
-import org.aing.danurirest.domain.auth.admin.dto.SignInResponse
+import org.aing.danurirest.domain.auth.device.dto.DeviceSignInRequest
+import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider

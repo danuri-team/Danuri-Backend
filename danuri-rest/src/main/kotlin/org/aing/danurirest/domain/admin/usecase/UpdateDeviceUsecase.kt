@@ -1,11 +1,12 @@
-package org.aing.danurirest.domain.auth.admin.usecase
+package org.aing.danurirest.domain.admin.usecase
 
 import org.aing.danuridomain.persistence.company.repository.CompanyRepository
 import org.aing.danuridomain.persistence.device.entity.Device
 import org.aing.danuridomain.persistence.device.repository.DeviceRepository
 import org.aing.danuridomain.persistence.space.repository.SpaceRepository
-import org.aing.danurirest.domain.auth.admin.dto.DeviceResponse
-import org.aing.danurirest.domain.auth.admin.dto.UpdateDeviceRequest
+import org.aing.danurirest.domain.admin.dto.DeviceResponse
+import org.aing.danurirest.domain.admin.dto.UpdateDeviceRequest
+import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.springframework.stereotype.Service

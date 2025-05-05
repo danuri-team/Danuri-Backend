@@ -1,4 +1,4 @@
-package org.aing.danurirest.domain.auth.admin.dto
+package org.aing.danurirest.domain.auth.common.dto
 
 import org.aing.danurirest.global.security.jwt.dto.JwtDetails
 

@@ -1,7 +1,7 @@
-package org.aing.danurirest.domain.auth.admin.usecase
+package org.aing.danurirest.domain.admin.usecase
 
 import org.aing.danuridomain.persistence.device.repository.DeviceRepository
-import org.aing.danurirest.domain.auth.admin.dto.DeviceResponse
+import org.aing.danurirest.domain.admin.dto.DeviceResponse
 import org.springframework.stereotype.Service
 
 @Service
