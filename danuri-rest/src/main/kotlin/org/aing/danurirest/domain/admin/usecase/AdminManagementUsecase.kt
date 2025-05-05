@@ -2,7 +2,6 @@ package org.aing.danurirest.domain.admin.usecase
 
 import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
-import org.aing.danuridomain.persistence.company.repository.CompanyRepository
 import org.aing.danurirest.domain.admin.dto.AdminPasswordUpdateRequest
 import org.aing.danurirest.domain.admin.dto.AdminResponse
 import org.aing.danurirest.domain.admin.dto.AdminUpdateRequest
@@ -53,7 +52,7 @@ class AdminManagementUsecase(
             id = admin.id,
             company = admin.company,
             email = request.email,
-            password = admin.password, // 비밀번호는 유지
+            password = admin.password,
             phone = request.phone,
             role = request.role,
             status = admin.status

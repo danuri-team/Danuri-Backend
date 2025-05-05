@@ -42,6 +42,7 @@ class ItemManagementUsecase(
         request: ItemRequest,
     ): ItemResponse {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
+        // TODO: 본인 회사의 아이템만 업데이트가 가능해야 함
 
         val item =
             itemRepository

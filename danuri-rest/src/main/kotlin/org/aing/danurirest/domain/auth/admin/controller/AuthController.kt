@@ -1,9 +1,9 @@
 package org.aing.danurirest.domain.auth.admin.controller
 
 import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
-import org.aing.danurirest.domain.auth.admin.dto.SignInResponse
+import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.domain.auth.admin.dto.SignUpAdminRequest
-import org.aing.danurirest.domain.auth.admin.dto.TokenRefreshRequest
+import org.aing.danurirest.domain.auth.common.dto.TokenRefreshRequest
 import org.aing.danurirest.domain.auth.admin.usecase.SignInUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.SignUpUsecase
 import org.aing.danurirest.domain.auth.admin.usecase.TokenRefreshUsecase

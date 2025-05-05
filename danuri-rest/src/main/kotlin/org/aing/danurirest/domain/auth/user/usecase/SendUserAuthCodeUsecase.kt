@@ -19,19 +19,15 @@ class SendUserAuthCodeUsecase(
     }
 
     fun execute(phone: String): String {
-        // 해당 전화번호를 가진 사용자가 있는지 확인
         if (!userRepository.existsByPhone(phone)) {
             throw CustomException(CustomErrorCode.NOT_FOUND_USER)
         }
 
-        // 기존 인증 코드가 있으면 삭제
         userAuthCodeRepository.deleteByPhone(phone)
 
-        // 인증 코드 생성 (6자리 숫자)
         val authCode = generateRandomCode()
         val expiredAt = LocalDateTime.now().plusMinutes(AUTH_CODE_EXPIRE_MINUTES)
 
-        // 인증 코드 저장
         val userAuthCode =
             UserAuthCode(
                 phone = phone,
@@ -40,6 +36,7 @@ class SendUserAuthCodeUsecase(
             )
         userAuthCodeRepository.save(userAuthCode)
 
+        // TODO: 뿌리오 연결
         return authCode
     }
 

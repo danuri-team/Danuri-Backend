@@ -15,7 +15,7 @@ data class UserResponse(
     val age: Age,
     val phone: String,
     val createAt: LocalDateTime,
-    val updateAt: LocalDateTime,
+    val updateAt: LocalDateTime?,
     val usageCount: Int
 ) {
     companion object {

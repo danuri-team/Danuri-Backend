@@ -1,4 +1,4 @@
-package org.aing.danurirest.domain.auth.admin.dto
+package org.aing.danurirest.domain.admin.dto
 
 import java.util.UUID
 
