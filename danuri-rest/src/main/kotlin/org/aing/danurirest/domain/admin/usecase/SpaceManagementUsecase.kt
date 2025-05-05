@@ -94,7 +94,6 @@ class SpaceManagementUsecase(
         return SpaceResponse.from(space)
     }
 
-    // 현재 관리자의 회사에 속한 공간 목록 조회
     fun getCurrentAdminCompanySpaces(): List<SpaceResponse> {
         val companyId = getAdminCompanyIdUsecase.execute()
         val spaces = spaceRepository.findByCompanyId(companyId)

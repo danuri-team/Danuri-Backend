@@ -53,7 +53,7 @@ class AdminManagementUsecase(
             id = admin.id,
             company = admin.company,
             email = request.email,
-            password = admin.password, // 비밀번호는 유지
+            password = admin.password,
             phone = request.phone,
             role = request.role,
             status = admin.status
