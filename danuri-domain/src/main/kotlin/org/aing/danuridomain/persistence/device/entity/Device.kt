@@ -34,6 +34,4 @@ data class Device(
     @CreatedDate
     @Column(nullable = false)
     val create_at: LocalDateTime = LocalDateTime.now(),
-    @Column(nullable = true)
-    val end_at: LocalDateTime? = null,
 )
