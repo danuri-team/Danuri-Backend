@@ -27,7 +27,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: "prometheus"
+        include: "*"
+
+sentry:
+  dsn: "${SENTRY_DSN}"
+  exception-resolver-order: -2147483647
+  max-request-body-size: always
+  send-default-pii: true
+  traces-sample-rate: 1.0
 
 ---
 spring:

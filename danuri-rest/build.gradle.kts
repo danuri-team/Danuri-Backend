@@ -1,6 +1,7 @@
 plugins {
     kotlin("plugin.spring") version "1.9.25"
     id("org.springframework.boot") version "3.4.4"
+    id("io.sentry.jvm.gradle") version "5.5.0"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -20,6 +21,8 @@ dependencies {
     implementation("org.apache.poi:poi:5.4.1")
     implementation("org.apache.poi:poi-ooxml:5.4.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 }
 
 tasks.getByName("jar") {
