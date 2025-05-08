@@ -40,7 +40,7 @@ class RentItemUsecase(
                     userId = user.id!!,
                 ).orElseThrow { CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE) }
 
-        if (usage.end_at?.isAfter(LocalDateTime.now()) != true) {
+        if (usage.endAt?.isAfter(LocalDateTime.now()) != true) {
             throw CustomException(CustomErrorCode.ALREADY_END)
         }
 
@@ -61,8 +61,8 @@ class RentItemUsecase(
             itemId = item.id!!,
             itemName = item.name,
             quantity = request.quantity,
-            borrowedAt = savedRental.borrowed_at,
-            returnedQuantity = savedRental.returned_quantity,
+            borrowedAt = savedRental.borrowedAt,
+            returnedQuantity = savedRental.returnedQuantity,
         )
     }
 
@@ -88,8 +88,8 @@ class RentItemUsecase(
             item = item,
             usage = usage,
             quantity = quantity,
-            borrowed_at = LocalDateTime.now(),
-            returned_quantity = 0,
+            borrowedAt = LocalDateTime.now(),
+            returnedQuantity = 0,
         )
 
     private fun updateItemQuantity(

@@ -64,7 +64,7 @@ class CreateSpaceUsageUsecase(
 
         val hasActiveUsage =
             userCurrentUsages.any { usage ->
-                !usage.start_at.isAfter(now) && (usage.end_at == null || !now.isAfter(usage.end_at))
+                !usage.startAt.isAfter(now) && (usage.endAt == null || !now.isAfter(usage.endAt))
             }
 
         if (hasActiveUsage) {
@@ -79,7 +79,7 @@ class CreateSpaceUsageUsecase(
     ) {
         val nowTime = now.toLocalTime()
 
-        if (nowTime.isBefore(space.start_at) || nowTime.isAfter(space.end_at)) {
+        if (nowTime.isBefore(space.startAt) || nowTime.isAfter(space.endAt)) {
             throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
         }
     }
@@ -99,8 +99,8 @@ class CreateSpaceUsageUsecase(
 
         val isOverlapping =
             currentUsages.any { usage ->
-                (usage.start_at <= endTime) &&
-                    (usage.end_at == null || usage.end_at?.isAfter(now) == true || usage.end_at?.isEqual(now) == true)
+                (usage.startAt <= endTime) &&
+                    (usage.endAt == null || usage.endAt?.isAfter(now) == true || usage.endAt?.isEqual(now) == true)
             }
 
         if (isOverlapping) {

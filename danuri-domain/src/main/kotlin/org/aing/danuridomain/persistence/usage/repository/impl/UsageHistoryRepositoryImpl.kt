@@ -40,31 +40,28 @@ class UsageHistoryRepositoryImpl(
             UsageHistory(
                 user = user,
                 space = space,
-                start_at = startAt,
-                end_at = endAt,
+                startAt = startAt,
+                endAt = endAt,
             ),
         )
 
     override fun findById(usageId: UUID): Optional<UsageHistory> = usageHistoryJpaRepository.findById(usageId)
-    
+
     override fun findAllByCompanyIdAndDateRange(
-        companyId: UUID, 
-        startDate: LocalDateTime, 
-        endDate: LocalDateTime
-    ): List<UsageHistory> = 
-        usageHistoryJpaRepository.findAllByCompanyIdAndDateRange(companyId, startDate, endDate)
-    
+        companyId: UUID,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+    ): List<UsageHistory> = usageHistoryJpaRepository.findAllByCompanyIdAndDateRange(companyId, startDate, endDate)
+
     override fun findAllBySpaceIdAndDateRange(
-        spaceId: UUID, 
-        startDate: LocalDateTime, 
-        endDate: LocalDateTime
-    ): List<UsageHistory> = 
-        usageHistoryJpaRepository.findAllBySpaceIdAndDateRange(spaceId, startDate, endDate)
-    
+        spaceId: UUID,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+    ): List<UsageHistory> = usageHistoryJpaRepository.findAllBySpaceIdAndDateRange(spaceId, startDate, endDate)
+
     override fun findAllByUserIdAndDateRange(
-        userId: UUID, 
-        startDate: LocalDateTime, 
-        endDate: LocalDateTime
-    ): List<UsageHistory> = 
-        usageHistoryJpaRepository.findAllByUserIdAndDateRange(userId, startDate, endDate)
+        userId: UUID,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+    ): List<UsageHistory> = usageHistoryJpaRepository.findAllByUserIdAndDateRange(userId, startDate, endDate)
 }

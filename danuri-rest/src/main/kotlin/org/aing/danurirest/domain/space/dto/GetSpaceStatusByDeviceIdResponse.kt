@@ -16,8 +16,8 @@ data class GetSpaceStatusByDeviceIdResponse(
             GetSpaceStatusByDeviceIdResponse(
                 id = dto.space.id,
                 name = dto.space.name,
-                startAt = dto.space.start_at,
-                endAt = dto.space.end_at,
+                startAt = dto.space.startAt,
+                endAt = dto.space.endAt,
                 isAvailable = dto.isAvailable,
             )
     }

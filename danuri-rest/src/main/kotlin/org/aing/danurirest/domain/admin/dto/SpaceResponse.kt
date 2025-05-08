@@ -11,7 +11,7 @@ data class SpaceResponse(
     val name: String,
     val startAt: LocalTime,
     val endAt: LocalTime,
-    val usageCount: Int
+    val usageCount: Int,
 ) {
     companion object {
         fun from(entity: Space): SpaceResponse =
@@ -20,9 +20,9 @@ data class SpaceResponse(
                 companyId = entity.company.id!!,
                 companyName = entity.company.name,
                 name = entity.name,
-                startAt = entity.start_at,
-                endAt = entity.end_at,
-                usageCount = entity.usage.size
+                startAt = entity.startAt,
+                endAt = entity.endAt,
+                usageCount = entity.usage.size,
             )
     }
 } 

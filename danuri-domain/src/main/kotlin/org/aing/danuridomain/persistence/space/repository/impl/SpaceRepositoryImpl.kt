@@ -71,16 +71,16 @@ class SpaceRepositoryImpl(
         usageHistory: QUsageHistory,
         currentDateTime: LocalDateTime,
     ): BooleanExpression =
-        usageHistory.start_at
+        usageHistory.startAt
             .loe(currentDateTime)
             .and(
-                usageHistory.end_at
+                usageHistory.endAt
                     .isNull()
-                    .or(usageHistory.end_at.goe(currentDateTime)),
+                    .or(usageHistory.endAt.goe(currentDateTime)),
             )
 
     private fun isWithinOperatingHours(
         space: QSpace,
         currentTime: LocalTime,
-    ): BooleanExpression = space.start_at.loe(currentTime).and(space.end_at.goe(currentTime))
+    ): BooleanExpression = space.startAt.loe(currentTime).and(space.endAt.goe(currentTime))
 }

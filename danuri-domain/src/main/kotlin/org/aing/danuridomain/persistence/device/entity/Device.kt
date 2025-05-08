@@ -28,5 +28,5 @@ data class Device(
     val role: Role = Role.ROLE_DEVICE,
     @CreatedDate
     @Column(nullable = false)
-    val create_at: LocalDateTime = LocalDateTime.now(),
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 )

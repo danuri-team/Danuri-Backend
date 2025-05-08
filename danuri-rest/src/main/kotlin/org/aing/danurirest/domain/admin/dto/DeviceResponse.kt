@@ -17,7 +17,7 @@ data class DeviceResponse(
                 id = device.id!!,
                 companyId = device.company.id!!,
                 companyName = device.company.name,
-                createAt = device.create_at,
+                createAt = device.createdAt,
             )
     }
-} 
+}

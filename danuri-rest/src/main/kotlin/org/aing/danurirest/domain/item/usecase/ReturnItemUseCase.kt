@@ -38,8 +38,8 @@ class ReturnItemUsecase(
             itemId = item.id!!,
             itemName = item.name,
             totalQuantity = rental.quantity,
-            returnedQuantity = rental.returned_quantity,
-            returnedAt = rental.returned_at!!,
+            returnedQuantity = rental.returnedQuantity,
+            returnedAt = rental.returnedAt!!,
         )
     }
 
@@ -47,11 +47,11 @@ class ReturnItemUsecase(
         rental: Rental,
         quantity: Int,
     ) {
-        if (rental.returned_at != null) {
+        if (rental.returnedAt != null) {
             throw CustomException(CustomErrorCode.ALREADY_RETURNED)
         }
 
-        if (rental.quantity < rental.returned_quantity + quantity) {
+        if (rental.quantity < rental.returnedQuantity + quantity) {
             throw CustomException(CustomErrorCode.OVER_QUANTITY)
         }
     }
@@ -60,8 +60,8 @@ class ReturnItemUsecase(
         rental: Rental,
         quantity: Int,
     ) {
-        rental.returned_quantity += quantity
-        rental.returned_at = LocalDateTime.now()
+        rental.returnedQuantity += quantity
+        rental.returnedAt = LocalDateTime.now()
         rentalRepository.save(rental)
     }
 

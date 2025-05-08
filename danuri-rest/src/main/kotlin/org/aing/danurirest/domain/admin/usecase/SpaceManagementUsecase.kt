@@ -29,8 +29,8 @@ class SpaceManagementUsecase(
             Space(
                 company = company,
                 name = request.name,
-                start_at = request.startAt,
-                end_at = request.endAt,
+                startAt = request.startAt,
+                endAt = request.endAt,
             )
 
         return SpaceResponse.from(spaceRepository.save(space))
@@ -56,8 +56,8 @@ class SpaceManagementUsecase(
                 id = space.id,
                 company = space.company,
                 name = request.name,
-                start_at = request.startAt,
-                end_at = request.endAt,
+                startAt = request.startAt,
+                endAt = request.endAt,
                 usage = space.usage,
             )
 
@@ -99,4 +99,4 @@ class SpaceManagementUsecase(
         val spaces = spaceRepository.findByCompanyId(companyId)
         return spaces.map { SpaceResponse.from(it) }
     }
-} 
+}

@@ -16,7 +16,7 @@ data class UserResponse(
     val phone: String,
     val createAt: LocalDateTime,
     val updateAt: LocalDateTime?,
-    val usageCount: Int
+    val usageCount: Int,
 ) {
     companion object {
         fun from(entity: User): UserResponse =
@@ -28,9 +28,9 @@ data class UserResponse(
                 sex = entity.sex,
                 age = entity.age,
                 phone = entity.phone,
-                createAt = entity.create_at,
-                updateAt = entity.update_at,
-                usageCount = entity.usages.size
+                createAt = entity.createAt,
+                updateAt = entity.updateAt,
+                usageCount = entity.usages.size,
             )
     }
 } 
