@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
-class RentItemUseCase(
+class RentItemUsecase(
     private val itemRepository: ItemRepository,
     private val rentalRepository: RentalRepository,
     private val usageHistoryRepository: UsageHistoryRepository,
@@ -74,7 +74,7 @@ class RentItemUseCase(
             throw CustomException(CustomErrorCode.ITEM_NOT_AVAILABLE)
         }
 
-        if (item.available_quantity < quantity) {
+        if (item.availableQuantity < quantity) {
             throw CustomException(CustomErrorCode.INSUFFICIENT_ITEM_QUANTITY)
         }
     }
@@ -96,8 +96,8 @@ class RentItemUseCase(
         item: Item,
         quantity: Int,
     ) {
-        item.available_quantity -= quantity
-        if (item.available_quantity == 0) {
+        item.availableQuantity -= quantity
+        if (item.availableQuantity == 0) {
             item.status = ItemStatus.NOT_AVAILABLE
         }
         itemRepository.save(item)

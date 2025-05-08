@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
-class ReturnItemUseCase(
+class ReturnItemUsecase(
     private val itemRepository: ItemRepository,
     private val rentalRepository: RentalRepository,
 ) {
@@ -69,8 +69,8 @@ class ReturnItemUseCase(
         item: Item,
         quantity: Int,
     ) {
-        item.available_quantity += quantity
-        if (item.available_quantity > 0) {
+        item.availableQuantity += quantity
+        if (item.availableQuantity > 0) {
             item.status = ItemStatus.AVAILABLE
         }
         itemRepository.save(item)
