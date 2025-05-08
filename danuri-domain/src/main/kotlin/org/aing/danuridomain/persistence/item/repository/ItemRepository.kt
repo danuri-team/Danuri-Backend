@@ -8,10 +8,12 @@ interface ItemRepository {
     fun findById(itemId: UUID): Optional<Item>
 
     fun save(item: Item): Item
-    
+
     fun findByCompanyId(companyId: UUID): List<Item>
-    
+
     fun delete(itemId: UUID)
-    
+
     fun update(item: Item): Item
+
+    fun findByCompanyIdAndAvailableQuantityGreaterThanAndStatus(companyId: UUID): List<Item>
 }

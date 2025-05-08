@@ -11,7 +11,7 @@ data class ItemResponse(
     val name: String,
     val totalQuantity: Int,
     val availableQuantity: Int,
-    val status: ItemStatus
+    val status: ItemStatus,
 ) {
     companion object {
         fun from(entity: Item): ItemResponse =
@@ -20,9 +20,9 @@ data class ItemResponse(
                 companyId = entity.company.id!!,
                 companyName = entity.company.name,
                 name = entity.name,
-                totalQuantity = entity.total_quantity,
-                availableQuantity = entity.available_quantity,
-                status = entity.status
+                totalQuantity = entity.totalQuantity,
+                availableQuantity = entity.availableQuantity,
+                status = entity.status,
             )
     }
 } 
