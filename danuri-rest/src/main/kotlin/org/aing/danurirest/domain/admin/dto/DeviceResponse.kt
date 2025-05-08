@@ -8,7 +8,7 @@ data class DeviceResponse(
     val id: UUID,
     val companyId: UUID,
     val companyName: String,
-    val createAt: LocalDateTime,
+    val createdAt: LocalDateTime,
     val endAt: LocalDateTime? = null,
 ) {
     companion object {
@@ -17,7 +17,7 @@ data class DeviceResponse(
                 id = device.id!!,
                 companyId = device.company.id!!,
                 companyName = device.company.name,
-                createAt = device.createdAt,
+                createdAt = device.createdAt,
             )
     }
 }
