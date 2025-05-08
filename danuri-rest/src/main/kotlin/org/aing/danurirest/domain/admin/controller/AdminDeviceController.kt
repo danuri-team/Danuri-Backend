@@ -6,7 +6,6 @@ import org.aing.danurirest.domain.admin.dto.UpdateDeviceRequest
 import org.aing.danurirest.domain.admin.usecase.DeleteDeviceUsecase
 import org.aing.danurirest.domain.admin.usecase.GetAdminCompanyDevicesUsecase
 import org.aing.danurirest.domain.admin.usecase.GetDeviceUsecase
-import org.aing.danurirest.domain.admin.usecase.GetDevicesBySpaceUsecase
 import org.aing.danurirest.domain.admin.usecase.RegisterDeviceUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateDeviceUsecase
 import org.springframework.http.ResponseEntity
@@ -26,7 +25,6 @@ class AdminDeviceController(
     private val registerDeviceUsecase: RegisterDeviceUsecase,
     private val getDeviceUsecase: GetDeviceUsecase,
     private val getAdminCompanyDevicesUsecase: GetAdminCompanyDevicesUsecase,
-    private val getDevicesBySpaceUsecase: GetDevicesBySpaceUsecase,
     private val updateDeviceUsecase: UpdateDeviceUsecase,
     private val deleteDeviceUsecase: DeleteDeviceUsecase,
 ) {
@@ -37,7 +35,7 @@ class AdminDeviceController(
         registerDeviceUsecase.execute(registerDeviceRequest).run {
             ResponseEntity.noContent().build()
         }
-        
+
     @GetMapping("/{deviceId}")
     fun getDevice(
         @PathVariable deviceId: UUID,
@@ -45,21 +43,13 @@ class AdminDeviceController(
         getDeviceUsecase.execute(deviceId).run {
             ResponseEntity.ok(this)
         }
-        
+
     @GetMapping
     fun getAllDevices(): ResponseEntity<List<DeviceResponse>> =
         getAdminCompanyDevicesUsecase.execute().run {
             ResponseEntity.ok(this)
         }
-        
-    @GetMapping("/space/{spaceId}")
-    fun getDevicesBySpace(
-        @PathVariable spaceId: UUID,
-    ): ResponseEntity<List<DeviceResponse>> =
-        getDevicesBySpaceUsecase.execute(spaceId).run {
-            ResponseEntity.ok(this)
-        }
-        
+
     @PutMapping("/{deviceId}")
     fun updateDevice(
         @PathVariable deviceId: UUID,
@@ -68,11 +58,11 @@ class AdminDeviceController(
         updateDeviceUsecase.execute(deviceId, updateDeviceRequest).run {
             ResponseEntity.ok(this)
         }
-        
+
     @DeleteMapping("/{deviceId}")
     fun deleteDevice(
         @PathVariable deviceId: UUID,
-    ): ResponseEntity<Unit> = 
+    ): ResponseEntity<Unit> =
         deleteDeviceUsecase.execute(deviceId).run {
             ResponseEntity.noContent().build()
         }

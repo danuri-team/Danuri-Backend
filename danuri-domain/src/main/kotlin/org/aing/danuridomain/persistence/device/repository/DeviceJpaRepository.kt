@@ -8,8 +8,7 @@ import java.util.UUID
 
 interface DeviceJpaRepository : JpaRepository<Device, UUID> {
     @Query("SELECT d FROM Device d WHERE d.company.id = :companyId")
-    fun findAllByCompanyId(@Param("companyId") companyId: UUID): List<Device>
-    
-    @Query("SELECT d FROM Device d WHERE d.space.id = :spaceId")
-    fun findAllBySpaceId(@Param("spaceId") spaceId: UUID): List<Device>
+    fun findAllByCompanyId(
+        @Param("companyId") companyId: UUID,
+    ): List<Device>
 }

@@ -16,7 +16,7 @@ class RegisterDeviceUsecase(
     private val deviceRepository: DeviceRepository,
     private val companyRepository: CompanyRepository,
     private val spaceRepository: SpaceRepository,
-    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase
+    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(registerDeviceRequest: RegisterDeviceRequest) {
         if (deviceRepository.findByDeviceId(registerDeviceRequest.deviceId).isPresent) {
@@ -24,14 +24,16 @@ class RegisterDeviceUsecase(
         }
 
         val companyId = getAdminCompanyIdUsecase.execute()
-        
-        val company = companyRepository.findById(companyId).orElseThrow {
-            throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY)
-        }
 
-        val space = spaceRepository.findById(registerDeviceRequest.spaceId).orElseThrow {
-            throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
-        }
+        val company =
+            companyRepository.findById(companyId).orElseThrow {
+                throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY)
+            }
+
+        val space =
+            spaceRepository.findById(registerDeviceRequest.spaceId).orElseThrow {
+                throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
+            }
 
         if (space.company.id != company.id) {
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
@@ -41,7 +43,6 @@ class RegisterDeviceUsecase(
             Device(
                 company = company,
                 role = Role.ROLE_DEVICE,
-                space = space,
             ),
         )
     }
