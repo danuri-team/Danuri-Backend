@@ -14,8 +14,8 @@ data class UserResponse(
     val sex: Sex,
     val age: Age,
     val phone: String,
-    val createAt: LocalDateTime,
-    val updateAt: LocalDateTime?,
+    val createdAt: LocalDateTime,
+    val updatedAt: LocalDateTime?,
     val usageCount: Int,
 ) {
     companion object {
@@ -28,9 +28,9 @@ data class UserResponse(
                 sex = entity.sex,
                 age = entity.age,
                 phone = entity.phone,
-                createAt = entity.createAt,
-                updateAt = entity.updateAt,
+                createdAt = entity.createdAt,
+                updatedAt = entity.updatedAt,
                 usageCount = entity.usages.size,
             )
     }
-} 
+}
