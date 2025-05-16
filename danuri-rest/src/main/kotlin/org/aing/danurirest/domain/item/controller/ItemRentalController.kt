@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.item.controller
 
-import org.aing.danurirest.domain.item.dto.ItemListReponse
+import org.aing.danurirest.domain.item.dto.ItemListResponse
 import org.aing.danurirest.domain.item.dto.ItemRentalRequest
 import org.aing.danurirest.domain.item.dto.ItemRentalResponse
 import org.aing.danurirest.domain.item.dto.ItemReturnRequest
@@ -38,7 +38,7 @@ class ItemRentalController(
         }
 
     @GetMapping
-    fun getItemList(): ResponseEntity<List<ItemListReponse>> =
+    fun getItemList(): ResponseEntity<List<ItemListResponse>> =
         getItemListUsecase.execute().run {
             ResponseEntity.ok(this)
         }
