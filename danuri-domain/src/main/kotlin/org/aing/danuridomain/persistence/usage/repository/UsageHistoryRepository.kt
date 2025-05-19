@@ -1,6 +1,7 @@
 package org.aing.danuridomain.persistence.usage.repository
 
 import org.aing.danuridomain.persistence.space.entity.Space
+import org.aing.danuridomain.persistence.usage.dto.CurrentUsageHistoryDto
 import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import org.aing.danuridomain.persistence.user.entity.User
 import java.time.LocalDateTime
@@ -27,22 +28,24 @@ interface UsageHistoryRepository {
     ): UsageHistory
 
     fun findById(usageId: UUID): Optional<UsageHistory>
-    
+
     fun findAllByCompanyIdAndDateRange(
         companyId: UUID,
         startDate: LocalDateTime,
-        endDate: LocalDateTime
+        endDate: LocalDateTime,
     ): List<UsageHistory>
-    
+
     fun findAllBySpaceIdAndDateRange(
         spaceId: UUID,
         startDate: LocalDateTime,
-        endDate: LocalDateTime
+        endDate: LocalDateTime,
     ): List<UsageHistory>
-    
+
     fun findAllByUserIdAndDateRange(
         userId: UUID,
         startDate: LocalDateTime,
-        endDate: LocalDateTime
+        endDate: LocalDateTime,
     ): List<UsageHistory>
+
+    fun findUserCurrentUsageInfo(userId: UUID): CurrentUsageHistoryDto
 }
