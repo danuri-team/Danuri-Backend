@@ -48,4 +48,9 @@ interface UsageHistoryRepository {
     ): List<UsageHistory>
 
     fun findUserCurrentUsageInfo(userId: UUID): CurrentUsageHistoryDto
+
+    fun updateEndDate(
+        usageId: UUID,
+        endDate: LocalDateTime,
+    )
 }

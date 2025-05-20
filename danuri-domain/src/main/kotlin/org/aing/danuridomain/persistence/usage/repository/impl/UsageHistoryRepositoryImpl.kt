@@ -137,4 +137,15 @@ class UsageHistoryRepositoryImpl(
             spaceUsageInfo = usageInfo,
         )
     }
+
+    override fun updateEndDate(
+        usageId: UUID,
+        endDate: LocalDateTime,
+    ) {
+        val result =
+            usageHistoryJpaRepository.findById(usageId).orElseThrow {
+                throw NoSuchElementException("현재 사용 중인 공간이 없습니다.")
+            }
+        usageHistoryJpaRepository.save(result.copy(endAt = endDate))
+    }
 }
