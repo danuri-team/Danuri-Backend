@@ -133,7 +133,6 @@ class UsageHistoryRepositoryImpl(
             )
 
         return CurrentUsageHistoryDto(
-            userId = first.userId,
             isUsingSpace = true,
             spaceUsageInfo = usageInfo,
         )
