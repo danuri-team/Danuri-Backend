@@ -10,6 +10,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("io.github.openfeign.querydsl:querydsl-core:6.11")
     ksp("io.github.openfeign.querydsl:querydsl-ksp-codegen:6.11")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("io.github.openfeign.querydsl:querydsl-jpa:6.11")
     runtimeOnly("com.mysql:mysql-connector-j")
 }

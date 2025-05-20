@@ -15,6 +15,11 @@ subprojects {
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
 
+        // jackson
+        implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
         // junit
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
