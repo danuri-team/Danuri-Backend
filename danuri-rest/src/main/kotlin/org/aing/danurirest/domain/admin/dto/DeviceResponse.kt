@@ -8,21 +8,16 @@ data class DeviceResponse(
     val id: UUID,
     val companyId: UUID,
     val companyName: String,
-    val spaceId: UUID,
-    val spaceName: String,
-    val createAt: LocalDateTime,
+    val createdAt: LocalDateTime,
     val endAt: LocalDateTime? = null,
 ) {
     companion object {
-        fun from(device: Device): DeviceResponse {
-            return DeviceResponse(
+        fun from(device: Device): DeviceResponse =
+            DeviceResponse(
                 id = device.id!!,
                 companyId = device.company.id!!,
                 companyName = device.company.name,
-                spaceId = device.space.id!!,
-                spaceName = device.space.name,
-                createAt = device.create_at,
+                createdAt = device.createdAt,
             )
-        }
     }
-} 
+}

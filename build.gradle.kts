@@ -1,6 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
+    kotlin("jvm") version "2.1.20"
     id("org.jlleitschuh.gradle.ktlint").version("12.2.0")
+    id("com.google.devtools.ksp") version "2.1.20-2.0.1" apply false
 }
 
 subprojects {
@@ -13,6 +14,11 @@ subprojects {
         // lombok
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
+
+        // jackson
+        implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
         // junit
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

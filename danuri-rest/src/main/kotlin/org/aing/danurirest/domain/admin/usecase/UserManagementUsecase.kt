@@ -42,8 +42,6 @@ class UserManagementUsecase(
                 sex = request.sex,
                 age = request.age,
                 phone = request.phone,
-                create_at = now,
-                update_at = now,
             )
 
         return UserResponse.from(userRepository.save(user))
@@ -79,8 +77,6 @@ class UserManagementUsecase(
                 sex = request.sex,
                 age = request.age,
                 phone = request.phone,
-                create_at = user.create_at,
-                update_at = LocalDateTime.now(),
             )
 
         return UserResponse.from(userRepository.update(updatedUser))
@@ -121,4 +117,4 @@ class UserManagementUsecase(
         val users = userRepository.findByCompanyId(companyId)
         return users.map { UserResponse.from(it) }
     }
-} 
+}

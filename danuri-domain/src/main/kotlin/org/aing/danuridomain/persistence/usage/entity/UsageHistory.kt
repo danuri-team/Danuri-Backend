@@ -29,7 +29,7 @@ data class UsageHistory(
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.ALL])
     val rental: List<Rental> = emptyList(),
     @Column(name = "start_at", nullable = false)
-    val start_at: LocalDateTime,
+    val startAt: LocalDateTime,
     @Column(name = "end_at", nullable = true)
-    val end_at: LocalDateTime?,
+    val endAt: LocalDateTime?,
 )

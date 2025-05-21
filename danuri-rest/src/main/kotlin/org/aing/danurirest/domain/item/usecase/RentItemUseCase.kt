@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
-class RentItemUseCase(
+class RentItemUsecase(
     private val itemRepository: ItemRepository,
     private val rentalRepository: RentalRepository,
     private val usageHistoryRepository: UsageHistoryRepository,
@@ -40,7 +40,7 @@ class RentItemUseCase(
                     userId = user.id!!,
                 ).orElseThrow { CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE) }
 
-        if (usage.end_at?.isAfter(LocalDateTime.now()) != true) {
+        if (usage.endAt?.isAfter(LocalDateTime.now()) != true) {
             throw CustomException(CustomErrorCode.ALREADY_END)
         }
 
@@ -61,8 +61,8 @@ class RentItemUseCase(
             itemId = item.id!!,
             itemName = item.name,
             quantity = request.quantity,
-            borrowedAt = savedRental.borrowed_at,
-            returnedQuantity = savedRental.returned_quantity,
+            borrowedAt = savedRental.borrowedAt,
+            returnedQuantity = savedRental.returnedQuantity,
         )
     }
 
@@ -74,7 +74,7 @@ class RentItemUseCase(
             throw CustomException(CustomErrorCode.ITEM_NOT_AVAILABLE)
         }
 
-        if (item.available_quantity < quantity) {
+        if (item.availableQuantity < quantity) {
             throw CustomException(CustomErrorCode.INSUFFICIENT_ITEM_QUANTITY)
         }
     }
@@ -88,16 +88,16 @@ class RentItemUseCase(
             item = item,
             usage = usage,
             quantity = quantity,
-            borrowed_at = LocalDateTime.now(),
-            returned_quantity = 0,
+            borrowedAt = LocalDateTime.now(),
+            returnedQuantity = 0,
         )
 
     private fun updateItemQuantity(
         item: Item,
         quantity: Int,
     ) {
-        item.available_quantity -= quantity
-        if (item.available_quantity == 0) {
+        item.availableQuantity -= quantity
+        if (item.availableQuantity == 0) {
             item.status = ItemStatus.NOT_AVAILABLE
         }
         itemRepository.save(item)

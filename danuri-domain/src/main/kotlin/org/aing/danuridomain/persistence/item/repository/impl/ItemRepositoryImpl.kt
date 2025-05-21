@@ -14,12 +14,17 @@ class ItemRepositoryImpl(
     override fun findById(itemId: UUID): Optional<Item> = itemJpaRepository.findById(itemId)
 
     override fun save(item: Item): Item = itemJpaRepository.save(item)
-    
+
     override fun findByCompanyId(companyId: UUID): List<Item> = itemJpaRepository.findAllByCompanyId(companyId)
-    
+
     override fun delete(itemId: UUID) {
         itemJpaRepository.deleteById(itemId)
     }
-    
+
     override fun update(item: Item): Item = itemJpaRepository.save(item)
+
+    override fun findByCompanyIdAndAvailableQuantityGreaterThanAndStatus(companyId: UUID): List<Item> =
+        itemJpaRepository.findByCompanyIdAndAvailableQuantityGreaterThanAndStatus(
+            companyId,
+        )
 }

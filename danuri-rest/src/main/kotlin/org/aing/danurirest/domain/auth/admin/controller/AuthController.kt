@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("admin/auth")
+@RequestMapping("auth/admin")
 class AuthController(
     private val signInUsecase: SignInUsecase,
     private val refreshTokenUsecase: TokenRefreshUsecase,

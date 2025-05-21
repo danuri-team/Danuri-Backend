@@ -29,9 +29,9 @@ data class Item(
     @Column(nullable = false, length = 10)
     val name: String,
     @Column(nullable = false)
-    val total_quantity: Int,
+    val totalQuantity: Int,
     @Column(nullable = false)
-    var available_quantity: Int,
+    var availableQuantity: Int,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var status: ItemStatus,

@@ -15,7 +15,7 @@ data class UsageHistoryResponse(
     val companyName: String,
     val startAt: LocalDateTime,
     val endAt: LocalDateTime?,
-    val rentalCount: Int
+    val rentalCount: Int,
 ) {
     companion object {
         fun from(entity: UsageHistory): UsageHistoryResponse =
@@ -28,9 +28,9 @@ data class UsageHistoryResponse(
                 spaceName = entity.space.id.toString(),
                 companyId = entity.space.company.id!!,
                 companyName = entity.space.company.name,
-                startAt = entity.start_at,
-                endAt = entity.end_at,
-                rentalCount = entity.rental.size
+                startAt = entity.startAt,
+                endAt = entity.endAt,
+                rentalCount = entity.rental.size,
             )
     }
 } 

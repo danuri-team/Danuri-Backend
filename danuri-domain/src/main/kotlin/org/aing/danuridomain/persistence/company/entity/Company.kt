@@ -35,5 +35,5 @@ data class Company(
     val name: String,
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    val create_at: LocalDateTime,
+    val createdAt: LocalDateTime,
 )

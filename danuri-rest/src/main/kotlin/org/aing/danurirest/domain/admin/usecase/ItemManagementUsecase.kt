@@ -29,8 +29,8 @@ class ItemManagementUsecase(
             Item(
                 company = company,
                 name = request.name,
-                total_quantity = request.totalQuantity,
-                available_quantity = request.totalQuantity,
+                totalQuantity = request.totalQuantity,
+                availableQuantity = request.totalQuantity,
                 status = request.status,
             )
 
@@ -49,16 +49,16 @@ class ItemManagementUsecase(
                 .findById(itemId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
 
-        val availableQuantityDiff = request.totalQuantity - item.total_quantity
-        val updatedAvailableQuantity = item.available_quantity + availableQuantityDiff
+        val availableQuantityDiff = request.totalQuantity - item.totalQuantity
+        val updatedAvailableQuantity = item.availableQuantity + availableQuantityDiff
 
         val updatedItem =
             Item(
                 id = item.id,
                 company = item.company,
                 name = request.name,
-                total_quantity = request.totalQuantity,
-                available_quantity = updatedAvailableQuantity,
+                totalQuantity = request.totalQuantity,
+                availableQuantity = updatedAvailableQuantity,
                 status = request.status,
             )
 
@@ -111,4 +111,4 @@ class ItemManagementUsecase(
         val items = itemRepository.findByCompanyId(companyId)
         return items.map { ItemResponse.from(it) }
     }
-} 
+}

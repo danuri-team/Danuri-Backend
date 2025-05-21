@@ -26,9 +26,9 @@ data class Rental(
     @Column(nullable = false)
     val quantity: Int,
     @Column(nullable = false)
-    val borrowed_at: LocalDateTime,
+    val borrowedAt: LocalDateTime,
     @Column(nullable = true)
-    var returned_at: LocalDateTime? = null,
+    var returnedAt: LocalDateTime? = null,
     @Column(nullable = false)
-    var returned_quantity: Int = 0,
+    var returnedQuantity: Int = 0,
 )

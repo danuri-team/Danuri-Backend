@@ -26,7 +26,7 @@ data class Space(
     @Column(nullable = false, length = 50)
     val name: String,
     @Column(nullable = false)
-    val start_at: LocalTime,
+    val startAt: LocalTime,
     @Column(nullable = false)
-    val end_at: LocalTime,
+    val endAt: LocalTime,
 )

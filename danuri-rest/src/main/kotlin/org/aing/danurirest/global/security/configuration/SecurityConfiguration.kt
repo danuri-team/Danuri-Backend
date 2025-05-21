@@ -26,14 +26,14 @@ class SecurityConfiguration(
             .formLogin { it.disable() }
             .cors {
                 corsConfig()
-            }
-            .sessionManagement {
+            }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
             .authorizeHttpRequests {
                 // 인증/인가
                 it.requestMatchers(HttpMethod.POST, "/admin/auth/**").permitAll()
                 it.requestMatchers(HttpMethod.POST, "/auth/user/**").permitAll()
+                it.requestMatchers(HttpMethod.POST, "/auth/device/**").permitAll()
                 // 헬스체크
                 it.requestMatchers(HttpMethod.GET, "/health").permitAll()
                 // 디바이스단
