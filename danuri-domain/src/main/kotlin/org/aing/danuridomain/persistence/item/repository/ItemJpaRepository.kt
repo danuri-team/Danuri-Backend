@@ -14,4 +14,9 @@ interface ItemJpaRepository : JpaRepository<Item, UUID> {
         availableQuantity: Int = 0,
         status: ItemStatus = ItemStatus.AVAILABLE,
     ): List<Item>
+
+    fun findByCompanyIdAndId(
+        companyId: UUID,
+        id: UUID,
+    ): Item
 }
