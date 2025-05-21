@@ -18,46 +18,49 @@ import java.util.UUID
 @RestController
 @RequestMapping("/admin/management")
 class AdminManagementController(
-    private val adminManagementUsecase: AdminManagementUsecase
+    private val adminManagementUsecase: AdminManagementUsecase,
 ) {
     @GetMapping("/me")
     fun getMyInfo(): ResponseEntity<AdminResponse> =
         adminManagementUsecase.getCurrentAdminInfo().run {
             ResponseEntity.ok(this)
         }
-    
+
     @GetMapping("/{adminId}")
-    fun getAdminInfo(@PathVariable adminId: UUID): ResponseEntity<AdminResponse> =
+    fun getAdminInfo(
+        @PathVariable adminId: UUID,
+    ): ResponseEntity<AdminResponse> =
         adminManagementUsecase.getAdminInfo(adminId).run {
             ResponseEntity.ok(this)
         }
-    
+
     @GetMapping("/company/{companyId}")
-    fun getAdminsByCompany(@PathVariable companyId: UUID): ResponseEntity<List<AdminResponse>> =
-        adminManagementUsecase.getAdminsByCompany(companyId).run {
+    fun getAdminsByCompany(
+        @PathVariable companyId: UUID,
+    ): ResponseEntity<List<AdminResponse>> =
+        adminManagementUsecase.getAdminsByCompany().run {
             ResponseEntity.ok(this)
         }
-    
-    @PutMapping("/{adminId}")
+
+    @PutMapping
     fun updateAdmin(
-        @PathVariable adminId: UUID,
-        @Valid @RequestBody request: AdminUpdateRequest
+        @Valid @RequestBody request: AdminUpdateRequest,
     ): ResponseEntity<AdminResponse> =
-        adminManagementUsecase.updateAdmin(adminId, request).run {
+        adminManagementUsecase.updateAdmin(request).run {
             ResponseEntity.ok(this)
         }
-    
+
     @PutMapping("/password")
     fun updatePassword(
-        @Valid @RequestBody request: AdminPasswordUpdateRequest
+        @Valid @RequestBody request: AdminPasswordUpdateRequest,
     ): ResponseEntity<AdminResponse> =
         adminManagementUsecase.updatePassword(request).run {
             ResponseEntity.ok(this)
         }
-    
-    @DeleteMapping("/{adminId}")
-    fun deleteAdmin(@PathVariable adminId: UUID): ResponseEntity<Unit> =
-        adminManagementUsecase.deleteAdmin(adminId).run {
+
+    @DeleteMapping
+    fun deleteAdmin(): ResponseEntity<Unit> =
+        adminManagementUsecase.deleteAdmin().run {
             ResponseEntity.noContent().build()
         }
-} 
+}

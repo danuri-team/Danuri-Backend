@@ -17,6 +17,11 @@ class ItemRepositoryImpl(
 
     override fun findByCompanyId(companyId: UUID): List<Item> = itemJpaRepository.findAllByCompanyId(companyId)
 
+    override fun findByCompanyIdAndId(
+        companyId: UUID,
+        itemId: UUID,
+    ): Item = itemJpaRepository.findByCompanyIdAndId(companyId, itemId)
+
     override fun delete(itemId: UUID) {
         itemJpaRepository.deleteById(itemId)
     }

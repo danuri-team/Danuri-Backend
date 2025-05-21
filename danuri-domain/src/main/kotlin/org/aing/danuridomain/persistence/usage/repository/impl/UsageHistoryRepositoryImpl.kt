@@ -56,7 +56,24 @@ class UsageHistoryRepositoryImpl(
             ),
         )
 
-    override fun findById(usageId: UUID): Optional<UsageHistory> = usageHistoryJpaRepository.findById(usageId)
+    override fun findByIdAndCompanyId(
+        usageId: UUID,
+        companyId: UUID,
+    ): Optional<UsageHistory> {
+        val qUsage = QUsageHistory.usageHistory
+        val qSpace = QSpace.space
+
+        val result =
+            queryFactory
+                .selectFrom(qUsage)
+                .join(qUsage.space, qSpace)
+                .where(
+                    qUsage.id.eq(usageId),
+                    qSpace.company.id.eq(companyId),
+                ).fetchOne()
+
+        return Optional.ofNullable(result)
+    }
 
     override fun findAllByCompanyIdAndDateRange(
         companyId: UUID,
@@ -64,11 +81,46 @@ class UsageHistoryRepositoryImpl(
         endDate: LocalDateTime,
     ): List<UsageHistory> = usageHistoryJpaRepository.findAllByCompanyIdAndDateRange(companyId, startDate, endDate)
 
-    override fun findAllBySpaceIdAndDateRange(
+    override fun findAllByCompanyIdAndSpaceIdAndDateRange(
         spaceId: UUID,
         startDate: LocalDateTime,
         endDate: LocalDateTime,
-    ): List<UsageHistory> = usageHistoryJpaRepository.findAllBySpaceIdAndDateRange(spaceId, startDate, endDate)
+        companyId: UUID,
+    ): List<UsageHistory> {
+        val qUsage = QUsageHistory.usageHistory
+        val qSpace = QSpace.space
+
+        return queryFactory
+            .selectFrom(qUsage)
+            .join(qUsage.space, qSpace)
+            .fetchJoin()
+            .where(
+                qSpace.id.eq(spaceId),
+                qSpace.company.id.eq(companyId),
+                qUsage.startAt.goe(startDate),
+                qUsage.startAt.loe(endDate),
+            ).fetch()
+    }
+
+    override fun findAllByUserIdAndDateRangeAndCompanyId(
+        userId: UUID,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+        companyId: UUID,
+    ): MutableList<UsageHistory>? {
+        val qUsage = QUsageHistory.usageHistory
+        val qUser = QUser.user
+
+        return queryFactory
+            .selectFrom(qUsage)
+            .join(qUsage.user, qUser)
+            .fetchJoin()
+            .where(
+                qUser.id.eq(userId),
+                qUser.company.id.eq(companyId),
+                qUsage.startAt.between(startDate, endDate),
+            ).fetch()
+    }
 
     override fun findAllByUserIdAndDateRange(
         userId: UUID,

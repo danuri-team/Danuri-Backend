@@ -42,12 +42,15 @@ class ItemManagementUsecase(
         request: ItemRequest,
     ): ItemResponse {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
-        // TODO: 본인 회사의 아이템만 업데이트가 가능해야 함
 
         val item =
             itemRepository
                 .findById(itemId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
+
+        if (item.company.id != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
 
         val availableQuantityDiff = request.totalQuantity - item.totalQuantity
         val updatedAvailableQuantity = item.availableQuantity + availableQuantityDiff

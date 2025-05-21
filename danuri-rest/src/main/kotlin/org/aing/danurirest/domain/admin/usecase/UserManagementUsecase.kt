@@ -64,7 +64,7 @@ class UserManagementUsecase(
 
         if (user.phone != request.phone) {
             userRepository
-                .findByPhoneAndCompanyId(request.phone, request.companyId!!)
+                .findByPhoneAndCompanyId(request.phone, user.company.id!!)
                 .ifPresent { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
         }
 

@@ -27,7 +27,10 @@ interface UsageHistoryRepository {
         endAt: LocalDateTime = LocalDateTime.now().plusMinutes(30),
     ): UsageHistory
 
-    fun findById(usageId: UUID): Optional<UsageHistory>
+    fun findByIdAndCompanyId(
+        usageId: UUID,
+        companyId: UUID,
+    ): Optional<UsageHistory>
 
     fun findAllByCompanyIdAndDateRange(
         companyId: UUID,
@@ -35,10 +38,11 @@ interface UsageHistoryRepository {
         endDate: LocalDateTime,
     ): List<UsageHistory>
 
-    fun findAllBySpaceIdAndDateRange(
+    fun findAllByCompanyIdAndSpaceIdAndDateRange(
         spaceId: UUID,
         startDate: LocalDateTime,
         endDate: LocalDateTime,
+        companyId: UUID,
     ): List<UsageHistory>
 
     fun findAllByUserIdAndDateRange(
@@ -46,6 +50,13 @@ interface UsageHistoryRepository {
         startDate: LocalDateTime,
         endDate: LocalDateTime,
     ): List<UsageHistory>
+
+    fun findAllByUserIdAndDateRangeAndCompanyId(
+        userId: UUID,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime,
+        companyId: UUID,
+    ): MutableList<UsageHistory>?
 
     fun findUserCurrentUsageInfo(userId: UUID): CurrentUsageHistoryDto
 
