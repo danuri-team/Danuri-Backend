@@ -155,9 +155,10 @@ class UsageHistoryRepositoryImpl(
                 .leftJoin(rental.item, item)
                 .where(
                     user.id.eq(userId),
-                    usage.endAt.isNull.or(usage.endAt.before(LocalDateTime.now())),
+                    usage.endAt.isNull.or(usage.endAt.after(LocalDateTime.now())),
                 ).fetch()
 
+        // TODO: Repository Layer -> Service Layer
         if (results.isEmpty()) {
             throw NoSuchElementException("현재 사용 중인 공간이 없습니다.")
         }
@@ -194,6 +195,7 @@ class UsageHistoryRepositoryImpl(
         usageId: UUID,
         endDate: LocalDateTime,
     ) {
+        // TODO: Repository Layer -> Service Layer
         val result =
             usageHistoryJpaRepository.findById(usageId).orElseThrow {
                 throw NoSuchElementException("현재 사용 중인 공간이 없습니다.")
