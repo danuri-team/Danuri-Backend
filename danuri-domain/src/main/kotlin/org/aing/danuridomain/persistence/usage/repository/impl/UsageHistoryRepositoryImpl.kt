@@ -155,7 +155,7 @@ class UsageHistoryRepositoryImpl(
                 .leftJoin(rental.item, item)
                 .where(
                     user.id.eq(userId),
-                    usage.endAt.isNull,
+                    usage.endAt.isNull.or(usage.endAt.before(LocalDateTime.now())),
                 ).fetch()
 
         if (results.isEmpty()) {
