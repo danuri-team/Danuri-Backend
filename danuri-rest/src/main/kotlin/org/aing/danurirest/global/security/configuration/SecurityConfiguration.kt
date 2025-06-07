@@ -31,16 +31,18 @@ class SecurityConfiguration(
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
             .authorizeHttpRequests {
                 // 인증/인가
-                it.requestMatchers(HttpMethod.POST, "/admin/auth/**").permitAll()
+                it.requestMatchers(HttpMethod.POST, "/auth/admin/**").permitAll()
                 it.requestMatchers(HttpMethod.POST, "/auth/user/**").permitAll()
-                it.requestMatchers(HttpMethod.POST, "/auth/device/**").permitAll()
+                it.requestMatchers(HttpMethod.POST, "/auth/device/token").hasRole("ADMIN")
+                // 디바이스
+                it.requestMatchers("/item/**", "/item").hasRole("DEVICE")
+                it.requestMatchers("/space").hasRole("DEVICE")
+                it.requestMatchers("/usage").hasRole("DEVICE")
+                // 어드민
+                it.requestMatchers("/admin/**").hasRole("ADMIN")
                 // 헬스체크
                 it.requestMatchers(HttpMethod.GET, "/health").permitAll()
-                // 디바이스단
-                it.requestMatchers(HttpMethod.POST, "/admin/devices/token").permitAll()
-                it.requestMatchers(HttpMethod.GET, "/admin/devices/space/").hasRole("DEVICE")
-                it.requestMatchers("/admin/**").hasRole("ADMIN")
-                it.requestMatchers("/").hasRole("ADMIN")
+                // 그 외
                 it.anyRequest().authenticated()
             }.build()
 
