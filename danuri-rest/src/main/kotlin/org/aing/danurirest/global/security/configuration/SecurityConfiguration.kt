@@ -32,7 +32,7 @@ class SecurityConfiguration(
             .authorizeHttpRequests {
                 // 인증/인가
                 it.requestMatchers(HttpMethod.POST, "/auth/admin/**").permitAll()
-                it.requestMatchers(HttpMethod.POST, "/auth/user/**").permitAll()
+                it.requestMatchers(HttpMethod.POST, "/auth/user/**").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.POST, "/auth/device/token").hasRole("ADMIN")
                 // 디바이스
                 it.requestMatchers("/item/**", "/item").hasRole("DEVICE")
