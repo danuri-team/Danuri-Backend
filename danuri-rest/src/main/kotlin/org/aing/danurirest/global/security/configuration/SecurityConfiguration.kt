@@ -39,7 +39,8 @@ class SecurityConfiguration(
                 it.requestMatchers(HttpMethod.POST, "/usage", "/space", "/item/**").hasRole("USER")
                 // 어드민
                 it.requestMatchers("/admin/**").hasRole("ADMIN")
-                // 헬스체크
+                // 헬스체크 & 개발자
+                it.requestMatchers(HttpMethod.GET, "/actuator", "/actuator/**").hasRole("ADMIN")
                 it.requestMatchers(HttpMethod.GET, "/health").permitAll()
                 // 그 외
                 it.anyRequest().authenticated()
