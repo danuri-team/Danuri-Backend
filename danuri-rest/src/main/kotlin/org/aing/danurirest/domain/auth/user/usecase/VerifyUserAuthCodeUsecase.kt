@@ -3,10 +3,10 @@ package org.aing.danurirest.domain.auth.user.usecase
 import org.aing.danuridomain.persistence.user.enum.Role
 import org.aing.danuridomain.persistence.user.repository.UserAuthCodeRepository
 import org.aing.danuridomain.persistence.user.repository.UserRepository
+import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider
-import org.aing.danurirest.global.security.jwt.dto.JwtDetails
 import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -20,7 +20,7 @@ class VerifyUserAuthCodeUsecase(
     fun execute(
         phone: String,
         authCode: String,
-    ): Pair<JwtDetails, JwtDetails> {
+    ): SignInResponse {
         val userAuthCode =
             userAuthCodeRepository
                 .findByPhone(phone)
@@ -56,6 +56,6 @@ class VerifyUserAuthCodeUsecase(
                 role = Role.ROLE_USER,
             )
 
-        return Pair(accessToken, refreshToken)
+        return SignInResponse(accessToken, refreshToken)
     }
-} 
+}

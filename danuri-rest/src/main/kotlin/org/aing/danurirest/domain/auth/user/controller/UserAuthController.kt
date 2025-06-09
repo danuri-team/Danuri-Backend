@@ -1,8 +1,8 @@
 package org.aing.danurirest.domain.auth.user.controller
 
 import jakarta.validation.Valid
+import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.domain.auth.user.dto.UserAuthCodeResponse
-import org.aing.danurirest.domain.auth.user.dto.UserAuthResponse
 import org.aing.danurirest.domain.auth.user.dto.UserPhoneAuthRequest
 import org.aing.danurirest.domain.auth.user.dto.UserRegisterRequest
 import org.aing.danurirest.domain.auth.user.dto.UserRegisterResponse
@@ -42,8 +42,8 @@ class UserAuthController(
     @PostMapping("/verify")
     fun verifyAuthCode(
         @Valid @RequestBody request: UserVerifyAuthRequest,
-    ): ResponseEntity<UserAuthResponse> {
-        val tokenInfo = verifyUserAuthCodeUsecase.execute(request.phone, request.authCode)
-        return ResponseEntity.ok(UserAuthResponse.from(tokenInfo.first, tokenInfo.second))
-    }
+    ): ResponseEntity<SignInResponse> =
+        verifyUserAuthCodeUsecase.execute(request.phone, request.authCode).run {
+            ResponseEntity.ok(this)
+        }
 }
