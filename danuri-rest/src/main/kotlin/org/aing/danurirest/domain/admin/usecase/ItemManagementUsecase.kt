@@ -98,17 +98,6 @@ class ItemManagementUsecase(
         return ItemResponse.from(item)
     }
 
-    fun getItemsByCompany(companyId: UUID): List<ItemResponse> {
-        val adminCompanyId = getAdminCompanyIdUsecase.execute()
-
-        if (companyId != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
-
-        val items = itemRepository.findByCompanyId(companyId)
-        return items.map { ItemResponse.from(it) }
-    }
-
     fun getCurrentAdminCompanyItems(): List<ItemResponse> {
         val companyId = getAdminCompanyIdUsecase.execute()
         val items = itemRepository.findByCompanyId(companyId)

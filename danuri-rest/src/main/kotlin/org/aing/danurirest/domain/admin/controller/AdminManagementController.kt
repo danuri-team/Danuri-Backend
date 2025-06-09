@@ -34,10 +34,8 @@ class AdminManagementController(
             ResponseEntity.ok(this)
         }
 
-    @GetMapping("/company/{companyId}")
-    fun getAdminsByCompany(
-        @PathVariable companyId: UUID,
-    ): ResponseEntity<List<AdminResponse>> =
+    @GetMapping
+    fun getAdminsByCompany(): ResponseEntity<List<AdminResponse>> =
         adminManagementUsecase.getAdminsByCompany().run {
             ResponseEntity.ok(this)
         }

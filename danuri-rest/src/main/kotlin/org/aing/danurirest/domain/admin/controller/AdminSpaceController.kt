@@ -18,35 +18,41 @@ import java.util.UUID
 @RestController
 @RequestMapping("/admin/spaces")
 class AdminSpaceController(
-    private val spaceManagementUsecase: SpaceManagementUsecase
+    private val spaceManagementUsecase: SpaceManagementUsecase,
 ) {
     @PostMapping
-    fun createSpace(@Valid @RequestBody request: SpaceRequest): ResponseEntity<SpaceResponse> =
+    fun createSpace(
+        @Valid @RequestBody request: SpaceRequest,
+    ): ResponseEntity<SpaceResponse> =
         spaceManagementUsecase.createSpace(request).run {
             ResponseEntity.ok(this)
         }
-    
+
     @PutMapping("/{spaceId}")
     fun updateSpace(
         @PathVariable spaceId: UUID,
-        @Valid @RequestBody request: SpaceRequest
+        @Valid @RequestBody request: SpaceRequest,
     ): ResponseEntity<SpaceResponse> =
         spaceManagementUsecase.updateSpace(spaceId, request).run {
             ResponseEntity.ok(this)
         }
-    
+
     @DeleteMapping("/{spaceId}")
-    fun deleteSpace(@PathVariable spaceId: UUID): ResponseEntity<Unit> =
+    fun deleteSpace(
+        @PathVariable spaceId: UUID,
+    ): ResponseEntity<Unit> =
         spaceManagementUsecase.deleteSpace(spaceId).run {
             ResponseEntity.noContent().build()
         }
-    
+
     @GetMapping("/{spaceId}")
-    fun getSpace(@PathVariable spaceId: UUID): ResponseEntity<SpaceResponse> =
+    fun getSpace(
+        @PathVariable spaceId: UUID,
+    ): ResponseEntity<SpaceResponse> =
         spaceManagementUsecase.getSpace(spaceId).run {
             ResponseEntity.ok(this)
         }
-        
+
     @GetMapping
     fun getCurrentCompanySpaces(): ResponseEntity<List<SpaceResponse>> =
         spaceManagementUsecase.getCurrentAdminCompanySpaces().run {
