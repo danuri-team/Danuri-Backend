@@ -144,6 +144,7 @@ class UsageHistoryRepositoryImpl(
                         space.name,
                         usage.startAt,
                         usage.endAt,
+                        usage.id,
                         item.name,
                         rental.quantity,
                         rental.returnedQuantity,
@@ -183,6 +184,7 @@ class UsageHistoryRepositoryImpl(
                 startAt = first.startAt,
                 endAt = first.endAt,
                 rentalItem = rentedItems,
+                usageId = first.usageId,
             )
 
         return CurrentUsageHistoryDto(

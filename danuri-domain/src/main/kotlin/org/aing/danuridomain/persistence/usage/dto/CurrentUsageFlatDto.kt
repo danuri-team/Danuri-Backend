@@ -11,6 +11,7 @@ data class CurrentUsageFlatDto(
     val spaceName: String,
     val startAt: LocalDateTime,
     val endAt: LocalDateTime?,
+    val usageId: UUID,
     val itemName: String?,
     val quantity: Int?,
     val returnedQuantity: Int?,
