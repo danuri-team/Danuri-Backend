@@ -46,7 +46,7 @@ class SendUserAuthCodeUsecase(
                 expiredAt = expiredAt,
             )
         userAuthCodeRepository.save(userAuthCode)
-        val message = Message(from = solfrom, to = phone.replace("-", ""), text = "[송정다누리청소년문화의집] 인증번호는 $authCode 입니다. 본인이 아닐 경우, 문의 해주세요.")
+        val message = Message(from = solfrom, to = phone.replace("-", ""), text = "[송정다누리청소년문화의집] 본인확인을 위해 인증번호 [$authCode]를 입력해 주세요.")
         try {
             val messageService =
                 NurigoApp.initialize(
