@@ -16,11 +16,11 @@ import java.util.Random
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class SendUserAuthCodeUsecase(
-    @Value("\${solapi.key}")
+    @Value("\${sms.apiKey}")
     private val solApiKey: String,
-    @Value("\${solapi.secret}")
+    @Value("\${sms.apiSecret}")
     private val solApiSecretKey: String,
-    @Value("\${solapi.from}")
+    @Value("\${sms.fromnumber}")
     private val solfrom: String,
     private val userRepository: UserRepository,
     private val userAuthCodeRepository: UserAuthCodeRepository,
