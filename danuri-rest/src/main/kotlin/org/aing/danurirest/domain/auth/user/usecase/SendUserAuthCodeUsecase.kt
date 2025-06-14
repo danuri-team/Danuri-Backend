@@ -1,13 +1,11 @@
 package org.aing.danurirest.domain.auth.user.usecase
 
-import net.nurigo.sdk.NurigoApp
-import net.nurigo.sdk.message.model.Message
 import org.aing.danuridomain.persistence.user.entity.UserAuthCode
 import org.aing.danuridomain.persistence.user.repository.UserAuthCodeRepository
 import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.springframework.beans.factory.annotation.Value
+import org.aing.danurirest.global.third_party.sms.SendSmsUsecase
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -16,14 +14,9 @@ import java.util.Random
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class SendUserAuthCodeUsecase(
-    @Value("\${sms.apiKey}")
-    private val solApiKey: String,
-    @Value("\${sms.apiSecret}")
-    private val solApiSecretKey: String,
-    @Value("\${sms.fromnumber}")
-    private val solfrom: String,
     private val userRepository: UserRepository,
     private val userAuthCodeRepository: UserAuthCodeRepository,
+    private val sendSmsUsecase: SendSmsUsecase,
 ) {
     companion object {
         private const val AUTH_CODE_EXPIRE_MINUTES = 5L
@@ -46,18 +39,9 @@ class SendUserAuthCodeUsecase(
                 expiredAt = expiredAt,
             )
         userAuthCodeRepository.save(userAuthCode)
-        val message = Message(from = solfrom, to = phone.replace("-", ""), text = "[송정다누리청소년문화의집] 본인확인을 위해 인증번호 [$authCode]를 입력해 주세요.")
-        try {
-            val messageService =
-                NurigoApp.initialize(
-                    apiKey = solApiKey,
-                    apiSecretKey = solApiSecretKey,
-                    domain = "https://api.solapi.com",
-                )
-            messageService.send(message)
-        } catch (e: Exception) {
-            throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
-        }
+
+        val messageText = "[송정다누리청소년문화의집] 본인확인을 위해 인증번호 [$authCode]를 입력해 주세요."
+        sendSmsUsecase.execute(phone, messageText)
     }
 
     private fun generateRandomCode(): String {
