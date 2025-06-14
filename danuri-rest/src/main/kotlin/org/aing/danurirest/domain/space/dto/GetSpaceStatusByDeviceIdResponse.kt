@@ -5,7 +5,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 data class GetSpaceStatusByDeviceIdResponse(
-    val id: UUID?,
+    val spaceId: UUID?,
     val name: String,
     val startAt: LocalTime,
     val endAt: LocalTime,
@@ -14,7 +14,7 @@ data class GetSpaceStatusByDeviceIdResponse(
     companion object {
         fun fromDomainDto(dto: SpaceAvailabilityDto): GetSpaceStatusByDeviceIdResponse =
             GetSpaceStatusByDeviceIdResponse(
-                id = dto.space.id,
+                spaceId = dto.space.id,
                 name = dto.space.name,
                 startAt = dto.space.startAt,
                 endAt = dto.space.endAt,
