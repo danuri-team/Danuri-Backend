@@ -6,8 +6,6 @@ import java.util.UUID
 
 data class SpaceResponse(
     val id: UUID,
-    val companyId: UUID,
-    val companyName: String,
     val name: String,
     val startAt: LocalTime,
     val endAt: LocalTime,
@@ -17,12 +15,10 @@ data class SpaceResponse(
         fun from(entity: Space): SpaceResponse =
             SpaceResponse(
                 id = entity.id!!,
-                companyId = entity.company.id!!,
-                companyName = entity.company.name,
                 name = entity.name,
                 startAt = entity.startAt,
                 endAt = entity.endAt,
                 usageCount = entity.usage.size,
             )
     }
-} 
+}

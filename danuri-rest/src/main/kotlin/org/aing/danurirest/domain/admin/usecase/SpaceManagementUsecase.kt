@@ -61,7 +61,7 @@ class SpaceManagementUsecase(
                 usage = space.usage,
             )
 
-        return SpaceResponse.from(spaceRepository.update(updatedSpace))
+        return SpaceResponse.from(spaceRepository.save(updatedSpace))
     }
 
     fun deleteSpace(spaceId: UUID) {

@@ -11,8 +11,8 @@ import java.util.UUID
 interface UsageHistoryRepository {
     fun spaceUsingTime(
         spaceId: UUID,
-        startTime: LocalDateTime = LocalDateTime.now(),
-        endTime: LocalDateTime = LocalDateTime.now().plusMinutes(150),
+        startTime: LocalDateTime,
+        endTime: LocalDateTime,
     ): List<UsageHistory>
 
     fun spaceUsingInfo(

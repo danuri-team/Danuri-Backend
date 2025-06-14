@@ -2,7 +2,7 @@ package org.aing.danurirest.domain.admin.dto
 
 import org.aing.danuridomain.persistence.admin.Status
 import org.aing.danuridomain.persistence.admin.entity.Admin
-import org.aing.danuridomain.persistence.user.enum.Role
+import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
 data class AdminResponse(
@@ -12,7 +12,7 @@ data class AdminResponse(
     val email: String,
     val phone: String,
     val role: Role,
-    val status: Status
+    val status: Status,
 ) {
     companion object {
         fun from(entity: Admin): AdminResponse =
@@ -23,7 +23,7 @@ data class AdminResponse(
                 email = entity.email,
                 phone = entity.phone,
                 role = entity.role,
-                status = entity.status
+                status = entity.status,
             )
     }
 } 

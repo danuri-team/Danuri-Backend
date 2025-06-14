@@ -5,7 +5,6 @@ import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.domain.auth.user.dto.UserAuthCodeResponse
 import org.aing.danurirest.domain.auth.user.dto.UserPhoneAuthRequest
 import org.aing.danurirest.domain.auth.user.dto.UserRegisterRequest
-import org.aing.danurirest.domain.auth.user.dto.UserRegisterResponse
 import org.aing.danurirest.domain.auth.user.dto.UserVerifyAuthRequest
 import org.aing.danurirest.domain.auth.user.usecase.RegisterUserUsecase
 import org.aing.danurirest.domain.auth.user.usecase.SendUserAuthCodeUsecase
@@ -26,10 +25,10 @@ class UserAuthController(
     @PostMapping("/register")
     fun registerUser(
         @Valid @RequestBody request: UserRegisterRequest,
-    ): ResponseEntity<UserRegisterResponse> {
-        val user = registerUserUsecase.execute(request)
-        return ResponseEntity.ok(UserRegisterResponse.from(user))
-    }
+    ): ResponseEntity<Unit> =
+        registerUserUsecase.execute(request).run {
+            ResponseEntity.noContent().build()
+        }
 
     @PostMapping("/phone")
     fun sendAuthCode(

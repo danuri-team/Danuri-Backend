@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import org.aing.danuridomain.persistence.user.enum.Role
+import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
 data class AdminUpdateRequest(
@@ -23,4 +23,4 @@ data class AdminUpdateRequest(
     val phone: String,
     @field:NotNull(message = "역할은 필수 입력값입니다.")
     val role: Role,
-) 
+)

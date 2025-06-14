@@ -12,10 +12,8 @@ interface AdminRepository {
     fun existsByEmail(email: String): Boolean
 
     fun save(admin: Admin): Admin
-    
+
     fun findByCompanyId(companyId: UUID): List<Admin>
-    
+
     fun delete(adminId: UUID)
-    
-    fun update(admin: Admin): Admin
 }

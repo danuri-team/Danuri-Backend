@@ -4,8 +4,7 @@ import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
-import org.aing.danuridomain.persistence.item.enum.ItemStatus
-import java.util.UUID
+import org.aing.danuridomain.persistence.item.ItemStatus
 
 data class ItemRequest(
     @field:NotBlank(message = "품목 이름은 필수 입력값입니다.")

@@ -77,7 +77,7 @@ class AdminManagementUsecase(
                 status = admin.status,
             )
 
-        return AdminResponse.from(adminRepository.update(updatedAdmin))
+        return AdminResponse.from(adminRepository.save(updatedAdmin))
     }
 
     fun updatePassword(request: AdminPasswordUpdateRequest): AdminResponse {
@@ -103,7 +103,7 @@ class AdminManagementUsecase(
                 status = admin.status,
             )
 
-        return AdminResponse.from(adminRepository.update(updatedAdmin))
+        return AdminResponse.from(adminRepository.save(updatedAdmin))
     }
 
     fun deleteAdmin() {

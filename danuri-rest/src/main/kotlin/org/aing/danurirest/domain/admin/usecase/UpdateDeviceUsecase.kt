@@ -53,9 +53,8 @@ class UpdateDeviceUsecase(
                 id = device.id,
                 company = company,
                 role = device.role,
-                createdAt = device.createdAt,
             )
 
-        return DeviceResponse.from(deviceRepository.update(updatedDevice))
+        return DeviceResponse.from(deviceRepository.save(updatedDevice))
     }
 }

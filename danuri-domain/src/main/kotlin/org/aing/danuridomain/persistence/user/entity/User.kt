@@ -11,13 +11,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.company.entity.Company
 import org.aing.danuridomain.persistence.usage.entity.UsageHistory
-import org.aing.danuridomain.persistence.user.enum.Age
-import org.aing.danuridomain.persistence.user.enum.Sex
-import org.hibernate.annotations.UpdateTimestamp
-import org.springframework.data.annotation.CreatedDate
-import java.time.LocalDateTime
+import org.aing.danuridomain.persistence.user.Age
+import org.aing.danuridomain.persistence.user.Sex
 import java.util.UUID
 
 @Entity
@@ -41,10 +39,4 @@ data class User(
     val age: Age,
     @Column(nullable = false, length = 30)
     val phone: String,
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    @UpdateTimestamp
-    @Column(nullable = false)
-    val updatedAt: LocalDateTime? = null,
-)
+) : BaseEntity()
