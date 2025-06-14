@@ -1,7 +1,7 @@
 package org.aing.danuridomain.persistence.item.repository
 
+import org.aing.danuridomain.persistence.item.ItemStatus
 import org.aing.danuridomain.persistence.item.entity.Item
-import org.aing.danuridomain.persistence.item.enum.ItemStatus
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 

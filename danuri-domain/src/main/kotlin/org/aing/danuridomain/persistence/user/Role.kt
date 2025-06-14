@@ -1,4 +1,4 @@
-package org.aing.danuridomain.persistence.user.enum
+package org.aing.danuridomain.persistence.user
 
 enum class Role {
     ROLE_ADMIN,

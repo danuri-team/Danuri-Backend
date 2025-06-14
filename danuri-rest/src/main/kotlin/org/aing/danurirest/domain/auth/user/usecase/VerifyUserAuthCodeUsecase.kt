@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.auth.user.usecase
 
-import org.aing.danuridomain.persistence.user.enum.Role
+import org.aing.danuridomain.persistence.user.Role
 import org.aing.danuridomain.persistence.user.repository.UserAuthCodeRepository
 import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse

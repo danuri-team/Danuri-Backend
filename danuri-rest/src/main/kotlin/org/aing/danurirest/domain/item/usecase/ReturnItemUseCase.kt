@@ -1,7 +1,7 @@
 package org.aing.danurirest.domain.item.usecase
 
+import org.aing.danuridomain.persistence.item.ItemStatus
 import org.aing.danuridomain.persistence.item.entity.Item
-import org.aing.danuridomain.persistence.item.enum.ItemStatus
 import org.aing.danuridomain.persistence.item.repository.ItemRepository
 import org.aing.danuridomain.persistence.rental.entity.Rental
 import org.aing.danuridomain.persistence.rental.repository.RentalRepository

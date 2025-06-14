@@ -8,6 +8,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.company.entity.Company
 import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import java.time.LocalTime
@@ -29,4 +30,4 @@ data class Space(
     val startAt: LocalTime,
     @Column(nullable = false)
     val endAt: LocalTime,
-)
+) : BaseEntity()

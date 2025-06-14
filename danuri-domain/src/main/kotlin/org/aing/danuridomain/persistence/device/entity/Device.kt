@@ -9,10 +9,9 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.company.entity.Company
-import org.aing.danuridomain.persistence.user.enum.Role
-import org.springframework.data.annotation.CreatedDate
-import java.time.LocalDateTime
+import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
 @Entity
@@ -26,7 +25,4 @@ data class Device(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val role: Role = Role.ROLE_DEVICE,
-    @CreatedDate
-    @Column(nullable = false)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-)
+) : BaseEntity()

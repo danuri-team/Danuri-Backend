@@ -5,7 +5,7 @@ import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
 import org.aing.danuridomain.persistence.company.entity.Company
 import org.aing.danuridomain.persistence.company.repository.CompanyRepository
-import org.aing.danuridomain.persistence.user.enum.Role
+import org.aing.danuridomain.persistence.user.Role
 import org.aing.danurirest.domain.auth.admin.dto.SignUpAdminRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode

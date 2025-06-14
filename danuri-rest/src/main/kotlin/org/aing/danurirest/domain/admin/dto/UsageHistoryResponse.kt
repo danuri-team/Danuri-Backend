@@ -11,8 +11,6 @@ data class UsageHistoryResponse(
     val userPhone: String,
     val spaceId: UUID,
     val spaceName: String,
-    val companyId: UUID,
-    val companyName: String,
     val startAt: LocalDateTime,
     val endAt: LocalDateTime?,
     val rentalCount: Int,
@@ -25,12 +23,10 @@ data class UsageHistoryResponse(
                 userName = entity.user.name,
                 userPhone = entity.user.phone,
                 spaceId = entity.space.id!!,
-                spaceName = entity.space.id.toString(),
-                companyId = entity.space.company.id!!,
-                companyName = entity.space.company.name,
+                spaceName = entity.space.name,
                 startAt = entity.startAt,
                 endAt = entity.endAt,
                 rentalCount = entity.rental.size,
             )
     }
-} 
+}

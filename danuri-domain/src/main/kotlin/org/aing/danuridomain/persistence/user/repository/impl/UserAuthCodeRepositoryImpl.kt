@@ -9,24 +9,15 @@ import java.util.Optional
 
 @Repository
 class UserAuthCodeRepositoryImpl(
-    private val userAuthCodeJpaRepository: UserAuthCodeJpaRepository
+    private val userAuthCodeJpaRepository: UserAuthCodeJpaRepository,
 ) : UserAuthCodeRepository {
-
     @Transactional
-    override fun save(userAuthCode: UserAuthCode): UserAuthCode {
-        return userAuthCodeJpaRepository.save(userAuthCode)
-    }
+    override fun save(userAuthCode: UserAuthCode): UserAuthCode = userAuthCodeJpaRepository.save(userAuthCode)
 
-    override fun findByPhone(phone: String): Optional<UserAuthCode> {
-        return userAuthCodeJpaRepository.findByPhone(phone)
-    }
+    override fun findByPhone(phone: String): Optional<UserAuthCode> = userAuthCodeJpaRepository.findByPhone(phone)
 
     @Transactional
     override fun deleteByPhone(phone: String) {
         userAuthCodeJpaRepository.deleteByPhone(phone)
-    }
-
-    override fun existsByPhoneAndAuthCode(phone: String, authCode: String): Boolean {
-        return userAuthCodeJpaRepository.existsByPhoneAndAuthCode(phone, authCode)
     }
 } 
