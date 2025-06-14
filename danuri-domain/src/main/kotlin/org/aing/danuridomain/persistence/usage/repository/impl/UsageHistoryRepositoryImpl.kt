@@ -194,14 +194,11 @@ class UsageHistoryRepositoryImpl(
     }
 
     override fun updateEndDate(
-        usageId: UUID,
+        user: User,
         endDate: LocalDateTime,
     ) {
-        // TODO: Repository Layer -> Service Layer
         val result =
-            usageHistoryJpaRepository.findById(usageId).orElseThrow {
-                throw NoSuchElementException("현재 사용 중인 공간이 없습니다.")
-            }
+            usageHistoryJpaRepository.findByUser(user)
         usageHistoryJpaRepository.save(result.copy(endAt = endDate))
     }
 }
