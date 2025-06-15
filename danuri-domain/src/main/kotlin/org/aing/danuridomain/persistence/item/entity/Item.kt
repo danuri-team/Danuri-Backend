@@ -34,6 +34,6 @@ data class Item(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company,
-    @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL])
-    val rentals: List<Rental> = emptyList(),
+    @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val rentals: MutableList<Rental> = mutableListOf(),
 ) : BaseEntity()
