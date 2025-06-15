@@ -29,6 +29,7 @@ enum class CustomErrorCode(
     DUPLICATE_USER(HttpStatus.CONFLICT, "이미 등록된 사용자입니다."),
 
     // Admin
+    NEED_COMPANY_APPROVE(HttpStatus.UNAUTHORIZED, "회사 측의 확인이 필요합니다. 관리자에게 문의 해주세요."),
     NOT_FOUND_ADMIN(HttpStatus.NOT_FOUND, "관리자를 찾을 수 없습니다."),
 
     // Company
