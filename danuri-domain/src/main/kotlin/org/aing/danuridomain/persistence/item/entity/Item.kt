@@ -11,8 +11,9 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.company.entity.Company
-import org.aing.danuridomain.persistence.item.enum.ItemStatus
+import org.aing.danuridomain.persistence.item.ItemStatus
 import org.aing.danuridomain.persistence.rental.entity.Rental
 import java.util.UUID
 
@@ -21,11 +22,6 @@ data class Item(
     @Id
     @GeneratedValue
     val id: UUID? = null,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
-    val company: Company,
-    @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL])
-    val rentals: List<Rental> = emptyList(),
     @Column(nullable = false, length = 10)
     val name: String,
     @Column(nullable = false)
@@ -35,4 +31,9 @@ data class Item(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var status: ItemStatus,
-)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    val company: Company,
+    @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val rentals: MutableList<Rental> = mutableListOf(),
+) : BaseEntity()

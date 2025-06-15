@@ -79,7 +79,7 @@ class UserManagementUsecase(
                 phone = request.phone,
             )
 
-        return UserResponse.from(userRepository.update(updatedUser))
+        return UserResponse.from(userRepository.save(updatedUser))
     }
 
     fun deleteUser(userId: UUID) {

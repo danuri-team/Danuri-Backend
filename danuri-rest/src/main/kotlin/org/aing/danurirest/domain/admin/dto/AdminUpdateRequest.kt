@@ -5,12 +5,12 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import org.aing.danuridomain.persistence.user.enum.Role
+import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
 data class AdminUpdateRequest(
-    @field:NotBlank(message = "이메일은 필수 입력값입니다.")
-    val id: UUID?,
+    @field:NotNull(message = "ID는 필수 입력값입니다.")
+    val id: UUID,
     @field:NotBlank(message = "이메일은 필수 입력값입니다.")
     @field:Email(message = "올바른 이메일 형식이 아닙니다.")
     @field:Size(max = 100, message = "이메일은 최대 100자까지 입력 가능합니다.")
@@ -23,4 +23,4 @@ data class AdminUpdateRequest(
     val phone: String,
     @field:NotNull(message = "역할은 필수 입력값입니다.")
     val role: Role,
-) 
+)

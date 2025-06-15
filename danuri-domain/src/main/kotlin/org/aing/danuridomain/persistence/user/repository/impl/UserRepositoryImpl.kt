@@ -29,6 +29,4 @@ class UserRepositoryImpl(
     override fun delete(userId: UUID) {
         userJpaRepository.deleteById(userId)
     }
-
-    override fun update(user: User): User = userJpaRepository.save(user)
 }

@@ -7,13 +7,12 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
+import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.device.entity.Device
 import org.aing.danuridomain.persistence.item.entity.Item
 import org.aing.danuridomain.persistence.space.entity.Space
 import org.aing.danuridomain.persistence.user.entity.User
-import org.springframework.data.annotation.CreatedDate
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
@@ -21,6 +20,8 @@ data class Company(
     @Id
     @GeneratedValue
     val id: UUID? = null,
+    @Column(nullable = false)
+    val name: String,
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val item: List<Item> = emptyList(),
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
@@ -31,9 +32,4 @@ data class Company(
     val device: List<Device> = emptyList(),
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val spaces: List<Space> = emptyList(),
-    @Column(nullable = false)
-    val name: String,
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    val createdAt: LocalDateTime,
-)
+) : BaseEntity()

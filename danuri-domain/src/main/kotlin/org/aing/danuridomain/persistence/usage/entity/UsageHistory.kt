@@ -9,6 +9,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.rental.entity.Rental
 import org.aing.danuridomain.persistence.space.entity.Space
 import org.aing.danuridomain.persistence.user.entity.User
@@ -32,4 +33,4 @@ data class UsageHistory(
     val startAt: LocalDateTime,
     @Column(name = "end_at", nullable = true)
     val endAt: LocalDateTime?,
-)
+) : BaseEntity()
