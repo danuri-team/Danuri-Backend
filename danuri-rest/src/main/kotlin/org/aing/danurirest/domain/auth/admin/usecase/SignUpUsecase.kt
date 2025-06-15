@@ -20,12 +20,12 @@ class SignUpUsecase(
 ) {
     fun execute(signUpAdminRequest: SignUpAdminRequest) {
         if (adminRepository.existsByEmail(signUpAdminRequest.email)) {
-            throw CustomException(CustomErrorCode.UNAUTHORIZED)
+            throw CustomException(CustomErrorCode.DUPLICATE_EMAIL)
         }
 
         val company: Company =
             companyRepository.findById(signUpAdminRequest.companyId).orElseThrow {
-                throw CustomException(CustomErrorCode.VALIDATION_ERROR)
+                throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY)
             }
 
         adminRepository.save(
