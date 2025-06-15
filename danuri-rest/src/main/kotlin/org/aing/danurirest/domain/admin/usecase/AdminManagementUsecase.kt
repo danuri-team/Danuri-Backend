@@ -63,7 +63,7 @@ class AdminManagementUsecase(
         }
 
         if (admin.email != request.email && adminRepository.existsByEmail(request.email)) {
-            throw CustomException(CustomErrorCode.VALIDATION_ERROR)
+            throw CustomException(CustomErrorCode.DUPLICATE_EMAIL)
         }
 
         val updatedAdmin =

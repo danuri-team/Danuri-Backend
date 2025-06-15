@@ -17,6 +17,7 @@ enum class CustomErrorCode(
     // Auth
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 refresh token 입니다."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 refresh token 입니다."),
+    DUPLICATE_EMAIL(HttpStatus.CONFLICT, "중복된 이메일입니다."),
     INVALID_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 인증번호입니다."),
     EXPIRED_AUTH_CODE(HttpStatus.BAD_REQUEST, "만료된 인증번호입니다."),
     TOO_MANY_REQUESTS(HttpStatus.BAD_REQUEST, "잠시 후에 다시 시도 해주세요."),
