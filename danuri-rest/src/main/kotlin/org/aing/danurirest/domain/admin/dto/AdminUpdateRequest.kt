@@ -9,7 +9,7 @@ import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
 data class AdminUpdateRequest(
-    @field:NotBlank(message = "ID는 필수 입력값입니다.")
+    @field:NotNull(message = "ID는 필수 입력값입니다.")
     val id: UUID?,
     @field:NotBlank(message = "이메일은 필수 입력값입니다.")
     @field:Email(message = "올바른 이메일 형식이 아닙니다.")
