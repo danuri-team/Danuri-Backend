@@ -57,7 +57,7 @@ class ExcelService {
         }
 
         // 바이트 배열로 변환
-        return XSSFWorkbook().use { wb ->
+        return workbook.use { wb ->
             ByteArrayOutputStream().use { outputStream ->
                 wb.write(outputStream)
                 outputStream.toByteArray()
