@@ -1,6 +1,7 @@
 package org.aing.danurirest.domain.admin.usecase
 
 import org.aing.danuridomain.persistence.item.repository.ItemRepository
+import org.aing.danuridomain.persistence.rental.RentalStatus
 import org.aing.danuridomain.persistence.rental.dto.RentalResponse
 import org.aing.danuridomain.persistence.rental.entity.Rental
 import org.aing.danuridomain.persistence.rental.repository.RentalRepository
@@ -41,12 +42,19 @@ class RentalManagementUsecase(
                 .findById(request.itemId)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
 
+        val adminCompanyId = getAdminCompanyIdUsecase.execute()
+
+        if (item.company.id != adminCompanyId) {
+            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
+        }
+
         rentalRepository.save(
             Rental(
                 item = item,
                 usage = usageHistory,
                 quantity = request.quantity,
                 borrowedAt = LocalDateTime.now(),
+                status = RentalStatus.NOT_CONFIRMED,
             ),
         )
     }
