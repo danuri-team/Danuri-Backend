@@ -15,8 +15,10 @@ class AdminRentalController(
 ) {
     @PostMapping
     fun createRental(
-        @RequestBody request: CreateRentalRequest,
-    ): ResponseEntity<Unit> = rentalManagementUsecase.create(request).run { ResponseEntity.status(201).build() }
+        @Valid @RequestBody request: CreateRentalRequest,
+    ): ResponseEntity<Unit> =
+        rentalManagementUsecase.create(request)
+            .run { ResponseEntity.status(201).build() }
 
     @GetMapping("/{rentalId}")
     fun getRental(
