@@ -25,7 +25,6 @@ class RentalManagementUsecase(
     val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun create(request: CreateRentalRequest) {
-        // TODO: 회사 검증 필요
         val usageHistory =
             usageHistoryRepository.findById(request.usageId).orElseThrow {
                 throw CustomException(CustomErrorCode.NOT_USAGE_FOUND)
@@ -89,7 +88,6 @@ class RentalManagementUsecase(
         rental.quantity = request.quantity
         rental.returnedQuantity = request.returnedQuantity
         rental.status = request.status
-        // save 호출 불필요 – 트랜잭션 종료 시점에 자동 flush
     }
 
     fun delete(rentalId: UUID) {
