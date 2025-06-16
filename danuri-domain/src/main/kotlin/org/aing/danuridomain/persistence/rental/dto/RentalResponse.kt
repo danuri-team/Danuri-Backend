@@ -1,6 +1,7 @@
 package org.aing.danuridomain.persistence.rental.dto
 
 import com.querydsl.core.annotations.QueryProjection
+import org.aing.danuridomain.persistence.rental.RentalStatus
 import java.util.*
 
 @QueryProjection
@@ -12,4 +13,5 @@ data class RentalResponse(
     val userId: UUID,
     val quantity: Int,
     val returnQuantity: Int,
+    val status: RentalStatus,
 )

@@ -75,7 +75,8 @@ class RentalManagementUsecase(
         if (rental.item.company.id != adminCompanyId) {
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
-        val modifiedRental = rental.copy(quantity = request.quantity, returnedQuantity = request.returnedQuantity)
+
+        val modifiedRental = rental.copy(quantity = request.quantity, returnedQuantity = request.returnedQuantity, status = request.status)
         rentalRepository.save(modifiedRental)
     }
 

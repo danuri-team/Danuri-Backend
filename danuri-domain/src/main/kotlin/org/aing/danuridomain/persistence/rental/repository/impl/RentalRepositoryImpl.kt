@@ -41,6 +41,7 @@ class RentalRepositoryImpl(
                         user.id,
                         rental.quantity,
                         rental.returnedQuantity,
+                        rental.status,
                     ),
                 ).from(rental)
                 .innerJoin(rental.item, item)
@@ -73,6 +74,7 @@ class RentalRepositoryImpl(
                     user.id,
                     rental.quantity,
                     rental.returnedQuantity,
+                    rental.status,
                 ),
             ).from(rental)
             .innerJoin(rental.item, item)
