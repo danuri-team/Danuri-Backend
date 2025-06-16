@@ -29,5 +29,5 @@ data class Rental(
     var returnedQuantity: Int = 0,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val status: RentalStatus = RentalStatus.NOT_CONFIRMED,
+    var status: RentalStatus = RentalStatus.NOT_CONFIRMED,
 ) : BaseEntity()
