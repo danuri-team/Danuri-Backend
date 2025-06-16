@@ -86,8 +86,10 @@ class RentalManagementUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        val modifiedRental = rental.copy(quantity = request.quantity, returnedQuantity = request.returnedQuantity, status = request.status)
-        rentalRepository.save(modifiedRental)
+        rental.quantity = request.quantity
+        rental.returnedQuantity = request.returnedQuantity
+        rental.status = request.status
+        // save 호출 불필요 – 트랜잭션 종료 시점에 자동 flush
     }
 
     fun delete(rentalId: UUID) {
