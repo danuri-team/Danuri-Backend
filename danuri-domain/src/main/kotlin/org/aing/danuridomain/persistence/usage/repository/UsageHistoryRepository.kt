@@ -64,4 +64,6 @@ interface UsageHistoryRepository {
         usageId: UUID,
         endDate: LocalDateTime,
     )
+
+    fun findById(id: UUID): Optional<UsageHistory>
 }

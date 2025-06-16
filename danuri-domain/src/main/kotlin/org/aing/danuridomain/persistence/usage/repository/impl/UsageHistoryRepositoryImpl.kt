@@ -204,4 +204,6 @@ class UsageHistoryRepositoryImpl(
             }
         usageHistoryJpaRepository.save(result.copy(endAt = endDate))
     }
+
+    override fun findById(id: UUID): Optional<UsageHistory> = usageHistoryJpaRepository.findById(id)
 }

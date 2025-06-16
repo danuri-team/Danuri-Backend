@@ -50,8 +50,10 @@ enum class CustomErrorCode(
     ALREADY_END(HttpStatus.BAD_REQUEST, "이미 종료된 공간 사용 기록입니다."),
 
     // Usage
+    USAGE_EXPIRED(HttpStatus.BAD_REQUEST, "이미 만료된 공간 이용입니다."),
     USAGE_CONFLICT_SPACE(HttpStatus.CONFLICT, "공간 이용 충돌이 발생 했습니다."),
     USAGE_CONFLICT_USER(HttpStatus.CONFLICT, "이미 다른 공간을 사용 중입니다."),
+    NOT_USAGE_FOUND(HttpStatus.NOT_FOUND, "공간을 사용중이지 않습니다."),
 
     // Device
     NOT_FOUND_DEVICE(HttpStatus.NOT_FOUND, "해당 기기를 찾을 수 없습니다."),
