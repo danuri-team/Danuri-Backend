@@ -12,6 +12,6 @@ data class RentalResponse(
     val userName: String,
     val userId: UUID,
     val quantity: Int,
-    val returnQuantity: Int,
+    val returnedQuantity: Int,
     val status: RentalStatus,
 )
