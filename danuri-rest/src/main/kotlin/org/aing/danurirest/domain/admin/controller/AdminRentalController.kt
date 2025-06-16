@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.admin.controller
 
+import jakarta.validation.Valid
 import org.aing.danuridomain.persistence.rental.dto.RentalResponse
 import org.aing.danurirest.domain.admin.dto.CreateRentalRequest
 import org.aing.danurirest.domain.admin.dto.UpdateRentalRequest
@@ -17,8 +18,9 @@ class AdminRentalController(
     fun createRental(
         @Valid @RequestBody request: CreateRentalRequest,
     ): ResponseEntity<Unit> =
-        rentalManagementUsecase.create(request)
-            .run { ResponseEntity.status(201).build() }
+        rentalManagementUsecase
+            .create(request)
+            .run { ResponseEntity.noContent().build() }
 
     @GetMapping("/{rentalId}")
     fun getRental(
