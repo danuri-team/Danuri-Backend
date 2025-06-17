@@ -33,4 +33,10 @@ data class UsageHistory(
     val startAt: LocalDateTime,
     @Column(name = "end_at", nullable = true)
     var endAt: LocalDateTime?,
-) : BaseEntity()
+) : BaseEntity() {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is UsageHistory) return false
+        return id != null && id == other.id
+    }
+}
