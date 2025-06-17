@@ -79,6 +79,7 @@ jobs:
         with:
           repository: danuri-team/danuri-devops
           ref: main
+          token: ${{ secrets.ACTION_TOKEN }}
           path: danuri-devops
 
       - name: Update Kubernetes resources
