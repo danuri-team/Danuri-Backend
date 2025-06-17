@@ -21,6 +21,9 @@ class FetchCheckOutUsecase(
                 .findByUserId(
                     userId = context.id!!,
                 ).orElseThrow { CustomException(CustomErrorCode.NOT_USAGE_FOUND) }
+        if (result.endAt != null) {
+            throw CustomException(CustomErrorCode.ALREADY_END)
+        }
         result.endAt = LocalDateTime.now()
     }
 }
