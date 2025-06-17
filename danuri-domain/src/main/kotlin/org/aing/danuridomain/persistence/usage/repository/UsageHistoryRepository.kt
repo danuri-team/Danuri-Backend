@@ -60,10 +60,7 @@ interface UsageHistoryRepository {
 
     fun findUserCurrentUsageInfo(userId: UUID): CurrentUsageHistoryDto
 
-    fun updateEndDate(
-        userId: UUID,
-        endDate: LocalDateTime,
-    )
-
     fun findById(id: UUID): Optional<UsageHistory>
+
+    fun findByUserId(userId: UUID): Optional<UsageHistory>
 }

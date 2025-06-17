@@ -35,34 +35,6 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
             SELECT u FROM UsageHistory u
             JOIN FETCH u.user
             JOIN FETCH u.space
-            WHERE u.space.company.id = :companyId
-        """,
-    )
-    fun findAllByCompanyId(
-        @Param("companyId") companyId: UUID,
-    ): List<UsageHistory>
-
-    @Query(
-        """
-        SELECT u FROM UsageHistory u
-        JOIN FETCH u.user
-        JOIN FETCH u.space
-        WHERE u.space.company.id = :companyId
-        AND u.startAt <= :endDate
-        AND (u.endAt IS NULL OR u.endAt >= :startDate)
-    """,
-    )
-    fun findAllByCompanyIdAndDateRange(
-        @Param("companyId") companyId: UUID,
-        @Param("startDate") startDate: LocalDateTime,
-        @Param("endDate") endDate: LocalDateTime,
-    ): List<UsageHistory>
-
-    @Query(
-        """
-            SELECT u FROM UsageHistory u
-            JOIN FETCH u.user
-            JOIN FETCH u.space
             WHERE u.user.id = :userId
             AND u.startAt >= :startDate
             AND (u.endAt IS NULL OR u.endAt <= :endDate)
@@ -74,5 +46,5 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
         @Param("endDate") endDate: LocalDateTime,
     ): List<UsageHistory>
 
-    fun findByUserId(userId: UUID): UsageHistory
+    fun findByUserId(userId: UUID): Optional<UsageHistory>
 }
