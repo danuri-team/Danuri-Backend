@@ -11,11 +11,11 @@ import java.util.UUID
 
 interface UserAuthCodeJpaRepository : JpaRepository<UserAuthCode, UUID> {
     fun findByPhone(phone: String): Optional<UserAuthCode>
-    
+
     @Transactional
     @Modifying
     @Query("DELETE FROM UserAuthCode u WHERE u.phone = :phone")
-    fun deleteByPhone(@Param("phone") phone: String)
-    
-    fun existsByPhoneAndAuthCode(phone: String, authCode: String): Boolean
+    fun deleteByPhone(
+        @Param("phone") phone: String,
+    )
 } 

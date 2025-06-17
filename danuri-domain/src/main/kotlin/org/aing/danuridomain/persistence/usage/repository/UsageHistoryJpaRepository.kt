@@ -44,13 +44,13 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
 
     @Query(
         """
-            SELECT u FROM UsageHistory u
-            JOIN FETCH u.user
-            JOIN FETCH u.space
-            WHERE u.space.company.id = :companyId
-            AND u.startAt >= :startDate
-            AND (u.endAt IS NULL OR u.endAt <= :endDate)
-        """,
+        SELECT u FROM UsageHistory u
+        JOIN FETCH u.user
+        JOIN FETCH u.space
+        WHERE u.space.company.id = :companyId
+        AND u.startAt <= :endDate
+        AND (u.endAt IS NULL OR u.endAt >= :startDate)
+    """,
     )
     fun findAllByCompanyIdAndDateRange(
         @Param("companyId") companyId: UUID,

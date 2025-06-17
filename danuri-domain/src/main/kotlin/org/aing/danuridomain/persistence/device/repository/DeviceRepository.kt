@@ -11,11 +11,7 @@ interface DeviceRepository {
 
     fun save(device: Device): Device
 
-    fun update(device: Device): Device
-
     fun delete(id: UUID)
-
-    fun findAll(): List<Device>
 
     fun findByCompanyId(companyId: UUID): List<Device>
 }

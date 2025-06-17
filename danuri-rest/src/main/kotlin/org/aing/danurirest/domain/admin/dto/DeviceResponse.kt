@@ -6,18 +6,13 @@ import java.util.UUID
 
 data class DeviceResponse(
     val id: UUID,
-    val companyId: UUID,
-    val companyName: String,
     val createdAt: LocalDateTime,
-    val endAt: LocalDateTime? = null,
 ) {
     companion object {
         fun from(device: Device): DeviceResponse =
             DeviceResponse(
                 id = device.id!!,
-                companyId = device.company.id!!,
-                companyName = device.company.name,
-                createdAt = device.createdAt,
+                createdAt = device.createdAt!!,
             )
     }
 }

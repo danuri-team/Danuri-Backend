@@ -1,6 +1,7 @@
 package org.aing.danurirest.domain.auth.admin.usecase
 
 import io.github.bucket4j.Bucket
+import org.aing.danuridomain.persistence.admin.Status
 import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
 import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
@@ -21,10 +22,14 @@ class SignInUsecase(
 ) {
     fun execute(request: SignInRequest): SignInResponse {
         checkRateLimit()
-        
+
         val admin = findAdminByEmail(request.email)
         validatePassword(admin, request.password)
-        
+
+        if (admin.status == Status.NEED_COMPANY_APPROVE) {
+            throw CustomException(CustomErrorCode.NEED_COMPANY_APPROVE)
+        }
+
         return generateTokens(admin)
     }
 
@@ -35,26 +40,32 @@ class SignInUsecase(
     }
 
     private fun findAdminByEmail(email: String): Admin =
-        adminRepository.findByEmail(email)
+        adminRepository
+            .findByEmail(email)
             .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
-    private fun validatePassword(admin: Admin, rawPassword: String) {
+    private fun validatePassword(
+        admin: Admin,
+        rawPassword: String,
+    ) {
         if (!passwordEncoder.matches(rawPassword, admin.password)) {
             throw CustomException(CustomErrorCode.WRONG_PASSWORD)
         }
     }
 
     private fun generateTokens(admin: Admin): SignInResponse {
-        val accessToken = jwtProvider.generateToken(
-            admin.id!!,
-            TokenType.ACCESS_TOKEN,
-            admin.role,
-        )
-        val refreshToken = jwtProvider.generateToken(
-            admin.id!!,
-            TokenType.REFRESH_TOKEN,
-            admin.role,
-        )
+        val accessToken =
+            jwtProvider.generateToken(
+                admin.id!!,
+                TokenType.ACCESS_TOKEN,
+                admin.role,
+            )
+        val refreshToken =
+            jwtProvider.generateToken(
+                admin.id!!,
+                TokenType.REFRESH_TOKEN,
+                admin.role,
+            )
         return SignInResponse(accessToken, refreshToken)
     }
 }

@@ -18,12 +18,10 @@ class AdminRepositoryImpl(
     override fun existsByEmail(email: String): Boolean = adminJpaRepository.existsByEmail(email)
 
     override fun save(admin: Admin): Admin = adminJpaRepository.save(admin)
-    
+
     override fun findByCompanyId(companyId: UUID): List<Admin> = adminJpaRepository.findAllByCompanyId(companyId)
-    
+
     override fun delete(adminId: UUID) {
         adminJpaRepository.deleteById(adminId)
     }
-    
-    override fun update(admin: Admin): Admin = adminJpaRepository.save(admin)
 }

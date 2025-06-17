@@ -9,9 +9,10 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.admin.Status
 import org.aing.danuridomain.persistence.company.entity.Company
-import org.aing.danuridomain.persistence.user.enum.Role
+import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
 @Entity
@@ -34,4 +35,4 @@ data class Admin(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val status: Status = Status.NEED_COMPANY_APPROVE,
-)
+) : BaseEntity()

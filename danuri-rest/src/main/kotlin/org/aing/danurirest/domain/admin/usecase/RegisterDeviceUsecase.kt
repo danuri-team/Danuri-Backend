@@ -4,7 +4,7 @@ import org.aing.danuridomain.persistence.company.repository.CompanyRepository
 import org.aing.danuridomain.persistence.device.entity.Device
 import org.aing.danuridomain.persistence.device.repository.DeviceRepository
 import org.aing.danuridomain.persistence.space.repository.SpaceRepository
-import org.aing.danuridomain.persistence.user.enum.Role
+import org.aing.danuridomain.persistence.user.Role
 import org.aing.danurirest.domain.admin.dto.RegisterDeviceRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
