@@ -199,6 +199,7 @@ class UsageHistoryRepositoryImpl(
     ) {
         val result =
             usageHistoryJpaRepository.findByUserId(userId)
-        usageHistoryJpaRepository.save(result.copy(endAt = endDate))
+        result.endAt = endDate
+        usageHistoryJpaRepository.save(result)
     }
 }
