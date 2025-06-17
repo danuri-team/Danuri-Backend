@@ -1,7 +1,6 @@
 package org.aing.danuridomain.persistence.usage.repository
 
 import org.aing.danuridomain.persistence.usage.entity.UsageHistory
-import org.aing.danuridomain.persistence.user.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -75,5 +74,5 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
         @Param("endDate") endDate: LocalDateTime,
     ): List<UsageHistory>
 
-    fun findByUser(user: User): UsageHistory
+    fun findByUserId(userId: UUID): UsageHistory
 }

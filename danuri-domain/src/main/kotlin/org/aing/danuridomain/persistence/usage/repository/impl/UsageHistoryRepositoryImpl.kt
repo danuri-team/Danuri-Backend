@@ -194,11 +194,11 @@ class UsageHistoryRepositoryImpl(
     }
 
     override fun updateEndDate(
-        user: User,
+        userId: UUID,
         endDate: LocalDateTime,
     ) {
         val result =
-            usageHistoryJpaRepository.findByUser(user)
+            usageHistoryJpaRepository.findByUserId(userId)
         usageHistoryJpaRepository.save(result.copy(endAt = endDate))
     }
 }
