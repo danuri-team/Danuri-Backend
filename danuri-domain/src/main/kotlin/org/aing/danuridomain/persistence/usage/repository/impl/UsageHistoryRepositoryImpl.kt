@@ -86,6 +86,7 @@ class UsageHistoryRepositoryImpl(
         val whereConditions =
             mutableListOf(
                 qSpace.company.id.eq(companyId),
+                qUsage.startAt.goe(startDate),
                 qUsage.endAt.isNull.or(qUsage.endAt.goe(startDate)),
             )
 
@@ -115,6 +116,7 @@ class UsageHistoryRepositoryImpl(
             mutableListOf(
                 qSpace.id.eq(spaceId),
                 qSpace.company.id.eq(companyId),
+                qUsage.startAt.goe(startDate),
                 qUsage.endAt.isNull.or(qUsage.endAt.goe(startDate)),
             )
 
@@ -144,6 +146,7 @@ class UsageHistoryRepositoryImpl(
             mutableListOf(
                 qUser.id.eq(userId),
                 qUser.company.id.eq(companyId),
+                qUsage.startAt.goe(startDate),
                 qUsage.endAt.isNull.or(qUsage.endAt.goe(startDate)),
             )
 
