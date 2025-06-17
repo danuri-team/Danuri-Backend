@@ -1,17 +1,20 @@
 package org.aing.danurirest.domain.usage.usecase
 
 import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
-import org.aing.danurirest.domain.usage.dto.FetchCheckOutRequest
+import org.aing.danurirest.global.security.jwt.dto.ContextDto
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
 class FetchCheckOutUsecase(
-    private val usageHistoryRepository: UsageHistoryRepository,
+    val usageHistoryRepository: UsageHistoryRepository,
 ) {
-    fun execute(fetchCheckOutRequest: FetchCheckOutRequest) =
+    fun execute() {
+        val context = SecurityContextHolder.getContext().authentication.principal as ContextDto
         usageHistoryRepository.updateEndDate(
-            usageId = fetchCheckOutRequest.usageId,
-            endDate = fetchCheckOutRequest.endAt ?: LocalDateTime.now(),
+            userId = context.id!!,
+            endDate = LocalDateTime.now(),
         )
+    }
 }

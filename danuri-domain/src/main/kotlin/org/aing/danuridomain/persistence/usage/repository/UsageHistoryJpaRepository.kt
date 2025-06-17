@@ -73,4 +73,6 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
         @Param("startDate") startDate: LocalDateTime,
         @Param("endDate") endDate: LocalDateTime,
     ): List<UsageHistory>
+
+    fun findByUserId(userId: UUID): UsageHistory
 }
