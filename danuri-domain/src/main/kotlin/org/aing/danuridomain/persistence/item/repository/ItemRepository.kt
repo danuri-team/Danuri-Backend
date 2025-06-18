@@ -11,7 +11,7 @@ interface ItemRepository {
 
     fun findByCompanyId(companyId: UUID): List<Item>
 
-    fun delete(itemId: UUID)
+    fun delete(entity: Item)
 
     fun update(item: Item): Item
 

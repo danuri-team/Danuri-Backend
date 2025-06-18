@@ -3,7 +3,11 @@ package org.aing.danurirest.domain.admin.controller
 import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.SpaceRequest
 import org.aing.danurirest.domain.admin.dto.SpaceResponse
-import org.aing.danurirest.domain.admin.usecase.SpaceManagementUsecase
+import org.aing.danurirest.domain.admin.usecase.CreateSpaceUsecase
+import org.aing.danurirest.domain.admin.usecase.DeleteSpaceUsecase
+import org.aing.danurirest.domain.admin.usecase.GetSpaceUsecase
+import org.aing.danurirest.domain.admin.usecase.GetSpacesUsecase
+import org.aing.danurirest.domain.admin.usecase.UpdateSpaceUsecase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,13 +22,17 @@ import java.util.UUID
 @RestController
 @RequestMapping("/admin/spaces")
 class AdminSpaceController(
-    private val spaceManagementUsecase: SpaceManagementUsecase,
+    private val createSpaceUsecase: CreateSpaceUsecase,
+    private val updateSpaceUsecase: UpdateSpaceUsecase,
+    private val deleteSpaceUsecase: DeleteSpaceUsecase,
+    private val getSpaceUsecase: GetSpaceUsecase,
+    private val getCompanySpacesUsecase: GetSpacesUsecase,
 ) {
     @PostMapping
     fun createSpace(
         @Valid @RequestBody request: SpaceRequest,
     ): ResponseEntity<SpaceResponse> =
-        spaceManagementUsecase.createSpace(request).run {
+        createSpaceUsecase.execute(request).run {
             ResponseEntity.ok(this)
         }
 
@@ -32,16 +40,16 @@ class AdminSpaceController(
     fun updateSpace(
         @PathVariable spaceId: UUID,
         @Valid @RequestBody request: SpaceRequest,
-    ): ResponseEntity<SpaceResponse> =
-        spaceManagementUsecase.updateSpace(spaceId, request).run {
-            ResponseEntity.ok(this)
+    ): ResponseEntity<Unit> =
+        updateSpaceUsecase.execute(spaceId, request).run {
+            ResponseEntity.noContent().build()
         }
 
     @DeleteMapping("/{spaceId}")
     fun deleteSpace(
         @PathVariable spaceId: UUID,
     ): ResponseEntity<Unit> =
-        spaceManagementUsecase.deleteSpace(spaceId).run {
+        deleteSpaceUsecase.execute(spaceId).run {
             ResponseEntity.noContent().build()
         }
 
@@ -49,13 +57,13 @@ class AdminSpaceController(
     fun getSpace(
         @PathVariable spaceId: UUID,
     ): ResponseEntity<SpaceResponse> =
-        spaceManagementUsecase.getSpace(spaceId).run {
+        getSpaceUsecase.execute(spaceId).run {
             ResponseEntity.ok(this)
         }
 
     @GetMapping
     fun getCurrentCompanySpaces(): ResponseEntity<List<SpaceResponse>> =
-        spaceManagementUsecase.getCurrentAdminCompanySpaces().run {
+        getCompanySpacesUsecase.execute().run {
             ResponseEntity.ok(this)
         }
-} 
+}

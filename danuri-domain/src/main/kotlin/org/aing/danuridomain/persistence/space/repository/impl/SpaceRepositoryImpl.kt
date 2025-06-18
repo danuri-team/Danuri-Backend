@@ -28,9 +28,7 @@ class SpaceRepositoryImpl(
 
     override fun findByCompanyId(companyId: UUID): List<Space> = spaceJpaRepository.findAllByCompanyId(companyId)
 
-    override fun delete(spaceId: UUID) {
-        spaceJpaRepository.deleteById(spaceId)
-    }
+    override fun delete(entity: Space) = spaceJpaRepository.delete(entity)
 
     override fun findSpacesWithAvailabilityByDeviceId(deviceId: UUID): List<SpaceAvailabilityDto> {
         val currentDateTime = LocalDateTime.now()

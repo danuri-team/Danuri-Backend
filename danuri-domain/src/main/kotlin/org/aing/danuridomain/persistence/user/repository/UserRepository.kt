@@ -20,5 +20,5 @@ interface UserRepository {
 
     fun existsByPhone(phone: String): Boolean
 
-    fun delete(userId: UUID)
+    fun delete(entity: User)
 }

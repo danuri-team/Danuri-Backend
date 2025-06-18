@@ -16,17 +16,17 @@ data class UsageHistoryResponse(
     val rentalCount: Int,
 ) {
     companion object {
-        fun from(entity: UsageHistory): UsageHistoryResponse =
+        fun from(usageHistory: UsageHistory): UsageHistoryResponse =
             UsageHistoryResponse(
-                id = entity.id!!,
-                userId = entity.user.id!!,
-                userName = entity.user.name,
-                userPhone = entity.user.phone,
-                spaceId = entity.space.id!!,
-                spaceName = entity.space.name,
-                startAt = entity.startAt,
-                endAt = entity.endAt,
-                rentalCount = entity.rental.size,
+                id = usageHistory.id!!,
+                userId = usageHistory.user.id!!,
+                userName = usageHistory.user.name,
+                userPhone = usageHistory.user.phone,
+                spaceId = usageHistory.space.id!!,
+                spaceName = usageHistory.space.name,
+                startAt = usageHistory.startAt,
+                endAt = usageHistory.endAt,
+                rentalCount = usageHistory.rental.size,
             )
     }
 }

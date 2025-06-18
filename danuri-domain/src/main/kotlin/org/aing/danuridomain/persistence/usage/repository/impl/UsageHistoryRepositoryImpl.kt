@@ -237,4 +237,6 @@ class UsageHistoryRepositoryImpl(
     override fun findById(id: UUID): Optional<UsageHistory> = usageHistoryJpaRepository.findById(id)
 
     override fun findByUserId(userId: UUID): Optional<UsageHistory> = usageHistoryJpaRepository.findByUserId(userId)
+
+    override fun save(entity: UsageHistory): UsageHistory = usageHistoryJpaRepository.save(entity)
 }

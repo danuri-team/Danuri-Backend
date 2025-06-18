@@ -30,13 +30,13 @@ data class User(
     @Column(nullable = false)
     val usages: List<UsageHistory> = emptyList(),
     @Column(nullable = false, length = 20)
-    val name: String,
+    var name: String,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val sex: Sex,
+    var sex: Sex,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val age: Age,
+    var age: Age,
     @Column(nullable = false, length = 30)
-    val phone: String,
+    var phone: String,
 ) : BaseEntity()

@@ -13,6 +13,8 @@ data class ItemRequest(
     @field:NotNull(message = "총 수량은 필수 입력값입니다.")
     @field:Min(value = 1, message = "총 수량은 최소 1개 이상이어야 합니다.")
     val totalQuantity: Int,
+    @field:Min(value = 1, message = "이용 가능 수량은 최소 1개 이상이어야 합니다.")
+    val availableQuantity: Int?,
     @field:NotNull(message = "상태 정보는 필수 입력값입니다.")
     val status: ItemStatus,
 )

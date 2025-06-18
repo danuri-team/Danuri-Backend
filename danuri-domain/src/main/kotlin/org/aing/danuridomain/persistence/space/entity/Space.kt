@@ -25,9 +25,15 @@ data class Space(
     @JoinColumn(name = "company_id")
     val company: Company,
     @Column(nullable = false, length = 50)
-    val name: String,
+    var name: String,
     @Column(nullable = false)
-    val startAt: LocalTime,
+    var startAt: LocalTime,
     @Column(nullable = false)
-    val endAt: LocalTime,
-) : BaseEntity()
+    var endAt: LocalTime,
+) : BaseEntity() {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is UsageHistory) return false
+        return id != null && id == other.id
+    }
+}
