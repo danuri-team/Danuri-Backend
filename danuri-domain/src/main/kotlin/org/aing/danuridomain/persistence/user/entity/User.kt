@@ -19,7 +19,7 @@ import org.aing.danuridomain.persistence.user.Sex
 import java.util.UUID
 
 @Entity
-data class User(
+class User(
     @Id
     @GeneratedValue
     val id: UUID? = null,

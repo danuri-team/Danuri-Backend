@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-data class UsageHistory(
+class UsageHistory(
     @Id
     @GeneratedValue
     val id: UUID? = null,
@@ -33,10 +33,4 @@ data class UsageHistory(
     val startAt: LocalDateTime,
     @Column(name = "end_at", nullable = true)
     var endAt: LocalDateTime?,
-) : BaseEntity() {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is UsageHistory) return false
-        return id != null && id == other.id
-    }
-}
+) : BaseEntity()

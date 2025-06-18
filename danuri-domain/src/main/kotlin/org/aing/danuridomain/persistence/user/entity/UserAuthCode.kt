@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-data class UserAuthCode(
+class UserAuthCode(
     @Id
     @GeneratedValue
     val id: UUID? = null,

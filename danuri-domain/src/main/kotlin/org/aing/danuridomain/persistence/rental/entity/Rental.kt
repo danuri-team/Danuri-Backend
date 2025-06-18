@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-data class Rental(
+class Rental(
     @Id
     @GeneratedValue
     val id: UUID? = null,

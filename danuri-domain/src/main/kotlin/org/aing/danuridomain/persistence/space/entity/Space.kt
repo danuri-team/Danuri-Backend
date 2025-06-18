@@ -15,7 +15,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 @Entity
-data class Space(
+class Space(
     @Id
     @GeneratedValue
     val id: UUID? = null,
@@ -30,10 +30,4 @@ data class Space(
     var startAt: LocalTime,
     @Column(nullable = false)
     var endAt: LocalTime,
-) : BaseEntity() {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is UsageHistory) return false
-        return id != null && id == other.id
-    }
-}
+) : BaseEntity()
