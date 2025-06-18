@@ -16,6 +16,13 @@ class SendSmsUsecase(
     @Value("\${sms.fromnumber}")
     private val solfrom: String,
 ) {
+    private val messageService =
+        NurigoApp.initialize(
+            apiKey = solApiKey,
+            apiSecretKey = solApiSecretKey,
+            domain = "https://api.solapi.com",
+        )
+
     fun execute(
         phone: String,
         text: String,
@@ -28,12 +35,6 @@ class SendSmsUsecase(
             )
 
         try {
-            val messageService =
-                NurigoApp.initialize(
-                    apiKey = solApiKey,
-                    apiSecretKey = solApiSecretKey,
-                    domain = "https://api.solapi.com",
-                )
             messageService.send(message)
         } catch (e: Exception) {
             throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
