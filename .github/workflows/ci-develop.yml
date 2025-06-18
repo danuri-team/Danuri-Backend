@@ -1,8 +1,8 @@
-name: ci-production
+name: ci-develop
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop" ]
   workflow_dispatch:
 
 permissions:
@@ -53,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./DockerfileProd
+          file: ./DockerfileStage
           push: true
           platforms: linux/arm64
           tags: |
@@ -85,7 +85,7 @@ jobs:
 
       - name: Update Kubernetes resources
         run: |
-          cd danuri-devops/overlays/production/
+          cd danuri-devops/overlays/stage/
           kustomize edit set image ${{ env.IMAGE_NAME }}:${{ steps.image.outputs.version }}
           cat kustomization.yaml
 
