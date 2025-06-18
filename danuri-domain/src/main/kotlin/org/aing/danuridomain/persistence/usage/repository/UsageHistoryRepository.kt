@@ -63,4 +63,6 @@ interface UsageHistoryRepository {
     fun findById(id: UUID): Optional<UsageHistory>
 
     fun findByUserId(userId: UUID): Optional<UsageHistory>
+
+    fun save(entity: UsageHistory): UsageHistory
 }

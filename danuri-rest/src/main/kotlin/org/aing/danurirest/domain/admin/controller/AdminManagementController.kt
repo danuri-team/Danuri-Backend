@@ -4,7 +4,12 @@ import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.AdminPasswordUpdateRequest
 import org.aing.danurirest.domain.admin.dto.AdminResponse
 import org.aing.danurirest.domain.admin.dto.AdminUpdateRequest
-import org.aing.danurirest.domain.admin.usecase.AdminManagementUsecase
+import org.aing.danurirest.domain.admin.usecase.DeleteAdminUsecase
+import org.aing.danurirest.domain.admin.usecase.GetAdminUsecase
+import org.aing.danurirest.domain.admin.usecase.GetAdminsUsecase
+import org.aing.danurirest.domain.admin.usecase.GetCurrentAdminUsecase
+import org.aing.danurirest.domain.admin.usecase.UpdateAdminPasswordUsecase
+import org.aing.danurirest.domain.admin.usecase.UpdateAdminUsecase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,11 +23,16 @@ import java.util.UUID
 @RestController
 @RequestMapping("/admin/management")
 class AdminManagementController(
-    private val adminManagementUsecase: AdminManagementUsecase,
+    private val getCurrentAdminUsecase: GetCurrentAdminUsecase,
+    private val getAdminUsecase: GetAdminUsecase,
+    private val getCompanyAdminsUsecase: GetAdminsUsecase,
+    private val updateAdminUsecase: UpdateAdminUsecase,
+    private val updateAdminPasswordUsecase: UpdateAdminPasswordUsecase,
+    private val deleteAdminUsecase: DeleteAdminUsecase,
 ) {
     @GetMapping("/me")
     fun getMyInfo(): ResponseEntity<AdminResponse> =
-        adminManagementUsecase.getCurrentAdminInfo().run {
+        getCurrentAdminUsecase.execute().run {
             ResponseEntity.ok(this)
         }
 
@@ -30,13 +40,13 @@ class AdminManagementController(
     fun getAdminInfo(
         @PathVariable adminId: UUID,
     ): ResponseEntity<AdminResponse> =
-        adminManagementUsecase.getAdminInfo(adminId).run {
+        getAdminUsecase.execute(adminId).run {
             ResponseEntity.ok(this)
         }
 
     @GetMapping
     fun getAdminsByCompany(): ResponseEntity<List<AdminResponse>> =
-        adminManagementUsecase.getAdminsByCompany().run {
+        getCompanyAdminsUsecase.execute().run {
             ResponseEntity.ok(this)
         }
 
@@ -44,7 +54,7 @@ class AdminManagementController(
     fun updateAdmin(
         @Valid @RequestBody request: AdminUpdateRequest,
     ): ResponseEntity<AdminResponse> =
-        adminManagementUsecase.updateAdmin(request).run {
+        updateAdminUsecase.execute(request).run {
             ResponseEntity.ok(this)
         }
 
@@ -52,13 +62,13 @@ class AdminManagementController(
     fun updatePassword(
         @Valid @RequestBody request: AdminPasswordUpdateRequest,
     ): ResponseEntity<AdminResponse> =
-        adminManagementUsecase.updatePassword(request).run {
+        updateAdminPasswordUsecase.execute(request).run {
             ResponseEntity.ok(this)
         }
 
     @DeleteMapping
     fun deleteAdmin(): ResponseEntity<Unit> =
-        adminManagementUsecase.deleteAdmin().run {
+        deleteAdminUsecase.execute().run {
             ResponseEntity.noContent().build()
         }
 }

@@ -3,7 +3,11 @@ package org.aing.danurirest.domain.admin.controller
 import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.ItemRequest
 import org.aing.danurirest.domain.admin.dto.ItemResponse
-import org.aing.danurirest.domain.admin.usecase.ItemManagementUsecase
+import org.aing.danurirest.domain.admin.usecase.CreateItemUsecase
+import org.aing.danurirest.domain.admin.usecase.DeleteItemUsecase
+import org.aing.danurirest.domain.admin.usecase.GetItemUsecase
+import org.aing.danurirest.domain.admin.usecase.GetItemsUsecase
+import org.aing.danurirest.domain.admin.usecase.UpdateItemUsecase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,13 +22,17 @@ import java.util.UUID
 @RestController
 @RequestMapping("/admin/items")
 class AdminItemController(
-    private val itemManagementUsecase: ItemManagementUsecase,
+    private val createItemUsecase: CreateItemUsecase,
+    private val updateItemUsecase: UpdateItemUsecase,
+    private val deleteItemUsecase: DeleteItemUsecase,
+    private val getItemUsecase: GetItemUsecase,
+    private val getCompanyItemsUsecase: GetItemsUsecase,
 ) {
     @PostMapping
     fun createItem(
         @Valid @RequestBody request: ItemRequest,
     ): ResponseEntity<ItemResponse> =
-        itemManagementUsecase.createItem(request).run {
+        createItemUsecase.execute(request).run {
             ResponseEntity.ok(this)
         }
 
@@ -33,7 +41,7 @@ class AdminItemController(
         @PathVariable itemId: UUID,
         @Valid @RequestBody request: ItemRequest,
     ): ResponseEntity<ItemResponse> =
-        itemManagementUsecase.updateItem(itemId, request).run {
+        updateItemUsecase.execute(itemId, request).run {
             ResponseEntity.ok(this)
         }
 
@@ -41,7 +49,7 @@ class AdminItemController(
     fun deleteItem(
         @PathVariable itemId: UUID,
     ): ResponseEntity<Unit> =
-        itemManagementUsecase.deleteItem(itemId).run {
+        deleteItemUsecase.execute(itemId).run {
             ResponseEntity.noContent().build()
         }
 
@@ -49,13 +57,13 @@ class AdminItemController(
     fun getItem(
         @PathVariable itemId: UUID,
     ): ResponseEntity<ItemResponse> =
-        itemManagementUsecase.getItem(itemId).run {
+        getItemUsecase.execute(itemId).run {
             ResponseEntity.ok(this)
         }
 
     @GetMapping
     fun getCurrentCompanyItems(): ResponseEntity<List<ItemResponse>> =
-        itemManagementUsecase.getCurrentAdminCompanyItems().run {
+        getCompanyItemsUsecase.execute().run {
             ResponseEntity.ok(this)
         }
 }
