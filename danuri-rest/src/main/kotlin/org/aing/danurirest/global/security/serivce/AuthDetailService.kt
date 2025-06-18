@@ -18,7 +18,7 @@ class AuthDetailService(
     private val userRepository: UserRepository,
 ) {
     fun loadAdminByToken(id: UUID): Admin =
-        adminRepository.findByID(id).orElseThrow {
+        adminRepository.findById(id).orElseThrow {
             throw CustomException(CustomErrorCode.NOT_FOUND_USER)
         }
 
@@ -26,7 +26,7 @@ class AuthDetailService(
         deviceRepository.findByDeviceId(id).orElseThrow {
             throw CustomException(CustomErrorCode.NOT_FOUND_USER)
         }
-        
+
     fun loadUserByToken(id: UUID): User =
         userRepository.findById(id).orElseThrow {
             throw CustomException(CustomErrorCode.NOT_FOUND_USER)

@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne
 import org.aing.danuridomain.persistence.BaseEntity
 import org.aing.danuridomain.persistence.admin.Status
 import org.aing.danuridomain.persistence.company.entity.Company
+import org.aing.danuridomain.persistence.usage.entity.UsageHistory
 import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
@@ -24,15 +25,21 @@ data class Admin(
     @JoinColumn(name = "company_id")
     val company: Company,
     @Column(nullable = false)
-    val email: String,
+    var email: String,
     @Column(nullable = false)
-    val password: String,
+    var password: String,
     @Column(nullable = false)
-    val phone: String,
+    var phone: String,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val role: Role = Role.ROLE_ADMIN,
+    var role: Role = Role.ROLE_ADMIN,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val status: Status = Status.NEED_COMPANY_APPROVE,
-) : BaseEntity()
+) : BaseEntity() {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is UsageHistory) return false
+        return id != null && id == other.id
+    }
+}

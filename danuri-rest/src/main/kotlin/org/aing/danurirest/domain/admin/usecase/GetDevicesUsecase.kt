@@ -6,15 +6,15 @@ import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.springframework.stereotype.Service
 
 @Service
-class GetAdminCompanyDevicesUsecase(
+class GetDevicesUsecase(
     private val deviceRepository: DeviceRepository,
-    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase
+    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(): List<DeviceResponse> {
         val companyId = getAdminCompanyIdUsecase.execute()
 
         val devices = deviceRepository.findByCompanyId(companyId)
-        
+
         return devices.map { DeviceResponse.from(it) }
     }
 } 

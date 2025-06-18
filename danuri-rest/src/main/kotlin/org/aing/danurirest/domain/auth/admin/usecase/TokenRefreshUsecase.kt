@@ -25,7 +25,7 @@ class TokenRefreshUsecase(
             )
 
         val admin: Admin =
-            adminRepository.findByID(UUID.fromString(claims.subject)).orElseThrow {
+            adminRepository.findById(UUID.fromString(claims.subject)).orElseThrow {
                 throw CustomException(CustomErrorCode.NOT_FOUND_USER)
             }
 

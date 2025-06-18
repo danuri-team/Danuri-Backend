@@ -4,8 +4,8 @@ import org.aing.danurirest.domain.admin.dto.DeviceResponse
 import org.aing.danurirest.domain.admin.dto.RegisterDeviceRequest
 import org.aing.danurirest.domain.admin.dto.UpdateDeviceRequest
 import org.aing.danurirest.domain.admin.usecase.DeleteDeviceUsecase
-import org.aing.danurirest.domain.admin.usecase.GetAdminCompanyDevicesUsecase
 import org.aing.danurirest.domain.admin.usecase.GetDeviceUsecase
+import org.aing.danurirest.domain.admin.usecase.GetDevicesUsecase
 import org.aing.danurirest.domain.admin.usecase.RegisterDeviceUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateDeviceUsecase
 import org.springframework.http.ResponseEntity
@@ -24,7 +24,7 @@ import java.util.UUID
 class AdminDeviceController(
     private val registerDeviceUsecase: RegisterDeviceUsecase,
     private val getDeviceUsecase: GetDeviceUsecase,
-    private val getAdminCompanyDevicesUsecase: GetAdminCompanyDevicesUsecase,
+    private val getAdminCompanyDevicesUsecase: GetDevicesUsecase,
     private val updateDeviceUsecase: UpdateDeviceUsecase,
     private val deleteDeviceUsecase: DeleteDeviceUsecase,
 ) {
@@ -66,4 +66,4 @@ class AdminDeviceController(
         deleteDeviceUsecase.execute(deviceId).run {
             ResponseEntity.noContent().build()
         }
-} 
+}
