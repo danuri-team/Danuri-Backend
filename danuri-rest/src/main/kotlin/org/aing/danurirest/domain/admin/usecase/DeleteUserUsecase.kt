@@ -24,6 +24,6 @@ class DeleteUserUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        userRepository.delete(userId)
+        userRepository.delete(user)
     }
 } 

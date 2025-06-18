@@ -1,16 +1,16 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.space.entity.Space
 import org.aing.danuridomain.persistence.space.repository.SpaceRepository
 import org.aing.danurirest.domain.admin.dto.SpaceRequest
-import org.aing.danurirest.domain.admin.dto.SpaceResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
+@Transactional
 class UpdateSpaceUsecase(
     private val spaceRepository: SpaceRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
@@ -18,7 +18,7 @@ class UpdateSpaceUsecase(
     fun execute(
         spaceId: UUID,
         request: SpaceRequest,
-    ): SpaceResponse {
+    ) {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val space =
@@ -30,16 +30,10 @@ class UpdateSpaceUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        val updatedSpace =
-            Space(
-                id = space.id,
-                company = space.company,
-                name = request.name,
-                startAt = request.startAt,
-                endAt = request.endAt,
-                usage = space.usage,
-            )
+        space.startAt = request.startAt
+        space.name = request.name
+        space.endAt = request.endAt
 
-        return SpaceResponse.from(spaceRepository.save(updatedSpace))
+        spaceRepository.save(space)
     }
-} 
+}

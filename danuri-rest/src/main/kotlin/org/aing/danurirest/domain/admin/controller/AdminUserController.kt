@@ -40,9 +40,9 @@ class AdminUserController(
     fun updateUser(
         @PathVariable userId: UUID,
         @Valid @RequestBody request: UserRequest,
-    ): ResponseEntity<UserResponse> =
+    ): ResponseEntity<Unit> =
         updateUserUsecase.execute(userId, request).run {
-            ResponseEntity.ok(this)
+            ResponseEntity.noContent().build()
         }
 
     @DeleteMapping("/{userId}")
@@ -66,4 +66,4 @@ class AdminUserController(
         getCompanyUsersUsecase.execute().run {
             ResponseEntity.ok(this)
         }
-} 
+}

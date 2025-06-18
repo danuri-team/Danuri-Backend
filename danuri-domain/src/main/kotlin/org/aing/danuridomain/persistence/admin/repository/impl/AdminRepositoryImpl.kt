@@ -11,7 +11,7 @@ import java.util.UUID
 class AdminRepositoryImpl(
     private val adminJpaRepository: AdminJpaRepository,
 ) : AdminRepository {
-    override fun findByID(adminId: UUID): Optional<Admin> = adminJpaRepository.findById(adminId)
+    override fun findById(adminId: UUID): Optional<Admin> = adminJpaRepository.findById(adminId)
 
     override fun findByEmail(email: String): Optional<Admin> = adminJpaRepository.findByEmail(email)
 

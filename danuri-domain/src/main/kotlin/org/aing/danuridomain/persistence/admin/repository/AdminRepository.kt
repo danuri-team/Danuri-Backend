@@ -5,7 +5,7 @@ import java.util.Optional
 import java.util.UUID
 
 interface AdminRepository {
-    fun findByID(adminId: UUID): Optional<Admin>
+    fun findById(adminId: UUID): Optional<Admin>
 
     fun findByEmail(email: String): Optional<Admin>
 

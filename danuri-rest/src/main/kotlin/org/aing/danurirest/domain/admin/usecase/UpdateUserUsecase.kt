@@ -1,16 +1,16 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.user.entity.User
 import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.domain.admin.dto.UserRequest
-import org.aing.danurirest.domain.admin.dto.UserResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
+@Transactional
 class UpdateUserUsecase(
     private val userRepository: UserRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
@@ -18,7 +18,7 @@ class UpdateUserUsecase(
     fun execute(
         userId: UUID,
         request: UserRequest,
-    ): UserResponse {
+    ) {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val user =
@@ -36,17 +36,11 @@ class UpdateUserUsecase(
                 .ifPresent { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
         }
 
-        val updatedUser =
-            User(
-                id = user.id,
-                company = user.company,
-                usages = user.usages,
-                name = request.name,
-                sex = request.sex,
-                age = request.age,
-                phone = request.phone,
-            )
+        user.name = request.name
+        user.sex = request.sex
+        user.age = request.age
+        user.phone = request.phone
 
-        return UserResponse.from(userRepository.save(updatedUser))
+        userRepository.save(user)
     }
-} 
+}

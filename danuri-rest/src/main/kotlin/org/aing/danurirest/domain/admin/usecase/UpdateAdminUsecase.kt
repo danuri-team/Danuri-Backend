@@ -1,24 +1,24 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.admin.entity.Admin
 import org.aing.danuridomain.persistence.admin.repository.AdminRepository
-import org.aing.danurirest.domain.admin.dto.AdminResponse
 import org.aing.danurirest.domain.admin.dto.AdminUpdateRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class UpdateAdminUsecase(
     private val adminRepository: AdminRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
-    fun execute(request: AdminUpdateRequest): AdminResponse {
+    fun execute(request: AdminUpdateRequest) {
         val currentAdminCompanyId = getAdminCompanyIdUsecase.execute()
         val admin =
             adminRepository
-                .findByID(request.id)
+                .findById(request.id)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ADMIN) }
 
         if (admin.company.id != currentAdminCompanyId) {
@@ -29,17 +29,10 @@ class UpdateAdminUsecase(
             throw CustomException(CustomErrorCode.DUPLICATE_EMAIL)
         }
 
-        val updatedAdmin =
-            Admin(
-                id = admin.id,
-                company = admin.company,
-                email = request.email,
-                password = admin.password,
-                phone = request.phone,
-                role = request.role,
-                status = admin.status,
-            )
+        admin.email = request.email
+        admin.phone = request.phone
+        admin.role = request.role
 
-        return AdminResponse.from(adminRepository.save(updatedAdmin))
+        adminRepository.save(admin)
     }
-} 
+}

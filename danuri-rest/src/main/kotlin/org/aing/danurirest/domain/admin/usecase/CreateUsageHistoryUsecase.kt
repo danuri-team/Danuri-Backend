@@ -20,6 +20,10 @@ class CreateUsageHistoryUsecase(
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(request: CreateUsageHistoryRequest) {
+        if (request.startAt.isAfter(request.endAt)) {
+            throw CustomException(CustomErrorCode.VALIDATION_ERROR)
+        }
+
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val user =

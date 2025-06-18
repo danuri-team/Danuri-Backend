@@ -17,7 +17,7 @@ class GetCurrentAdminUsecase(
 
         val admin =
             adminRepository
-                .findByID(user.id!!)
+                .findById(user.id!!)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ADMIN) }
 
         return AdminResponse.from(admin)

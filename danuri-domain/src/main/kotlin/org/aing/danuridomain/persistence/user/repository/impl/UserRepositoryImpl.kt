@@ -26,7 +26,5 @@ class UserRepositoryImpl(
 
     override fun existsByPhone(phone: String): Boolean = userJpaRepository.existsByPhone(phone)
 
-    override fun delete(userId: UUID) {
-        userJpaRepository.deleteById(userId)
-    }
+    override fun delete(entity: User) = userJpaRepository.delete(entity)
 }

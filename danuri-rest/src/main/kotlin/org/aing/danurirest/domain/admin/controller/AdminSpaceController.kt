@@ -40,9 +40,9 @@ class AdminSpaceController(
     fun updateSpace(
         @PathVariable spaceId: UUID,
         @Valid @RequestBody request: SpaceRequest,
-    ): ResponseEntity<SpaceResponse> =
+    ): ResponseEntity<Unit> =
         updateSpaceUsecase.execute(spaceId, request).run {
-            ResponseEntity.ok(this)
+            ResponseEntity.noContent().build()
         }
 
     @DeleteMapping("/{spaceId}")

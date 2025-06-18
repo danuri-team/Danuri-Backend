@@ -17,7 +17,7 @@ class GetAdminUsecase(
         val currentAdminCompanyId = getAdminCompanyIdUsecase.execute()
         val admin =
             adminRepository
-                .findByID(adminId)
+                .findById(adminId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ADMIN) }
 
         if (admin.company.id != currentAdminCompanyId) {

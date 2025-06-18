@@ -10,16 +10,18 @@ import java.util.UUID
 
 @Service
 class GetAdminCompanyIdUsecase(
-    private val adminRepository: AdminRepository
+    private val adminRepository: AdminRepository,
 ) {
     fun execute(): UUID {
         val context = SecurityContextHolder.getContext().authentication.principal as ContextDto
-        
+
         val adminId = context.id ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
-        
-        val admin = adminRepository.findByID(adminId)
-            .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ADMIN) }
-        
+
+        val admin =
+            adminRepository
+                .findById(adminId)
+                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ADMIN) }
+
         return admin.company.id ?: throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY)
     }
 } 

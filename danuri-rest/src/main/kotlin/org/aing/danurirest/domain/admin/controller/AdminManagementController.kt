@@ -53,17 +53,17 @@ class AdminManagementController(
     @PutMapping
     fun updateAdmin(
         @Valid @RequestBody request: AdminUpdateRequest,
-    ): ResponseEntity<AdminResponse> =
+    ): ResponseEntity<Unit> =
         updateAdminUsecase.execute(request).run {
-            ResponseEntity.ok(this)
+            ResponseEntity.noContent().build()
         }
 
     @PutMapping("/password")
     fun updatePassword(
         @Valid @RequestBody request: AdminPasswordUpdateRequest,
-    ): ResponseEntity<AdminResponse> =
+    ): ResponseEntity<Unit> =
         updateAdminPasswordUsecase.execute(request).run {
-            ResponseEntity.ok(this)
+            ResponseEntity.noContent().build()
         }
 
     @DeleteMapping

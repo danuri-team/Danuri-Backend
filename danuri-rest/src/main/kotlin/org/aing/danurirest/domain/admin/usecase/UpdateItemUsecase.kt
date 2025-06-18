@@ -8,9 +8,11 @@ import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
+@Transactional
 class UpdateItemUsecase(
     private val itemRepository: ItemRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
@@ -30,19 +32,16 @@ class UpdateItemUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        val availableQuantityDiff = request.totalQuantity - item.totalQuantity
-        val updatedAvailableQuantity = item.availableQuantity + availableQuantityDiff
-
         val updatedItem =
             Item(
                 id = item.id,
                 company = item.company,
                 name = request.name,
                 totalQuantity = request.totalQuantity,
-                availableQuantity = updatedAvailableQuantity,
+                availableQuantity = request.availableQuantity!!,
                 status = request.status,
             )
 
         return ItemResponse.from(itemRepository.update(updatedItem))
     }
-} 
+}

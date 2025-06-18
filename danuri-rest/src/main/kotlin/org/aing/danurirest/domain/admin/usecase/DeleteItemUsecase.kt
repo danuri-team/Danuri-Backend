@@ -24,6 +24,6 @@ class DeleteItemUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        itemRepository.delete(itemId)
+        itemRepository.delete(item)
     }
 } 
