@@ -24,6 +24,6 @@ class DeleteSpaceUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        spaceRepository.delete(spaceId)
+        spaceRepository.delete(space)
     }
 } 

@@ -31,7 +31,7 @@ class CreateUserUsecase(
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY) }
 
         userRepository
-            .findByPhoneAndCompanyId(request.phone, request.companyId)
+            .findByPhoneAndCompanyId(request.phone, company.id!!)
             .ifPresent { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
 
         val user =
@@ -45,4 +45,4 @@ class CreateUserUsecase(
 
         return UserResponse.from(userRepository.save(user))
     }
-} 
+}

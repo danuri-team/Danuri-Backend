@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.admin.usecase
 
+import org.aing.danuridomain.persistence.item.ItemStatus
 import org.aing.danuridomain.persistence.item.repository.ItemRepository
 import org.aing.danuridomain.persistence.rental.RentalStatus
 import org.aing.danuridomain.persistence.rental.entity.Rental
@@ -38,6 +39,10 @@ class CreateRentalUsecase(
                 .findById(request.itemId)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
 
+        if (item.status == ItemStatus.NOT_AVAILABLE || item.availableQuantity < request.quantity) {
+            throw CustomException(CustomErrorCode.ITEM_NOT_AVAILABLE)
+        }
+
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         if (item.company.id != adminCompanyId) {
@@ -54,4 +59,4 @@ class CreateRentalUsecase(
             ),
         )
     }
-} 
+}

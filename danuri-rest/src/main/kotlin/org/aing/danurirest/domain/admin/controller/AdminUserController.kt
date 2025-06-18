@@ -31,9 +31,9 @@ class AdminUserController(
     @PostMapping
     fun createUser(
         @Valid @RequestBody request: UserRequest,
-    ): ResponseEntity<UserResponse> =
+    ): ResponseEntity<Unit> =
         createUserUsecase.execute(request).run {
-            ResponseEntity.ok(this)
+            ResponseEntity.noContent().build()
         }
 
     @PutMapping("/{userId}")

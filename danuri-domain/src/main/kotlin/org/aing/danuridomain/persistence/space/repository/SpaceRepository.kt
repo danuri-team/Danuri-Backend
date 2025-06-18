@@ -12,7 +12,7 @@ interface SpaceRepository {
 
     fun findByCompanyId(companyId: UUID): List<Space>
 
-    fun delete(spaceId: UUID)
+    fun delete(entity: Space)
 
     fun findSpacesWithAvailabilityByDeviceId(deviceId: UUID): List<SpaceAvailabilityDto>
 }
