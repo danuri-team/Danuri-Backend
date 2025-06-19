@@ -10,6 +10,7 @@ class WebConfig : WebMvcConfigurer {
         registry
             .addMapping("/**")
             .allowedOrigins("http://localhost:3000")
+            .allowedOriginPatterns("https://*.danuri-admin-frontend.pages.dev")
             .allowedMethods("*")
             .allowCredentials(true)
     }
