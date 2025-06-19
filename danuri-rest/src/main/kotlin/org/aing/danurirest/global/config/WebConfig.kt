@@ -9,8 +9,7 @@ class WebConfig : WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         registry
             .addMapping("/**")
-            .allowedOrigins("http://localhost:3000")
-            .allowedOriginPatterns("https://*.danuri-admin-frontend.pages.dev")
+            .allowedOriginPatterns("https://*.danuri-admin-frontend.pages.dev", "http://localhost:3000")
             .allowedMethods("*")
             .allowCredentials(true)
     }
