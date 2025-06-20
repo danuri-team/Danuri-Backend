@@ -63,7 +63,11 @@ class ReturnItemUsecase(
     ) {
         rental.returnedQuantity += quantity
         rental.returnedAt = LocalDateTime.now()
-        rental.status = RentalStatus.RETURNED
+
+        if (rental.quantity == rental.returnedQuantity) {
+            rental.status = RentalStatus.RETURNED
+        }
+
         rentalRepository.save(rental)
     }
 
