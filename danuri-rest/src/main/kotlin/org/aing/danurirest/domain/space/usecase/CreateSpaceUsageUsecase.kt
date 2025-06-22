@@ -58,8 +58,7 @@ class CreateSpaceUsageUsecase(
         val userCurrentUsages =
             usageHistoryRepository.findAllByUserIdAndDateRange(
                 userId = userId,
-                startDate = now.minusHours(1),
-                endDate = now.plusHours(1),
+                currentTime = LocalDateTime.now(),
             )
 
         val hasActiveUsage =
