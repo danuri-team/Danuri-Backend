@@ -18,12 +18,15 @@ class FetchCheckOutUsecase(
         val context = SecurityContextHolder.getContext().authentication.principal as ContextDto
         val result =
             usageHistoryRepository
-                .findByUserId(
+                .findAllByUserIdAndDateRange(
                     userId = context.id!!,
-                ).orElseThrow { CustomException(CustomErrorCode.NOT_USAGE_FOUND) }
-        if (result.endAt != null) {
-            throw CustomException(CustomErrorCode.ALREADY_END)
+                    currentTime = LocalDateTime.now(),
+                )
+
+        if (result.isEmpty()) {
+            throw CustomException(CustomErrorCode.NOT_FOUND)
         }
-        result.endAt = LocalDateTime.now()
+
+        result[0].endAt = LocalDateTime.now()
     }
 }

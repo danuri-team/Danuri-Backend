@@ -32,18 +32,17 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
 
     @Query(
         """
-            SELECT u FROM UsageHistory u
-            JOIN FETCH u.user
-            JOIN FETCH u.space
-            WHERE u.user.id = :userId
-            AND u.startAt >= :startDate
-            AND (u.endAt IS NULL OR u.endAt <= :endDate)
-        """,
+        SELECT u FROM UsageHistory u
+        JOIN FETCH u.user
+        JOIN FETCH u.space
+        WHERE u.user.id = :userId
+        AND u.startAt <= :currentTime
+        AND (u.endAt IS NULL OR u.endAt >= :currentTime)
+    """,
     )
-    fun findAllByUserIdAndDateRange(
+    fun findCurrentUsageByUserId(
         @Param("userId") userId: UUID,
-        @Param("startDate") startDate: LocalDateTime,
-        @Param("endDate") endDate: LocalDateTime,
+        @Param("currentTime") currentTime: LocalDateTime,
     ): List<UsageHistory>
 
     fun findByUserId(userId: UUID): Optional<UsageHistory>

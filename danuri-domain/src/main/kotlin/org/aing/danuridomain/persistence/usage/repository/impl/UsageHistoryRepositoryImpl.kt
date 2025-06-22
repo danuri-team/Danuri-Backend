@@ -165,9 +165,8 @@ class UsageHistoryRepositoryImpl(
 
     override fun findAllByUserIdAndDateRange(
         userId: UUID,
-        startDate: LocalDateTime,
-        endDate: LocalDateTime,
-    ): List<UsageHistory> = usageHistoryJpaRepository.findAllByUserIdAndDateRange(userId, startDate, endDate)
+        currentTime: LocalDateTime,
+    ): List<UsageHistory> = usageHistoryJpaRepository.findCurrentUsageByUserId(userId, currentTime)
 
     override fun findUserCurrentUsageInfo(userId: UUID): CurrentUsageHistoryDto {
         val usage = QUsageHistory.usageHistory

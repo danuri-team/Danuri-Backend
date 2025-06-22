@@ -18,7 +18,7 @@ import org.aing.danuridomain.persistence.rental.entity.Rental
 import java.util.UUID
 
 @Entity
-data class Item(
+class Item(
     @Id
     @GeneratedValue
     val id: UUID? = null,

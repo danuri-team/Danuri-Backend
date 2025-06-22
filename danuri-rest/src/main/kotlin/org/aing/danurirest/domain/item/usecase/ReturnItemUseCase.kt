@@ -3,6 +3,7 @@ package org.aing.danurirest.domain.item.usecase
 import org.aing.danuridomain.persistence.item.ItemStatus
 import org.aing.danuridomain.persistence.item.entity.Item
 import org.aing.danuridomain.persistence.item.repository.ItemRepository
+import org.aing.danuridomain.persistence.rental.RentalStatus
 import org.aing.danuridomain.persistence.rental.entity.Rental
 import org.aing.danuridomain.persistence.rental.repository.RentalRepository
 import org.aing.danurirest.domain.item.dto.ItemReturnRequest
@@ -62,6 +63,11 @@ class ReturnItemUsecase(
     ) {
         rental.returnedQuantity += quantity
         rental.returnedAt = LocalDateTime.now()
+
+        if (rental.quantity == rental.returnedQuantity) {
+            rental.status = RentalStatus.RETURNED
+        }
+
         rentalRepository.save(rental)
     }
 

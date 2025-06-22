@@ -16,7 +16,7 @@ import org.aing.danuridomain.persistence.user.entity.User
 import java.util.UUID
 
 @Entity
-data class Company(
+class Company(
     @Id
     @GeneratedValue
     val id: UUID? = null,

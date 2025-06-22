@@ -15,7 +15,7 @@ import org.aing.danuridomain.persistence.user.Role
 import java.util.UUID
 
 @Entity
-data class Device(
+class Device(
     @Id
     @GeneratedValue
     val id: UUID? = null,
