@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import org.aing.danuridomain.persistence.user.Role
+import org.aing.danurirest.persistence.user.Role
 import java.util.UUID
 
 data class AdminUpdateRequest(

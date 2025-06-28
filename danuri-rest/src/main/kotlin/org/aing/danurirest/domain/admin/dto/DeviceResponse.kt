@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.admin.dto
 
-import org.aing.danuridomain.persistence.device.entity.Device
+import org.aing.danurirest.persistence.device.entity.Device
 import java.time.LocalDateTime
 import java.util.UUID
 

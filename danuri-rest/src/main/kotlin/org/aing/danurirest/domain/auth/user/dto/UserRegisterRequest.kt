@@ -3,8 +3,8 @@ package org.aing.danurirest.domain.auth.user.dto
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
-import org.aing.danuridomain.persistence.user.Age
-import org.aing.danuridomain.persistence.user.Sex
+import org.aing.danurirest.persistence.user.Age
+import org.aing.danurirest.persistence.user.Sex
 import java.util.UUID
 
 data class UserRegisterRequest(

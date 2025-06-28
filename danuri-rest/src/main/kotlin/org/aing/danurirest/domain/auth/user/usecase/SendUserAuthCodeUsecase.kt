@@ -1,8 +1,8 @@
 package org.aing.danurirest.domain.auth.user.usecase
 
-import org.aing.danuridomain.persistence.user.entity.UserAuthCode
-import org.aing.danuridomain.persistence.user.repository.UserAuthCodeRepository
-import org.aing.danuridomain.persistence.user.repository.UserRepository
+import org.aing.danurirest.persistence.user.entity.UserAuthCode
+import org.aing.danurirest.persistence.user.repository.UserAuthCodeRepository
+import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.third_party.discord.client.DiscordFeignClient
@@ -17,7 +17,7 @@ import java.util.Random
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class SendUserAuthCodeUsecase(
-    private val userRepository: UserRepository,
+    private val userJpaRepository: UserJpaRepository,
     private val userAuthCodeRepository: UserAuthCodeRepository,
     private val sendSmsUsecase: SendSmsUsecase,
     @Value("\${spring.profiles.active:default}")
@@ -29,7 +29,7 @@ class SendUserAuthCodeUsecase(
     }
 
     fun execute(phone: String) {
-        if (!userRepository.existsByPhone(phone)) {
+        if (!userJpaRepository.existsByPhone(phone)) {
             throw CustomException(CustomErrorCode.NOT_FOUND_USER)
         }
 

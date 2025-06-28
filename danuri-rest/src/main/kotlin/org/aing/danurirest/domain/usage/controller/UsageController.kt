@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.usage.controller
 
-import org.aing.danuridomain.persistence.usage.dto.CurrentUsageHistoryDto
+import org.aing.danurirest.persistence.usage.dto.CurrentUsageHistoryDto
 import org.aing.danurirest.domain.usage.usecase.FetchCheckOutUsecase
 import org.aing.danurirest.domain.usage.usecase.GetCurrentUsageInfoUsecase
 import org.springframework.http.ResponseEntity

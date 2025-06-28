@@ -2,7 +2,7 @@ package org.aing.danurirest.domain.admin.dto
 
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotNull
-import org.aing.danuridomain.persistence.rental.RentalStatus
+import org.aing.danurirest.persistence.rental.RentalStatus
 
 data class UpdateRentalRequest(
     @field:Min(value = 1, message = "총 수량은 최소 1개 이상이어야 합니다.")
