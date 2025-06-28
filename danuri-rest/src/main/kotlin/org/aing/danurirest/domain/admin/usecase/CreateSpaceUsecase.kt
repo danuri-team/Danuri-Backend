@@ -1,21 +1,21 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.company.repository.CompanyRepository
-import org.aing.danuridomain.persistence.space.entity.Space
-import org.aing.danuridomain.persistence.space.repository.SpaceRepository
 import org.aing.danurirest.domain.admin.dto.SpaceRequest
 import org.aing.danurirest.domain.admin.dto.SpaceResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
+import org.aing.danurirest.persistence.space.entity.Space
+import org.aing.danurirest.persistence.space.repository.SpaceJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
 class CreateSpaceUsecase(
-    private val spaceRepository: SpaceRepository,
-    private val companyRepository: CompanyRepository,
+    private val spaceJpaRepository: SpaceJpaRepository,
+    private val companyRepository: CompanyJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(request: SpaceRequest): SpaceResponse {
@@ -34,6 +34,6 @@ class CreateSpaceUsecase(
                 endAt = request.endAt,
             )
 
-        return SpaceResponse.from(spaceRepository.save(space))
+        return SpaceResponse.from(spaceJpaRepository.save(space))
     }
-} 
+}

@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.admin.dto
 
-import org.aing.danuridomain.persistence.space.entity.Space
+import org.aing.danurirest.persistence.space.entity.Space
 import java.time.LocalTime
 import java.util.UUID
 

@@ -1,11 +1,11 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.domain.admin.dto.UpdateUsageHistoryRequest
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -13,7 +13,7 @@ import java.util.UUID
 @Service
 @Transactional
 class UpdateUsageHistoryUsecase(
-    private val usageHistoryRepository: UsageHistoryRepository,
+    private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(
@@ -23,7 +23,7 @@ class UpdateUsageHistoryUsecase(
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val usageHistory =
-            usageHistoryRepository
+            usageHistoryJpaRepository
                 .findById(usageHistoryId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_USAGE_FOUND) }
 
@@ -33,6 +33,6 @@ class UpdateUsageHistoryUsecase(
 
         usageHistory.endAt = request.endAt
 
-        return UsageHistoryResponse.from(usageHistoryRepository.save(usageHistory))
+        return UsageHistoryResponse.from(usageHistoryJpaRepository.save(usageHistory))
     }
 } 

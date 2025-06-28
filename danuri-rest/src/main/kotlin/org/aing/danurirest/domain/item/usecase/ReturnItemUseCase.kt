@@ -1,30 +1,30 @@
 package org.aing.danurirest.domain.item.usecase
 
-import org.aing.danuridomain.persistence.item.ItemStatus
-import org.aing.danuridomain.persistence.item.entity.Item
-import org.aing.danuridomain.persistence.item.repository.ItemRepository
-import org.aing.danuridomain.persistence.rental.RentalStatus
-import org.aing.danuridomain.persistence.rental.entity.Rental
-import org.aing.danuridomain.persistence.rental.repository.RentalRepository
 import org.aing.danurirest.domain.item.dto.ItemReturnRequest
 import org.aing.danurirest.domain.item.dto.ItemReturnResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.item.ItemStatus
+import org.aing.danurirest.persistence.item.entity.Item
+import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
+import org.aing.danurirest.persistence.rental.RentalStatus
+import org.aing.danurirest.persistence.rental.entity.Rental
+import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
 class ReturnItemUsecase(
-    private val itemRepository: ItemRepository,
-    private val rentalRepository: RentalRepository,
+    private val itemJpaRepository: ItemJpaRepository,
+    private val rentalJpaRepository: RentalJpaRepository,
 ) {
     fun execute(
         rentalId: UUID,
         request: ItemReturnRequest,
     ): ItemReturnResponse {
         val rental =
-            rentalRepository
+            rentalJpaRepository
                 .findById(rentalId)
                 .orElseThrow { CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE) }
 
@@ -68,7 +68,7 @@ class ReturnItemUsecase(
             rental.status = RentalStatus.RETURNED
         }
 
-        rentalRepository.save(rental)
+        rentalJpaRepository.save(rental)
     }
 
     private fun updateItemQuantity(
@@ -79,6 +79,6 @@ class ReturnItemUsecase(
         if (item.availableQuantity > 0) {
             item.status = ItemStatus.AVAILABLE
         }
-        itemRepository.save(item)
+        itemJpaRepository.save(item)
     }
 }

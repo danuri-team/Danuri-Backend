@@ -1,21 +1,21 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.company.repository.CompanyRepository
-import org.aing.danuridomain.persistence.item.entity.Item
-import org.aing.danuridomain.persistence.item.repository.ItemRepository
 import org.aing.danurirest.domain.admin.dto.ItemRequest
 import org.aing.danurirest.domain.admin.dto.ItemResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
+import org.aing.danurirest.persistence.item.entity.Item
+import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
 class CreateItemUsecase(
-    private val itemRepository: ItemRepository,
-    private val companyRepository: CompanyRepository,
+    private val itemJpaRepository: ItemJpaRepository,
+    private val companyRepository: CompanyJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(request: ItemRequest): ItemResponse {
@@ -35,6 +35,6 @@ class CreateItemUsecase(
                 status = request.status,
             )
 
-        return ItemResponse.from(itemRepository.save(item))
+        return ItemResponse.from(itemJpaRepository.save(item))
     }
-} 
+}

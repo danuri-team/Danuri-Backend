@@ -1,22 +1,22 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.item.repository.ItemRepository
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
 class DeleteItemUsecase(
-    private val itemRepository: ItemRepository,
+    private val itemJpaRepository: ItemJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(itemId: UUID) {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val item =
-            itemRepository
+            itemJpaRepository
                 .findById(itemId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
 
@@ -24,6 +24,6 @@ class DeleteItemUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        itemRepository.delete(item)
+        itemJpaRepository.delete(item)
     }
-} 
+}

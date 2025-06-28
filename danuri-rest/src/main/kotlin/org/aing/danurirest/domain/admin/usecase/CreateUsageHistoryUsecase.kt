@@ -1,22 +1,22 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.space.repository.SpaceRepository
-import org.aing.danuridomain.persistence.usage.entity.UsageHistory
-import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
-import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.domain.admin.dto.CreateUsageHistoryRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.space.repository.SpaceJpaRepository
+import org.aing.danurirest.persistence.usage.entity.UsageHistory
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
+import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
 class CreateUsageHistoryUsecase(
-    private val usageHistoryRepository: UsageHistoryRepository,
-    private val userRepository: UserRepository,
-    private val spaceRepository: SpaceRepository,
+    private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
+    private val userRepository: UserJpaRepository,
+    private val spaceJpaRepository: SpaceJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(request: CreateUsageHistoryRequest) {
@@ -36,7 +36,7 @@ class CreateUsageHistoryUsecase(
         }
 
         val space =
-            spaceRepository
+            spaceJpaRepository
                 .findById(request.spaceId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
 
@@ -52,6 +52,6 @@ class CreateUsageHistoryUsecase(
                 endAt = request.endAt,
             )
 
-        usageHistoryRepository.save(usageHistory)
+        usageHistoryJpaRepository.save(usageHistory)
     }
-} 
+}

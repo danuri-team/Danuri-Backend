@@ -1,7 +1,7 @@
 package org.aing.danurirest.domain.admin.dto
 
-import org.aing.danuridomain.persistence.item.ItemStatus
-import org.aing.danuridomain.persistence.item.entity.Item
+import org.aing.danurirest.persistence.item.ItemStatus
+import org.aing.danurirest.persistence.item.entity.Item
 import java.util.UUID
 
 data class ItemResponse(

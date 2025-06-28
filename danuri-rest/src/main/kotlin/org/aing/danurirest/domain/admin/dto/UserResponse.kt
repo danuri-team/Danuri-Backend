@@ -1,8 +1,8 @@
 package org.aing.danurirest.domain.admin.dto
 
-import org.aing.danuridomain.persistence.user.Age
-import org.aing.danuridomain.persistence.user.Sex
-import org.aing.danuridomain.persistence.user.entity.User
+import org.aing.danurirest.persistence.user.Age
+import org.aing.danurirest.persistence.user.Sex
+import org.aing.danurirest.persistence.user.entity.User
 import java.time.LocalDateTime
 import java.util.UUID
 

@@ -1,13 +1,15 @@
 package org.aing.danurirest.domain.space.usecase
 
-import org.aing.danuridomain.persistence.space.entity.Space
-import org.aing.danuridomain.persistence.space.repository.SpaceRepository
-import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
-import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.domain.space.dto.UseSpaceRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
+import org.aing.danurirest.persistence.space.entity.Space
+import org.aing.danurirest.persistence.space.repository.SpaceJpaRepository
+import org.aing.danurirest.persistence.usage.entity.UsageHistory
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
+import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -16,8 +18,9 @@ import java.util.UUID
 @Service
 class CreateSpaceUsageUsecase(
     private val usageHistoryRepository: UsageHistoryRepository,
-    private val spaceRepository: SpaceRepository,
-    private val userRepository: UserRepository,
+    private val spaceJpaRepository: SpaceJpaRepository,
+    private val userJpaRepository: UserJpaRepository,
+    private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
 ) {
     companion object {
         private const val USAGE_DURATION_MINUTES = 30L
@@ -46,7 +49,7 @@ class CreateSpaceUsageUsecase(
     }
 
     private fun findSpaceById(spaceId: UUID): Space =
-        spaceRepository
+        spaceJpaRepository
             .findById(spaceId)
             .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
 
@@ -56,17 +59,11 @@ class CreateSpaceUsageUsecase(
         now: LocalDateTime,
     ) {
         val userCurrentUsages =
-            usageHistoryRepository.findAllByUserIdAndDateRange(
+            usageHistoryRepository.findUserCurrentUsageInfo(
                 userId = userId,
-                currentTime = LocalDateTime.now(),
             )
 
-        val hasActiveUsage =
-            userCurrentUsages.any { usage ->
-                !usage.startAt.isAfter(now) && (usage.endAt == null || !now.isAfter(usage.endAt))
-            }
-
-        if (hasActiveUsage) {
+        if (userCurrentUsages.isUsingSpace) {
             throw CustomException(CustomErrorCode.USAGE_CONFLICT_USER)
         }
     }
@@ -90,7 +87,7 @@ class CreateSpaceUsageUsecase(
         endTime: LocalDateTime,
     ) {
         val currentUsages =
-            usageHistoryRepository.spaceUsingTime(
+            usageHistoryJpaRepository.spaceUsingTime(
                 spaceId = spaceId,
                 startTime = now.minusMinutes(USAGE_DURATION_MINUTES),
                 endTime = endTime.plusMinutes(USAGE_DURATION_MINUTES),
@@ -114,11 +111,18 @@ class CreateSpaceUsageUsecase(
         endTime: LocalDateTime,
     ) {
         val user =
-            userRepository
+            userJpaRepository
                 .findById(userId)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
-        usageHistoryRepository.createSpaceUsage(space, user, startTime, endTime)
+        usageHistoryJpaRepository.save(
+            UsageHistory(
+                user = user,
+                space = space,
+                startAt = startTime,
+                endAt = endTime,
+            ),
+        )
     }
 
     private fun getCurrentContext(): ContextDto {

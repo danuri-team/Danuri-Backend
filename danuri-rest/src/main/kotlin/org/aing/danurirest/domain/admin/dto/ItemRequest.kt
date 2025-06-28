@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
-import org.aing.danuridomain.persistence.item.ItemStatus
+import org.aing.danurirest.persistence.item.ItemStatus
 
 data class ItemRequest(
     @field:NotBlank(message = "품목 이름은 공백일 수 없습니다.")

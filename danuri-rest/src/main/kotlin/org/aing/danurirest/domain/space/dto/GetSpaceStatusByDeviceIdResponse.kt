@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.space.dto
 
-import org.aing.danuridomain.persistence.space.dto.SpaceAvailabilityDto
+import org.aing.danurirest.persistence.space.dto.SpaceAvailabilityDto
 import java.time.LocalTime
 import java.util.UUID
 

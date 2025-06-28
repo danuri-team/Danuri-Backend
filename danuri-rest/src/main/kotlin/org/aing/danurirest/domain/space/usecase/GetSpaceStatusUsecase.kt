@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.space.usecase
 
-import org.aing.danuridomain.persistence.space.repository.SpaceRepository
+import org.aing.danurirest.persistence.space.repository.SpaceRepository
 import org.aing.danurirest.domain.space.dto.GetSpaceStatusByDeviceIdResponse
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
 import org.springframework.security.core.context.SecurityContextHolder

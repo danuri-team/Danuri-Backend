@@ -1,17 +1,17 @@
 package org.aing.danurirest.domain.item.usecase
 
-import org.aing.danuridomain.persistence.item.ItemStatus
-import org.aing.danuridomain.persistence.item.entity.Item
-import org.aing.danuridomain.persistence.item.repository.ItemRepository
-import org.aing.danuridomain.persistence.rental.entity.Rental
-import org.aing.danuridomain.persistence.rental.repository.RentalRepository
-import org.aing.danuridomain.persistence.usage.entity.UsageHistory
-import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.domain.item.dto.ItemRentalRequest
 import org.aing.danurirest.domain.item.dto.ItemRentalResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
+import org.aing.danurirest.persistence.item.ItemStatus
+import org.aing.danurirest.persistence.item.entity.Item
+import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
+import org.aing.danurirest.persistence.rental.entity.Rental
+import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
+import org.aing.danurirest.persistence.usage.entity.UsageHistory
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -19,9 +19,9 @@ import java.util.UUID
 
 @Service
 class RentItemUsecase(
-    private val itemRepository: ItemRepository,
-    private val rentalRepository: RentalRepository,
-    private val usageHistoryRepository: UsageHistoryRepository,
+    private val itemJpaRepository: ItemJpaRepository,
+    private val rentalJpaRepository: RentalJpaRepository,
+    private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
 ) {
     fun execute(
         usageId: UUID,
@@ -34,25 +34,28 @@ class RentItemUsecase(
                 as ContextDto
 
         val usage =
-            usageHistoryRepository
-                .spaceUsingInfo(
-                    usageId = usageId,
-                    userId = user.id!!,
-                ).orElseThrow { CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE) }
+            usageHistoryJpaRepository
+                .findById(
+                    usageId,
+                ).orElseThrow { CustomException(CustomErrorCode.NOT_USAGE_FOUND) }
+
+        if (usage.user.id != user.id) {
+            throw CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE)
+        }
 
         if (usage.endAt?.isAfter(LocalDateTime.now()) != true) {
             throw CustomException(CustomErrorCode.ALREADY_END)
         }
 
         val item =
-            itemRepository
+            itemJpaRepository
                 .findById(request.itemId)
                 .orElseThrow { IllegalArgumentException("존재하지 않는 아이템입니다.") }
 
         validateItemAvailability(item, request.quantity)
 
         val rental = createRental(usage, item, request.quantity)
-        val savedRental = rentalRepository.save(rental)
+        val savedRental = rentalJpaRepository.save(rental)
 
         updateItemQuantity(item, request.quantity)
 
@@ -100,6 +103,6 @@ class RentItemUsecase(
         if (item.availableQuantity == 0) {
             item.status = ItemStatus.NOT_AVAILABLE
         }
-        itemRepository.save(item)
+        itemJpaRepository.save(item)
     }
 }

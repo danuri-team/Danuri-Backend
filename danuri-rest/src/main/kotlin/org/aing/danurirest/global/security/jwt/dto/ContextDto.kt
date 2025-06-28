@@ -1,9 +1,9 @@
 package org.aing.danurirest.global.security.jwt.dto
 
-import org.aing.danuridomain.persistence.admin.entity.Admin
-import org.aing.danuridomain.persistence.device.entity.Device
-import org.aing.danuridomain.persistence.user.Role
-import org.aing.danuridomain.persistence.user.entity.User
+import org.aing.danurirest.persistence.admin.entity.Admin
+import org.aing.danurirest.persistence.device.entity.Device
+import org.aing.danurirest.persistence.user.Role
+import org.aing.danurirest.persistence.user.entity.User
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import java.util.UUID

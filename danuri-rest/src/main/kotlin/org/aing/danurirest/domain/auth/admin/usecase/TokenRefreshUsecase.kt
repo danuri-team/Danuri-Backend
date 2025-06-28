@@ -1,8 +1,8 @@
 package org.aing.danurirest.domain.auth.admin.usecase
 
 import io.jsonwebtoken.Claims
-import org.aing.danuridomain.persistence.admin.entity.Admin
-import org.aing.danuridomain.persistence.admin.repository.AdminRepository
+import org.aing.danurirest.persistence.admin.entity.Admin
+import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.domain.auth.common.dto.TokenRefreshRequest
 import org.aing.danurirest.global.exception.CustomException
@@ -15,7 +15,7 @@ import java.util.UUID
 @Service
 class TokenRefreshUsecase(
     private val jwtProvider: JwtProvider,
-    private val adminRepository: AdminRepository,
+    private val adminJpaRepository: AdminJpaRepository,
 ) {
     fun execute(request: TokenRefreshRequest): SignInResponse {
         val claims: Claims =
@@ -25,7 +25,7 @@ class TokenRefreshUsecase(
             )
 
         val admin: Admin =
-            adminRepository.findById(UUID.fromString(claims.subject)).orElseThrow {
+            adminJpaRepository.findById(UUID.fromString(claims.subject)).orElseThrow {
                 throw CustomException(CustomErrorCode.NOT_FOUND_USER)
             }
 

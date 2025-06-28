@@ -1,7 +1,7 @@
 package org.aing.danurirest.domain.admin.controller
 
 import jakarta.validation.Valid
-import org.aing.danuridomain.persistence.rental.dto.RentalResponse
+import org.aing.danurirest.persistence.rental.dto.RentalResponse
 import org.aing.danurirest.domain.admin.dto.CreateRentalRequest
 import org.aing.danurirest.domain.admin.dto.UpdateRentalRequest
 import org.aing.danurirest.domain.admin.usecase.CreateRentalUsecase

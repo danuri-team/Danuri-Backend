@@ -1,8 +1,8 @@
 package org.aing.danurirest.domain.admin.dto
 
-import org.aing.danuridomain.persistence.admin.Status
-import org.aing.danuridomain.persistence.admin.entity.Admin
-import org.aing.danuridomain.persistence.user.Role
+import org.aing.danurirest.persistence.admin.Status
+import org.aing.danurirest.persistence.admin.entity.Admin
+import org.aing.danurirest.persistence.user.Role
 import java.util.UUID
 
 data class AdminResponse(
