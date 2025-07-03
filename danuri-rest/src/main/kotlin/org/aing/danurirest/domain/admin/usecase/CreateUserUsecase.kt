@@ -1,21 +1,21 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.company.repository.CompanyRepository
-import org.aing.danuridomain.persistence.user.entity.User
-import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.domain.admin.dto.UserRequest
 import org.aing.danurirest.domain.admin.dto.UserResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
+import org.aing.danurirest.persistence.user.entity.User
+import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
 class CreateUserUsecase(
-    private val userRepository: UserRepository,
-    private val companyRepository: CompanyRepository,
+    private val userRepository: UserJpaRepository,
+    private val companyRepository: CompanyJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(request: UserRequest): UserResponse {

@@ -1,7 +1,7 @@
 package org.aing.danurirest.domain.usage.usecase
 
-import org.aing.danuridomain.persistence.usage.dto.CurrentUsageHistoryDto
-import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
+import org.aing.danurirest.persistence.usage.dto.CurrentUsageHistoryDto
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto

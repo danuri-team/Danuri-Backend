@@ -1,10 +1,10 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.domain.admin.dto.UserRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -12,7 +12,7 @@ import java.util.UUID
 @Service
 @Transactional
 class UpdateUserUsecase(
-    private val userRepository: UserRepository,
+    private val userJpaRepository: UserJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(
@@ -22,7 +22,7 @@ class UpdateUserUsecase(
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val user =
-            userRepository
+            userJpaRepository
                 .findById(userId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
@@ -31,7 +31,7 @@ class UpdateUserUsecase(
         }
 
         if (user.phone != request.phone) {
-            userRepository
+            userJpaRepository
                 .findByPhoneAndCompanyId(request.phone, user.company.id!!)
                 .ifPresent { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
         }
@@ -41,6 +41,6 @@ class UpdateUserUsecase(
         user.age = request.age
         user.phone = request.phone
 
-        userRepository.save(user)
+        userJpaRepository.save(user)
     }
 }

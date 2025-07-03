@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danuridomain.persistence.usage.repository.UsageHistoryRepository
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase

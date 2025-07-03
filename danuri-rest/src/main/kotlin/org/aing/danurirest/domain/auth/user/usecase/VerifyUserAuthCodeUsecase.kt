@@ -1,19 +1,19 @@
 package org.aing.danurirest.domain.auth.user.usecase
 
-import org.aing.danuridomain.persistence.user.Role
-import org.aing.danuridomain.persistence.user.repository.UserAuthCodeRepository
-import org.aing.danuridomain.persistence.user.repository.UserRepository
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider
 import org.aing.danurirest.global.security.jwt.enum.TokenType
+import org.aing.danurirest.persistence.user.Role
+import org.aing.danurirest.persistence.user.repository.UserAuthCodeRepository
+import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
 class VerifyUserAuthCodeUsecase(
-    private val userRepository: UserRepository,
+    private val userJpaRepository: UserJpaRepository,
     private val userAuthCodeRepository: UserAuthCodeRepository,
     private val jwtProvider: JwtProvider,
 ) {
@@ -38,7 +38,7 @@ class VerifyUserAuthCodeUsecase(
         userAuthCodeRepository.deleteByPhone(phone)
 
         val user =
-            userRepository
+            userJpaRepository
                 .findByPhone(phone)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
