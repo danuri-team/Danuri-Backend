@@ -6,7 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
     id("com.google.devtools.ksp") version "2.1.20-2.0.1"
-    id("org.jlleitschuh.gradle.ktlint").version("12.2.0")
+    id("org.jlleitschuh.gradle.ktlint").version("13.0.0")
 }
 
 group = "org.aing"
