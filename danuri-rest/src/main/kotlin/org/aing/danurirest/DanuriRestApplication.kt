@@ -1,11 +1,9 @@
 package org.aing.danurirest
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.cloud.openfeign.EnableFeignClients
 import java.util.TimeZone
 
-@SpringBootApplication(scanBasePackages = ["org.aing.danurirest", "org.aing.danurirest"])
 @EnableFeignClients
 class DanuriRestApplication
 
