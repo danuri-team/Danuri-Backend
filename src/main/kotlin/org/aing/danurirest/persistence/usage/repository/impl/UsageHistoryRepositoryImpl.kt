@@ -159,9 +159,10 @@ class UsageHistoryRepositoryImpl(
                     usage.endAt.isNull.or(usage.endAt.after(LocalDateTime.now())),
                 ).fetch()
 
-        // TODO: Repository Layer -> Service Layer
         if (results.isEmpty()) {
-            throw NoSuchElementException("현재 사용 중인 공간이 없습니다.")
+            return CurrentUsageHistoryDto(
+                isUsingSpace = false
+            )
         }
 
         val first = results.first()
