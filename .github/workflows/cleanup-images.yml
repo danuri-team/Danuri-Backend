@@ -15,6 +15,7 @@ jobs:
         with:
           token: ${{ secrets.GHCR_TOKEN }}
           keep-n-tagged: 5
+          package: danuri-backend
           exclude-tags: master,develop
           delete-untagged: true
           keep-n-untagged: 0
