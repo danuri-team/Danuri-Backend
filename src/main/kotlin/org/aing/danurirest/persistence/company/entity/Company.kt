@@ -30,7 +30,7 @@ class Company(
     val spaces: List<Space> = emptyList(),
     @OneToOne(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val helpHistory: HelpHistory,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "help_setting_id")
     val helpSetting: HelpSetting,
 ) : BaseEntity()

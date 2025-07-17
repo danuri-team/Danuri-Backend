@@ -35,7 +35,7 @@ class CreateSpaceUsageUsecase(
         val endTime = now.plusMinutes(USAGE_DURATION_MINUTES)
 
         // 1. 현재 사용자의 중복 예약 검사
-        checkUserCurrentUsage(userId, now)
+        checkUserCurrentUsage(userId)
 
         // 2. 공간 사용 가능 시간 검사
         checkSpaceAvailableTime(space, now)
@@ -56,7 +56,6 @@ class CreateSpaceUsageUsecase(
     // 사용자의 현재 사용 중인 예약이 있는지 확인
     private fun checkUserCurrentUsage(
         userId: UUID,
-        now: LocalDateTime,
     ) {
         val userCurrentUsages =
             usageHistoryRepository.findUserCurrentUsageInfo(
