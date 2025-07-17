@@ -46,7 +46,7 @@ class RentItemUsecase(
         val item =
             itemJpaRepository
                 .findById(request.itemId)
-                .orElseThrow { IllegalArgumentException("존재하지 않는 아이템입니다.") }
+                .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
 
         validateItemAvailability(item, request.quantity)
 
