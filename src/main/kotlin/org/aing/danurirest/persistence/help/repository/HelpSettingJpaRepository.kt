@@ -4,4 +4,6 @@ import org.aing.danurirest.persistence.help.entity.HelpSetting
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-interface HelpSettingJpaRepository : JpaRepository<HelpSetting, UUID>
+interface HelpSettingJpaRepository : JpaRepository<HelpSetting, UUID> {
+    fun findByCompanyId(companyId: UUID): Optional<HelpSetting>
+}

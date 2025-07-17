@@ -1,5 +1,6 @@
 package org.aing.danurirest.persistence.help.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.aing.danurirest.persistence.BaseEntity
 import org.aing.danurirest.persistence.admin.entity.Admin
@@ -13,10 +14,11 @@ class HelpHistory(
     val id: UUID? = null,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
+    @JsonIgnore
     val company: Company,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "checked_admin_id")
-    val checkedAdmin: Admin? = null,
+    var checkedAdmin: Admin? = null,
     @Column
-    val isResolved: Boolean = false,
+    var isResolved: Boolean = false,
 ) : BaseEntity()

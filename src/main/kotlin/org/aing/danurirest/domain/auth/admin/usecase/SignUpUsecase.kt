@@ -1,14 +1,13 @@
 package org.aing.danurirest.domain.auth.admin.usecase
 
-import org.aing.danurirest.persistence.admin.Status
+import org.aing.danurirest.domain.auth.admin.dto.SignUpAdminRequest
+import org.aing.danurirest.global.exception.CustomException
+import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.company.entity.Company
 import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
 import org.aing.danurirest.persistence.user.Role
-import org.aing.danurirest.domain.auth.admin.dto.SignUpAdminRequest
-import org.aing.danurirest.global.exception.CustomException
-import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -35,7 +34,7 @@ class SignUpUsecase(
                 password = passwordEncoder.encode(signUpAdminRequest.password),
                 phone = signUpAdminRequest.phone,
                 role = Role.ROLE_ADMIN,
-                status = Status.NEED_COMPANY_APPROVE,
+                helpSetting = company.helpSetting,
             ),
         )
     }
