@@ -31,7 +31,7 @@ class Admin(
     val status: Status = Status.NEED_COMPANY_APPROVE,
     @OneToMany(mappedBy = "checkedAdmin", cascade = [CascadeType.ALL], orphanRemoval = true)
     val checkedHelpHistories: List<HelpHistory> = emptyList(),
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "help_setting_id")
     val helpSetting: HelpSetting,
 ) : BaseEntity()
