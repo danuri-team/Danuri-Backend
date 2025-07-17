@@ -5,7 +5,7 @@ import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
-import org.springframework.security.core.context.SecurityContextHolder
+import org.aing.danurirest.global.security.util.PrincipalUtil
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,7 +13,7 @@ class GetCurrentAdminUsecase(
     private val adminJpaRepository: AdminJpaRepository,
 ) {
     fun execute(): AdminResponse {
-        val user: ContextDto = SecurityContextHolder.getContext().authentication.principal as ContextDto
+        val user = PrincipalUtil.getContextDto()
 
         val admin =
             adminJpaRepository

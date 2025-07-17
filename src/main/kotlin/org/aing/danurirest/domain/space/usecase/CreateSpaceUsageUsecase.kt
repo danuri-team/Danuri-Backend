@@ -10,7 +10,7 @@ import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
-import org.springframework.security.core.context.SecurityContextHolder
+import org.aing.danurirest.global.security.util.PrincipalUtil
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -125,9 +125,5 @@ class CreateSpaceUsageUsecase(
         )
     }
 
-    private fun getCurrentContext(): ContextDto {
-        val authentication = SecurityContextHolder.getContext().authentication
-        return authentication.principal as? ContextDto
-            ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
-    }
+    private fun getCurrentContext(): ContextDto = PrincipalUtil.getContextDto()
 }
