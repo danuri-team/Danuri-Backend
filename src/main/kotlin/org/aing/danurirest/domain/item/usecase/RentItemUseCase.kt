@@ -12,7 +12,7 @@ import org.aing.danurirest.persistence.rental.entity.Rental
 import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
-import org.springframework.security.core.context.SecurityContextHolder
+import org.aing.danurirest.global.security.util.PrincipalUtil
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.UUID
@@ -27,11 +27,7 @@ class RentItemUsecase(
         usageId: UUID,
         request: ItemRentalRequest,
     ): ItemRentalResponse {
-        val user: ContextDto =
-            SecurityContextHolder
-                .getContext()
-                .authentication.principal
-                as ContextDto
+        val user = PrincipalUtil.getContextDto()
 
         val usage =
             usageHistoryJpaRepository

@@ -4,7 +4,7 @@ import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
-import org.springframework.security.core.context.SecurityContextHolder
+import org.aing.danurirest.global.security.util.PrincipalUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -15,7 +15,7 @@ class FetchCheckOutUsecase(
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
 ) {
     fun execute() {
-        val context = SecurityContextHolder.getContext().authentication.principal as ContextDto
+        val context = PrincipalUtil.getContextDto()
         val result =
             usageHistoryJpaRepository
                 .findCurrentUsageByUserId(
