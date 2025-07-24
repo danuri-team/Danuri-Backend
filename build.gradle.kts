@@ -47,11 +47,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     runtimeOnly("com.mysql:mysql-connector-j")
-
-    // QueryDSL
     implementation("io.github.openfeign.querydsl:querydsl-core:6.11")
     ksp("io.github.openfeign.querydsl:querydsl-ksp-codegen:6.11")
     implementation("io.github.openfeign.querydsl:querydsl-jpa:6.11")
+
+    // QR
+    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.google.zxing:javase:3.5.3")
+
+    // S3
+    implementation("software.amazon.awssdk:s3:2.32.5")
 
     // JWT
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
