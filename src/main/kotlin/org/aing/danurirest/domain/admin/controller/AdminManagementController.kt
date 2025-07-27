@@ -4,14 +4,12 @@ import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.AdminPasswordUpdateRequest
 import org.aing.danurirest.domain.admin.dto.AdminResponse
 import org.aing.danurirest.domain.admin.dto.AdminUpdateRequest
-import org.aing.danurirest.domain.admin.usecase.DeleteAdminUsecase
 import org.aing.danurirest.domain.admin.usecase.GetAdminUsecase
 import org.aing.danurirest.domain.admin.usecase.GetAdminsUsecase
 import org.aing.danurirest.domain.admin.usecase.GetCurrentAdminUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateAdminPasswordUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateAdminUsecase
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
@@ -28,7 +26,6 @@ class AdminManagementController(
     private val getCompanyAdminsUsecase: GetAdminsUsecase,
     private val updateAdminUsecase: UpdateAdminUsecase,
     private val updateAdminPasswordUsecase: UpdateAdminPasswordUsecase,
-    private val deleteAdminUsecase: DeleteAdminUsecase,
 ) {
     @GetMapping("/me")
     fun getMyInfo(): ResponseEntity<AdminResponse> =
@@ -58,17 +55,11 @@ class AdminManagementController(
             ResponseEntity.noContent().build()
         }
 
-    @PutMapping("/password")
+    @PutMapping("/change-password")
     fun updatePassword(
         @Valid @RequestBody request: AdminPasswordUpdateRequest,
     ): ResponseEntity<Unit> =
         updateAdminPasswordUsecase.execute(request).run {
-            ResponseEntity.noContent().build()
-        }
-
-    @DeleteMapping
-    fun deleteAdmin(): ResponseEntity<Unit> =
-        deleteAdminUsecase.execute().run {
             ResponseEntity.noContent().build()
         }
 }
