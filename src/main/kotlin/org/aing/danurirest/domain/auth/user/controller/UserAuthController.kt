@@ -41,7 +41,7 @@ class UserAuthController(
     fun verifyAuthCode(
         @Valid @RequestBody request: AuthorizationCodeRequest,
     ): ResponseEntity<SignInResponse> =
-        verifyUserAuthCodeUsecase.execute(request.phone, request.authCode).run {
+        verifyUserAuthCodeUsecase.execute(request).run {
             ResponseEntity.ok(this)
         }
 }
