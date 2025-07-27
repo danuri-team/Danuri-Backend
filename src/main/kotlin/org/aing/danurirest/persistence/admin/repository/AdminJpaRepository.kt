@@ -9,6 +9,8 @@ interface AdminJpaRepository : JpaRepository<Admin, UUID> {
     fun findByEmail(email: String): Optional<Admin>
 
     fun existsByEmail(email: String): Boolean
-    
+
     fun findAllByCompanyId(companyId: UUID): List<Admin>
+
+    fun findByPhone(phone: String): Optional<Admin>
 }
