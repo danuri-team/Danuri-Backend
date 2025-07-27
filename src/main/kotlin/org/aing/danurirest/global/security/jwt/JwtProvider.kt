@@ -6,13 +6,13 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
-import org.aing.danurirest.persistence.user.Role
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
 import org.aing.danurirest.global.security.jwt.dto.JwtDetails
 import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.global.security.serivce.AuthDetailService
+import org.aing.danurirest.persistence.user.Role
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -20,9 +20,7 @@ import org.springframework.stereotype.Component
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.Base64
-import java.util.Date
-import java.util.UUID
+import java.util.*
 
 @Component
 class JwtProvider(
@@ -67,8 +65,6 @@ class JwtProvider(
             token.substring(7)
         }
 
-    fun getIdByRefreshToken(refreshToken: String): String = getPayload(refreshToken, TokenType.REFRESH_TOKEN).subject
-
     fun getPayload(
         token: String?,
         tokenType: TokenType,
@@ -103,8 +99,9 @@ class JwtProvider(
         id: UUID,
         tokenType: TokenType,
         role: Role,
+        expireTime: Long? = null,
     ): JwtDetails {
-        val tokenExpires = if (tokenType == TokenType.ACCESS_TOKEN) accessTokenExpires else refreshTokenExpires
+        val tokenExpires = expireTime ?: if (tokenType == TokenType.ACCESS_TOKEN) accessTokenExpires else refreshTokenExpires
         val expiredAt =
             Date.from(
                 LocalDateTime
