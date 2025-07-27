@@ -1,13 +1,13 @@
 package org.aing.danurirest.domain.auth.user.usecase
 
-import org.aing.danurirest.persistence.user.entity.UserAuthCode
-import org.aing.danurirest.persistence.user.repository.UserAuthCodeRepository
-import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.third_party.discord.client.DiscordFeignClient
 import org.aing.danurirest.global.third_party.discord.dto.DiscordMessage
-import org.aing.danurirest.global.third_party.sms.SendSmsUsecase
+import org.aing.danurirest.global.third_party.sms.SendKakaoUsecase
+import org.aing.danurirest.persistence.user.entity.UserAuthCode
+import org.aing.danurirest.persistence.user.repository.UserAuthCodeRepository
+import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,7 +19,7 @@ import java.util.Random
 class SendUserAuthCodeUsecase(
     private val userJpaRepository: UserJpaRepository,
     private val userAuthCodeRepository: UserAuthCodeRepository,
-    private val sendSmsUsecase: SendSmsUsecase,
+    private val sendKakaoUsecase: SendKakaoUsecase,
     @Value("\${spring.profiles.active:default}")
     private val activeProfile: String,
     private val discordFeignClient: DiscordFeignClient,
@@ -46,11 +46,20 @@ class SendUserAuthCodeUsecase(
             )
         userAuthCodeRepository.save(userAuthCode)
 
-        val messageText = "[송정다누리청소년문화의집] 본인확인을 위해 인증번호 [$authCode]를 입력해 주세요."
-
         when (activeProfile) {
-            "dev" -> discordFeignClient.sendMessage(DiscordMessage(messageText))
-            "prod" -> sendSmsUsecase.execute(phone, messageText)
+            "dev" -> discordFeignClient.sendMessage(DiscordMessage("[다누리] 본인확인을 위해 인증번호 [$authCode]를 입력해 주세요."))
+            "prod" -> {
+                val info: HashMap<String, String> = hashMapOf()
+
+                info["#{기관명}"] = "다누리"
+                info["#{인증번호}"] = authCode
+
+                sendKakaoUsecase.execute(
+                    phone = phone,
+                    template = "KA01TP250724083504813k3WOaqJ8PgO",
+                    info = info,
+                )
+            }
             else -> discordFeignClient.sendMessage(DiscordMessage("미확인 프로필입니다."))
         }
     }
