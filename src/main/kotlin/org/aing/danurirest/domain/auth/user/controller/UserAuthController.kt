@@ -1,11 +1,10 @@
 package org.aing.danurirest.domain.auth.user.controller
 
 import jakarta.validation.Valid
+import org.aing.danurirest.domain.auth.common.dto.AuthenticationRequest
+import org.aing.danurirest.domain.auth.common.dto.AuthorizationCodeRequest
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
-import org.aing.danurirest.domain.auth.user.dto.UserAuthCodeResponse
-import org.aing.danurirest.domain.auth.user.dto.UserPhoneAuthRequest
 import org.aing.danurirest.domain.auth.user.dto.UserRegisterRequest
-import org.aing.danurirest.domain.auth.user.dto.UserVerifyAuthRequest
 import org.aing.danurirest.domain.auth.user.usecase.RegisterUserUsecase
 import org.aing.danurirest.domain.auth.user.usecase.SendUserAuthCodeUsecase
 import org.aing.danurirest.domain.auth.user.usecase.VerifyUserAuthCodeUsecase
@@ -32,15 +31,15 @@ class UserAuthController(
 
     @PostMapping("/phone")
     fun sendAuthCode(
-        @Valid @RequestBody request: UserPhoneAuthRequest,
-    ): ResponseEntity<UserAuthCodeResponse> {
-        sendUserAuthCodeUsecase.execute(request.phone)
-        return ResponseEntity.ok(UserAuthCodeResponse(isSuccess = true, message = "인증번호가 발송되었습니다."))
-    }
+        @Valid @RequestBody request: AuthenticationRequest,
+    ): ResponseEntity<Unit> =
+        sendUserAuthCodeUsecase.execute(request).run {
+            ResponseEntity.noContent().build()
+        }
 
     @PostMapping("/verify")
     fun verifyAuthCode(
-        @Valid @RequestBody request: UserVerifyAuthRequest,
+        @Valid @RequestBody request: AuthorizationCodeRequest,
     ): ResponseEntity<SignInResponse> =
         verifyUserAuthCodeUsecase.execute(request.phone, request.authCode).run {
             ResponseEntity.ok(this)
