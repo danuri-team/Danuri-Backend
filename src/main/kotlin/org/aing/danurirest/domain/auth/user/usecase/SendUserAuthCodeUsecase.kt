@@ -8,7 +8,7 @@ import org.aing.danurirest.global.third_party.discord.client.DiscordFeignClient
 import org.aing.danurirest.global.third_party.discord.dto.DiscordMessage
 import org.aing.danurirest.global.third_party.sms.SendSmsUsecase
 import org.aing.danurirest.persistence.user.entity.UserAuthCode
-import org.aing.danurirest.persistence.user.repository.UserAuthCodeRepository
+import org.aing.danurirest.persistence.user.repository.UserAuthCodeJpaRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 @Transactional(rollbackFor = [Exception::class])
 class SendUserAuthCodeUsecase(
     private val userJpaRepository: UserJpaRepository,
-    private val userAuthCodeRepository: UserAuthCodeRepository,
+    private val userAuthCodeJpaRepository: UserAuthCodeJpaRepository,
     private val sendSmsUsecase: SendSmsUsecase,
     @Value("\${spring.profiles.active:default}")
     private val activeProfile: String,
@@ -34,7 +34,7 @@ class SendUserAuthCodeUsecase(
             throw CustomException(CustomErrorCode.NOT_FOUND_USER)
         }
 
-        userAuthCodeRepository.deleteByPhone(request.phone)
+        userAuthCodeJpaRepository.deleteByPhone(request.phone)
 
         val authCode = GenerateRandomCode.execute()
         val expiredAt = LocalDateTime.now().plusMinutes(AUTH_CODE_EXPIRE_MINUTES)
@@ -54,6 +54,6 @@ class SendUserAuthCodeUsecase(
                 expiredAt = expiredAt,
             )
 
-        userAuthCodeRepository.save(userAuthCode)
+        userAuthCodeJpaRepository.save(userAuthCode)
     }
 }
