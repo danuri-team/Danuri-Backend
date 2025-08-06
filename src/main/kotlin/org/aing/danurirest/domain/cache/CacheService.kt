@@ -1,10 +1,10 @@
-package org.aing.danurirest.persistence.redis.service
+package org.aing.danurirest.domain.cache
 
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 
 @Service
-class DomainLayerCacheService(
+class CacheService(
     private val redisTemplate: RedisTemplate<String, Any>,
 ) {
     fun getFromCache(key: String): Any? = redisTemplate.opsForValue().get(key)
