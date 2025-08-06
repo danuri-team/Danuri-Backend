@@ -1,4 +1,4 @@
-package org.aing.danurirest.global.common
+package org.aing.danurirest.global.util
 
 import java.util.*
 

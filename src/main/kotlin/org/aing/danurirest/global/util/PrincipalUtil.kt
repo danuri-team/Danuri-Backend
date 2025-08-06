@@ -1,4 +1,4 @@
-package org.aing.danurirest.global.security.util
+package org.aing.danurirest.global.util
 
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
