@@ -4,7 +4,6 @@ import org.aing.danurirest.domain.item.dto.ItemRentalRequest
 import org.aing.danurirest.domain.item.dto.ItemRentalResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.security.jwt.dto.ContextDto
 import org.aing.danurirest.persistence.item.ItemStatus
 import org.aing.danurirest.persistence.item.entity.Item
 import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
@@ -12,10 +11,8 @@ import org.aing.danurirest.persistence.rental.entity.Rental
 import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
-import org.aing.danurirest.global.security.util.PrincipalUtil
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Service
 class RentItemUsecase(
@@ -23,21 +20,12 @@ class RentItemUsecase(
     private val rentalJpaRepository: RentalJpaRepository,
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
 ) {
-    fun execute(
-        usageId: UUID,
-        request: ItemRentalRequest,
-    ): ItemRentalResponse {
-        val user = PrincipalUtil.getContextDto()
-
+    fun execute(request: ItemRentalRequest): ItemRentalResponse {
         val usage =
             usageHistoryJpaRepository
                 .findById(
-                    usageId,
+                    request.usageId,
                 ).orElseThrow { CustomException(CustomErrorCode.NOT_USAGE_FOUND) }
-
-        if (usage.user.id != user.id) {
-            throw CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE)
-        }
 
         if (usage.endAt?.isAfter(LocalDateTime.now()) != true) {
             throw CustomException(CustomErrorCode.ALREADY_END)

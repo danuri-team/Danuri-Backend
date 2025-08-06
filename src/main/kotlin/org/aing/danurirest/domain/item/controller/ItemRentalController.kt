@@ -1,16 +1,14 @@
 package org.aing.danurirest.domain.item.controller
 
+import org.aing.danurirest.domain.common.dto.QrUsageIdRequest
 import org.aing.danurirest.domain.item.dto.ItemListResponse
 import org.aing.danurirest.domain.item.dto.ItemRentalRequest
 import org.aing.danurirest.domain.item.dto.ItemRentalResponse
-import org.aing.danurirest.domain.item.dto.ItemReturnRequest
-import org.aing.danurirest.domain.item.dto.ItemReturnResponse
 import org.aing.danurirest.domain.item.usecase.GetItemListUsecase
 import org.aing.danurirest.domain.item.usecase.RentItemUsecase
 import org.aing.danurirest.domain.item.usecase.ReturnItemUsecase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.UUID
 
 @RestController
 @RequestMapping("/item")
@@ -19,21 +17,19 @@ class ItemRentalController(
     private val returnItemUseCase: ReturnItemUsecase,
     private val getItemListUsecase: GetItemListUsecase,
 ) {
-    @PostMapping("/{usageId}/rental")
+    @PostMapping
     fun rentItem(
-        @PathVariable usageId: UUID,
         @RequestBody request: ItemRentalRequest,
     ): ResponseEntity<ItemRentalResponse> =
-        rentItemUseCase.execute(usageId, request).run {
+        rentItemUseCase.execute(request).run {
             ResponseEntity.ok(this)
         }
 
-    @PostMapping("/{rentalId}/return")
+    @DeleteMapping("/return")
     fun returnItem(
-        @PathVariable rentalId: UUID,
-        @RequestBody request: ItemReturnRequest,
-    ): ResponseEntity<ItemReturnResponse> =
-        returnItemUseCase.execute(rentalId, request).run {
+        @RequestBody request: QrUsageIdRequest,
+    ): ResponseEntity<Unit> =
+        returnItemUseCase.execute(request).run {
             ResponseEntity.ok(this)
         }
 
