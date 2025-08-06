@@ -2,6 +2,7 @@ package org.aing.danurirest.global.third_party.s3.service
 
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.global.third_party.s3.BucketType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -13,7 +14,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import software.amazon.awssdk.services.s3.model.S3Exception
 import software.amazon.awssdk.services.s3.presigner.S3Presigner
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest
-import java.io.FileNotFoundException
 import java.io.IOException
 import java.time.Duration
 import java.util.UUID
@@ -25,86 +25,77 @@ class S3Service(
 ) {
     private val log: Logger = LoggerFactory.getLogger(S3Service::class.java)
 
-    fun uploadFile(
-        multipartFile: MultipartFile,
-        bucketName: String,
+    private fun uploadToS3(
+        bucketType: BucketType,
+        fileBytes: ByteArray,
+        contentType: String,
     ): String {
-        if (multipartFile.isEmpty) {
-            throw FileNotFoundException("업로드된 파일이 비어 있습니다.")
-        }
-
         val fileName: String = UUID.randomUUID().toString()
-
-        try {
-            multipartFile.inputStream.use { inputStream ->
-                val fileBytes = inputStream.readAllBytes()
-
-                s3Client.putObject(
-                    PutObjectRequest
-                        .builder()
-                        .bucket(bucketName)
-                        .key(fileName)
-                        .contentType(multipartFile.contentType)
-                        .build(),
-                    RequestBody.fromBytes(fileBytes),
-                )
-
-                val fileUrl: String =
-                    s3Client
-                        .utilities()
-                        .getUrl { builder ->
-                            builder
-                                .bucket(
-                                    bucketName,
-                                ).key(fileName)
-                        }.toExternalForm()
-                return fileUrl
-            }
-        } catch (e: IOException) {
-            log.error("이미지 업로드 중 I/O 오류 발생 | ${e.message}")
-            throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
-        } catch (e: S3Exception) {
-            log.error("이미지 업로드 중 외부 종속 오류 발생 | ${e.message}")
-            throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
-        }
-    }
-
-    fun uploadQrImage(
-        qrBytes: ByteArray,
-        bucketName: String,
-    ): String {
-        val fileName = UUID.randomUUID().toString()
 
         try {
             s3Client.putObject(
                 PutObjectRequest
                     .builder()
-                    .bucket(bucketName)
-                    .key(fileName)
-                    .contentType("image/jpeg")
+                    .bucket(bucketType.bucketName)
+                    .key("${bucketType.folder}/$fileName")
+                    .contentType(contentType)
                     .build(),
-                RequestBody.fromBytes(qrBytes),
+                RequestBody.fromBytes(fileBytes),
             )
-
             return fileName
         } catch (e: IOException) {
-            log.error("QR 업로드 중 I/O 오류 발생 | ${e.message}")
+            log.error("S3 업로드 중 I/O 오류 발생 | ${e.message}")
             throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
         } catch (e: S3Exception) {
-            log.error("QR 업로드 중 외부 종속 오류 발생 | ${e.message}")
+            log.error("S3 업로드 중 외부 종속 오류 발생 | ${e.message}")
             throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
         }
     }
 
+    fun uploadFile(
+        multipartFile: MultipartFile,
+        bucketType: BucketType,
+    ): String {
+        if (multipartFile.isEmpty) {
+            log.error("S3 업로드 중 파일이 빈 오류 발생")
+            throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
+        }
+
+        val fileName: String =
+            uploadToS3(
+                fileBytes = multipartFile.bytes,
+                contentType = multipartFile.contentType ?: "application/octet-stream",
+                bucketType = bucketType,
+            )
+
+        return s3Client
+            .utilities()
+            .getUrl { builder ->
+                builder
+                    .bucket(bucketType.bucketName)
+                    .key("${bucketType.folder}/$fileName")
+            }.toExternalForm()
+    }
+
+    fun uploadQrImage(
+        qrBytes: ByteArray,
+        bucketType: BucketType = BucketType.QR_LINK,
+    ): String =
+        uploadToS3(
+            bucketType = bucketType,
+            fileBytes = qrBytes,
+            contentType = "image/jpeg",
+        )
+
     fun generatePreSignedUrl(
-        bucketName: String,
+        bucketType: BucketType,
         key: String,
     ): String {
         val getObjectRequest =
             GetObjectRequest
                 .builder()
-                .bucket(bucketName)
-                .key(key)
+                .bucket(bucketType.bucketName)
+                .key("${bucketType.folder}/$key")
                 .build()
 
         val preSignRequest =
