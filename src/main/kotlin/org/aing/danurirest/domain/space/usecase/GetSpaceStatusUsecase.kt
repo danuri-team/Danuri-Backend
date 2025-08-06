@@ -1,9 +1,8 @@
 package org.aing.danurirest.domain.space.usecase
 
-import org.aing.danurirest.persistence.space.repository.SpaceRepository
 import org.aing.danurirest.domain.space.dto.GetSpaceStatusByDeviceIdResponse
-import org.aing.danurirest.global.security.jwt.dto.ContextDto
-import org.aing.danurirest.global.security.util.PrincipalUtil
+import org.aing.danurirest.global.util.PrincipalUtil
+import org.aing.danurirest.persistence.space.repository.SpaceRepository
 import org.springframework.stereotype.Service
 
 @Service
