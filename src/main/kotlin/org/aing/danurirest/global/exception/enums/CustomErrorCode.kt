@@ -41,7 +41,7 @@ enum class CustomErrorCode(
     ITEM_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "현재 대여할 수 없는 품목입니다."),
     INSUFFICIENT_ITEM_QUANTITY(HttpStatus.BAD_REQUEST, "남은 수량이 부족합니다."),
     ALREADY_RETURNED(HttpStatus.BAD_REQUEST, "이미 반납된 대여 기록입니다."),
-    OVER_QUANTITY(HttpStatus.BAD_REQUEST, "반납 수량이 대여 수량을 초과합니다."),
+    NOT_RENTED_ITEM(HttpStatus.NOT_FOUND, "대여했던 품목을 찾을 수 없습니다.."),
 
     // Space
     NOT_FOUND_SPACE(HttpStatus.NOT_FOUND, "공간을 찾을 수 없습니다."),
