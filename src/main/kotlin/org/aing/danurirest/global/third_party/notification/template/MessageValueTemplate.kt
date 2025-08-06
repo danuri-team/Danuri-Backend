@@ -1,4 +1,4 @@
-package org.aing.danurirest.global.third_party.sms.template
+package org.aing.danurirest.global.third_party.notification.template
 
 sealed class MessageValueTemplate {
     abstract fun toMap(): Map<String, String>

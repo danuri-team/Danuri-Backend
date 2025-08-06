@@ -1,4 +1,4 @@
-package org.aing.danurirest.global.third_party.sms.template
+package org.aing.danurirest.global.third_party.notification.template
 
 enum class MessageTemplate(
     val templateId: String,
