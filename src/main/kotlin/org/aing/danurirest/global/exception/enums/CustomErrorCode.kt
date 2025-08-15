@@ -61,4 +61,8 @@ enum class CustomErrorCode(
     // Help
     NOT_FOUND_HELP(HttpStatus.NOT_FOUND, "도움을 찾을 수 없습니다."),
     HELP_NOT_ENABLED(HttpStatus.BAD_GATEWAY, "도움 기능이 활성화되어 있지 않습니다."),
+
+    // Form
+    FORM_IS_NOT_SETUP(HttpStatus.NOT_FOUND, "폼 설정이 되어 있지 않습니다."),
+    INVALID_JSON_SCHEMA(HttpStatus.BAD_REQUEST, "유효하지 않은 JSON 스키마 형식입니다."),
 }
