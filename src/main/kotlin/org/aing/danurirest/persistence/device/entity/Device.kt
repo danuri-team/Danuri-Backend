@@ -19,6 +19,8 @@ class Device(
     @Id
     @GeneratedValue
     val id: UUID? = null,
+    @Column(nullable = false)
+    var name: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     val company: Company,

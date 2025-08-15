@@ -23,9 +23,9 @@ class Item(
     @GeneratedValue
     val id: UUID? = null,
     @Column(nullable = false, length = 10)
-    val name: String,
+    var name: String,
     @Column(nullable = false)
-    val totalQuantity: Int,
+    var totalQuantity: Int,
     @Column(nullable = false)
     var availableQuantity: Int,
     @Column(nullable = false)
