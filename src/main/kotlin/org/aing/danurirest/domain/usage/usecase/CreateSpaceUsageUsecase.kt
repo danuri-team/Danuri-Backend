@@ -1,8 +1,5 @@
 package org.aing.danurirest.domain.usage.usecase
 
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
-import com.google.zxing.client.j2se.MatrixToImageWriter
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.third_party.notification.service.NotificationService
@@ -10,6 +7,7 @@ import org.aing.danurirest.global.third_party.notification.template.MessageTempl
 import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
 import org.aing.danurirest.global.third_party.s3.BucketType
 import org.aing.danurirest.global.third_party.s3.service.S3Service
+import org.aing.danurirest.global.util.GenerateQrCode
 import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.space.entity.Space
 import org.aing.danurirest.persistence.space.repository.SpaceJpaRepository
@@ -21,7 +19,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -37,8 +34,6 @@ class CreateSpaceUsageUsecase(
 ) {
     companion object {
         private const val USAGE_DURATION_MINUTES = 30L
-        private const val WIDTH = 200
-        private const val HEIGHT = 200
     }
 
     private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
@@ -134,7 +129,7 @@ class CreateSpaceUsageUsecase(
                 ),
             )
 
-        val qr = createQr("{\"usageId\": " + usage.id + "}")
+        val qr = GenerateQrCode.execute("{\"usageId\": " + usage.id + "}")
 
         val fileName =
             s3Service.uploadQrImage(
@@ -144,7 +139,11 @@ class CreateSpaceUsageUsecase(
                 BucketType.QR_LINK,
             )
 
-        val qrLink = s3Service.generatePreSignedUrl(bucketName = "danuri-cloud", fileName)
+        val qrLink =
+            s3Service.generatePreSignedUrl(
+                BucketType.QR_LINK,
+                fileName,
+            )
 
         notificationService.sendNotification(
             toMessage = user.phone,
@@ -168,15 +167,4 @@ class CreateSpaceUsageUsecase(
                 ),
         )
     }
-
-    fun createQr(usageId: String): Result<ByteArray> =
-        try {
-            val encode = MultiFormatWriter().encode(usageId, BarcodeFormat.QR_CODE, WIDTH, HEIGHT)
-            val out = ByteArrayOutputStream()
-            MatrixToImageWriter.writeToStream(encode, "JPG", out)
-            Result.success(out.toByteArray())
-        } catch (e: Exception) {
-            log.error(e.message, e)
-            Result.failure(e)
-        }
 }
