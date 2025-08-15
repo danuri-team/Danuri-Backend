@@ -1,8 +1,9 @@
 package org.aing.danurirest.domain.admin.controller
 
 import jakarta.validation.Valid
-import org.aing.danurirest.domain.admin.dto.ItemRequest
+import org.aing.danurirest.domain.admin.dto.ItemCreateRequest
 import org.aing.danurirest.domain.admin.dto.ItemResponse
+import org.aing.danurirest.domain.admin.dto.ItemUpdateRequest
 import org.aing.danurirest.domain.admin.usecase.CreateItemUsecase
 import org.aing.danurirest.domain.admin.usecase.DeleteItemUsecase
 import org.aing.danurirest.domain.admin.usecase.GetItemUsecase
@@ -30,7 +31,7 @@ class AdminItemController(
 ) {
     @PostMapping
     fun createItem(
-        @Valid @RequestBody request: ItemRequest,
+        @Valid @RequestBody request: ItemCreateRequest,
     ): ResponseEntity<ItemResponse> =
         createItemUsecase.execute(request).run {
             ResponseEntity.ok(this)
@@ -39,7 +40,7 @@ class AdminItemController(
     @PutMapping("/{itemId}")
     fun updateItem(
         @PathVariable itemId: UUID,
-        @Valid @RequestBody request: ItemRequest,
+        @Valid @RequestBody request: ItemUpdateRequest,
     ): ResponseEntity<ItemResponse> =
         updateItemUsecase.execute(itemId, request).run {
             ResponseEntity.ok(this)

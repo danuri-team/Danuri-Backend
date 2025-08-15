@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.admin.controller
 
+import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.DeviceResponse
 import org.aing.danurirest.domain.admin.dto.RegisterDeviceRequest
 import org.aing.danurirest.domain.admin.dto.UpdateDeviceRequest
@@ -30,7 +31,7 @@ class AdminDeviceController(
 ) {
     @PostMapping
     fun registerDevice(
-        @RequestBody registerDeviceRequest: RegisterDeviceRequest,
+        @Valid @RequestBody registerDeviceRequest: RegisterDeviceRequest,
     ): ResponseEntity<Unit> =
         registerDeviceUsecase.execute(registerDeviceRequest).run {
             ResponseEntity.noContent().build()
@@ -53,7 +54,7 @@ class AdminDeviceController(
     @PutMapping("/{deviceId}")
     fun updateDevice(
         @PathVariable deviceId: UUID,
-        @RequestBody updateDeviceRequest: UpdateDeviceRequest,
+        @Valid @RequestBody updateDeviceRequest: UpdateDeviceRequest,
     ): ResponseEntity<DeviceResponse> =
         updateDeviceUsecase.execute(deviceId, updateDeviceRequest).run {
             ResponseEntity.ok(this)

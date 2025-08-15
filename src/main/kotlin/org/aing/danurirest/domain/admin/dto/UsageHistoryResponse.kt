@@ -7,7 +7,6 @@ import java.util.UUID
 data class UsageHistoryResponse(
     val id: UUID,
     val userId: UUID,
-    val userName: String,
     val userPhone: String,
     val spaceId: UUID,
     val spaceName: String,
@@ -20,7 +19,6 @@ data class UsageHistoryResponse(
             UsageHistoryResponse(
                 id = usageHistory.id!!,
                 userId = usageHistory.user.id!!,
-                userName = usageHistory.user.name,
                 userPhone = usageHistory.user.phone,
                 spaceId = usageHistory.space.id!!,
                 spaceName = usageHistory.space.name,

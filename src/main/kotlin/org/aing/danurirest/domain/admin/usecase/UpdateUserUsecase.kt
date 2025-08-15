@@ -36,9 +36,6 @@ class UpdateUserUsecase(
                 .ifPresent { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
         }
 
-        user.name = request.name
-        user.sex = request.sex
-        user.age = request.age
         user.phone = request.phone
 
         userJpaRepository.save(user)
