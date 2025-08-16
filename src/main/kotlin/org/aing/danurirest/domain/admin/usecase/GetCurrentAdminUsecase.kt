@@ -3,9 +3,8 @@ package org.aing.danurirest.domain.admin.usecase
 import org.aing.danurirest.domain.admin.dto.AdminResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.security.jwt.dto.ContextDto
+import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
-import org.aing.danurirest.global.security.util.PrincipalUtil
 import org.springframework.stereotype.Service
 
 @Service

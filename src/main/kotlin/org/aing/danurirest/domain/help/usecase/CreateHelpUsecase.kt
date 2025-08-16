@@ -2,7 +2,7 @@ package org.aing.danurirest.domain.help.usecase
 
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.security.util.PrincipalUtil
+import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.help.entity.HelpHistory
 import org.aing.danurirest.persistence.help.repository.HelpHistoryJpaRepository
 import org.aing.danurirest.persistence.help.repository.HelpSettingJpaRepository

@@ -1,19 +1,27 @@
-package org.aing.danurirest.domain.space.usecase
+package org.aing.danurirest.domain.usage.usecase
 
-import org.aing.danurirest.domain.space.dto.UseSpaceRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.security.jwt.dto.ContextDto
+import org.aing.danurirest.global.third_party.notification.service.NotificationService
+import org.aing.danurirest.global.third_party.notification.template.MessageTemplate
+import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
+import org.aing.danurirest.global.third_party.s3.BucketType
+import org.aing.danurirest.global.third_party.s3.service.S3Service
+import org.aing.danurirest.global.util.GenerateQrCode
+import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.space.entity.Space
 import org.aing.danurirest.persistence.space.repository.SpaceJpaRepository
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
-import org.aing.danurirest.global.security.util.PrincipalUtil
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import java.util.UUID
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 @Service
 class CreateSpaceUsageUsecase(
@@ -21,27 +29,29 @@ class CreateSpaceUsageUsecase(
     private val spaceJpaRepository: SpaceJpaRepository,
     private val userJpaRepository: UserJpaRepository,
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
+    private val notificationService: NotificationService,
+    private val s3Service: S3Service,
 ) {
     companion object {
         private const val USAGE_DURATION_MINUTES = 30L
     }
 
-    fun execute(useSpaceRequest: UseSpaceRequest): Boolean {
-        val context = getCurrentContext()
+    private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
+
+    @Transactional
+    fun execute(spaceId: UUID): Boolean {
+        val context = PrincipalUtil.getContextDto()
         val userId = context.id ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
 
-        val space = findSpaceById(useSpaceRequest.spaceId)
+        val space = findSpaceById(spaceId)
         val now = LocalDateTime.now()
         val endTime = now.plusMinutes(USAGE_DURATION_MINUTES)
 
-        // 1. 현재 사용자의 중복 예약 검사
         checkUserCurrentUsage(userId)
 
-        // 2. 공간 사용 가능 시간 검사
         checkSpaceAvailableTime(space, now)
 
-        // 3. 공간 중복 예약 검사
-        checkSpaceCurrentUsage(useSpaceRequest.spaceId, now, endTime)
+        checkSpaceCurrentUsage(spaceId, now, endTime)
 
         createSpaceUsage(space, userId, now, endTime)
 
@@ -53,10 +63,7 @@ class CreateSpaceUsageUsecase(
             .findById(spaceId)
             .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
 
-    // 사용자의 현재 사용 중인 예약이 있는지 확인
-    private fun checkUserCurrentUsage(
-        userId: UUID,
-    ) {
+    private fun checkUserCurrentUsage(userId: UUID) {
         val userCurrentUsages =
             usageHistoryRepository.findUserCurrentUsageInfo(
                 userId = userId,
@@ -67,7 +74,6 @@ class CreateSpaceUsageUsecase(
         }
     }
 
-    // 공간 가용 시간 확인
     private fun checkSpaceAvailableTime(
         space: Space,
         now: LocalDateTime,
@@ -79,7 +85,6 @@ class CreateSpaceUsageUsecase(
         }
     }
 
-    // 공간 중복 예약 확인
     private fun checkSpaceCurrentUsage(
         spaceId: UUID,
         now: LocalDateTime,
@@ -114,15 +119,52 @@ class CreateSpaceUsageUsecase(
                 .findById(userId)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
-        usageHistoryJpaRepository.save(
-            UsageHistory(
-                user = user,
-                space = space,
-                startAt = startTime,
-                endAt = endTime,
-            ),
+        val usage =
+            usageHistoryJpaRepository.save(
+                UsageHistory(
+                    user = user,
+                    space = space,
+                    startAt = startTime,
+                    endAt = endTime,
+                ),
+            )
+
+        val qr = GenerateQrCode.execute("""{"usageId":"${usage.id}"}""")
+
+        val fileName =
+            s3Service.uploadQrImage(
+                qr.getOrElse {
+                    throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
+                },
+                BucketType.QR_LINK,
+            )
+
+        val qrLink =
+            s3Service.generatePreSignedUrl(
+                BucketType.QR_LINK,
+                fileName,
+            )
+
+        notificationService.sendNotification(
+            toMessage = user.phone,
+            template = MessageTemplate.SPACE_REGISTRATION,
+            params =
+                MessageValueTemplate.SpaceRegistrationParams(
+                    orgName = space.company.name,
+                    spaceName = space.name,
+                    usageDate = usage.startAt.toLocalDate().toString(),
+                    startTime =
+                        usage.startAt
+                            .toLocalTime()
+                            .truncatedTo(ChronoUnit.SECONDS)
+                            .toString(),
+                    endTime =
+                        usage.endAt!!
+                            .toLocalTime()
+                            .truncatedTo(ChronoUnit.SECONDS)
+                            .toString(),
+                    qrLink = qrLink,
+                ),
         )
     }
-
-    private fun getCurrentContext(): ContextDto = PrincipalUtil.getContextDto()
 }

@@ -1,32 +1,54 @@
 package org.aing.danurirest.domain.usage.usecase
 
+import org.aing.danurirest.domain.common.dto.QrUsageIdRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.security.jwt.dto.ContextDto
+import org.aing.danurirest.global.third_party.notification.service.NotificationService
+import org.aing.danurirest.global.third_party.notification.template.MessageTemplate
+import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
-import org.aing.danurirest.global.security.util.PrincipalUtil
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Service
 @Transactional
 class FetchCheckOutUsecase(
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
+    private val notificationService: NotificationService,
 ) {
-    fun execute() {
-        val context = PrincipalUtil.getContextDto()
+    fun execute(request: QrUsageIdRequest) {
         val result =
             usageHistoryJpaRepository
-                .findCurrentUsageByUserId(
-                    userId = context.id!!,
-                    currentTime = LocalDateTime.now(),
-                )
+                .findById(request.usageId)
+                .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND) }
 
-        if (result.isEmpty()) {
-            throw CustomException(CustomErrorCode.NOT_FOUND)
+        if (result.endAt != null) {
+            throw CustomException(CustomErrorCode.ALREADY_END)
         }
 
-        result[0].endAt = LocalDateTime.now()
+        result.endAt = LocalDateTime.now()
+
+        notificationService.sendNotification(
+            toMessage = result.user.phone,
+            template = MessageTemplate.CHECKOUT_NOTIFICATION,
+            params =
+                MessageValueTemplate.CheckoutNotificationParams(
+                    orgName = result.space.company.name,
+                    spaceName = result.space.name,
+                    usageDate = result.startAt.toLocalDate().toString(),
+                    startTime =
+                        result.startAt
+                            .toLocalTime()
+                            .truncatedTo(ChronoUnit.SECONDS)
+                            .toString(),
+                    endTime =
+                        result.endAt!!
+                            .toLocalTime()
+                            .truncatedTo(ChronoUnit.SECONDS)
+                            .toString(),
+                ),
+        )
     }
 }

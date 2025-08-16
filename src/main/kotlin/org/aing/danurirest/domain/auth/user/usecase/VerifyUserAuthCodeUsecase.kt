@@ -27,20 +27,17 @@ class VerifyUserAuthCodeUsecase(
             throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
         }
 
-        // 만료된 코드들 먼저 삭제
         val now = LocalDateTime.now()
         val expiredCodes = userAuthCodes.filter { now.isAfter(it.expiredAt) }
         if (expiredCodes.isNotEmpty()) {
             expiredCodes.forEach { userAuthCodeJpaRepository.delete(it) }
         }
 
-        // 만료되지 않은 코드 중에서 일치하는 것 찾기
         userAuthCodes
             .filter { !now.isAfter(it.expiredAt) }
             .find { it.authCode == request.authCode }
             ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
 
-        // 인증 성공 후 해당 전화번호의 모든 인증코드 삭제
         userAuthCodeJpaRepository.deleteByPhone(request.phone)
 
         val user =

@@ -1,6 +1,6 @@
-package org.aing.danurirest.global.third_party.discord.client
+package org.aing.danurirest.global.third_party.notification.client
 
-import org.aing.danurirest.global.third_party.discord.dto.DiscordMessage
+import org.aing.danurirest.global.third_party.notification.dto.DiscordMessage
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping

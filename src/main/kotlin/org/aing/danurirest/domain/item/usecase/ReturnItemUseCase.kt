@@ -1,84 +1,51 @@
 package org.aing.danurirest.domain.item.usecase
 
-import org.aing.danurirest.domain.item.dto.ItemReturnRequest
-import org.aing.danurirest.domain.item.dto.ItemReturnResponse
+import org.aing.danurirest.domain.common.dto.QrUsageIdRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.item.ItemStatus
-import org.aing.danurirest.persistence.item.entity.Item
 import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
-import org.aing.danurirest.persistence.rental.RentalStatus
-import org.aing.danurirest.persistence.rental.entity.Rental
 import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Service
 class ReturnItemUsecase(
-    private val itemJpaRepository: ItemJpaRepository,
     private val rentalJpaRepository: RentalJpaRepository,
+    private val itemJpaRepository: ItemJpaRepository,
+    private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
 ) {
-    fun execute(
-        rentalId: UUID,
-        request: ItemReturnRequest,
-    ): ItemReturnResponse {
-        val rental =
+    @Transactional
+    fun execute(request: QrUsageIdRequest) {
+        usageHistoryJpaRepository
+            .findById(request.usageId)
+            .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND) }
+
+        val rentals =
             rentalJpaRepository
-                .findById(rentalId)
-                .orElseThrow { CustomException(CustomErrorCode.NO_OWN_SPACE_OR_AVAILABLE) }
+                .findAllByUsageId(request.usageId)
+                .takeIf { it.isNotEmpty() }
+                ?: throw CustomException(CustomErrorCode.NOT_RENTED_ITEM)
 
-        validateReturnRequest(rental, request.quantity)
+        val now = LocalDateTime.now()
 
-        val item = rental.item
-        updateRental(rental, request.quantity)
-        updateItemQuantity(item, request.quantity)
+        rentals.forEach { rental ->
+            if (rental.returnedAt != null) return@forEach
 
-        return ItemReturnResponse(
-            id = rental.id,
-            itemId = item.id!!,
-            itemName = item.name,
-            totalQuantity = rental.quantity,
-            returnedQuantity = rental.returnedQuantity,
-            returnedAt = rental.returnedAt!!,
-        )
-    }
+            val item =
+                itemJpaRepository
+                    .findById(rental.item.id!!)
+                    .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
 
-    private fun validateReturnRequest(
-        rental: Rental,
-        quantity: Int,
-    ) {
-        if (rental.returnedAt != null) {
-            throw CustomException(CustomErrorCode.ALREADY_RETURNED)
+            item.availableQuantity += 1
+
+            if (item.availableQuantity > 0) {
+                item.status = ItemStatus.AVAILABLE
+            }
+
+            rental.returnedAt = now
         }
-
-        if (rental.quantity < rental.returnedQuantity + quantity) {
-            throw CustomException(CustomErrorCode.OVER_QUANTITY)
-        }
-    }
-
-    private fun updateRental(
-        rental: Rental,
-        quantity: Int,
-    ) {
-        rental.returnedQuantity += quantity
-        rental.returnedAt = LocalDateTime.now()
-
-        if (rental.quantity == rental.returnedQuantity) {
-            rental.status = RentalStatus.RETURNED
-        }
-
-        rentalJpaRepository.save(rental)
-    }
-
-    private fun updateItemQuantity(
-        item: Item,
-        quantity: Int,
-    ) {
-        item.availableQuantity += quantity
-        if (item.availableQuantity > 0) {
-            item.status = ItemStatus.AVAILABLE
-        }
-        itemJpaRepository.save(item)
     }
 }
