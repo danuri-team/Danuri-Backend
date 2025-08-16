@@ -129,7 +129,7 @@ class CreateSpaceUsageUsecase(
                 ),
             )
 
-        val qr = GenerateQrCode.execute("{\"usageId\": " + usage.id + "}")
+        val qr = GenerateQrCode.execute("""{"usageId":"${usage.id}"}""")
 
         val fileName =
             s3Service.uploadQrImage(
