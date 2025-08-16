@@ -32,7 +32,7 @@ enum class MessageTemplate(
     ),
 
     CHECKOUT_NOTIFICATION(
-        templateId = "KA01TP250724083504813k3WOaqJ8PgO",
+        templateId = "KA01TP250717034805358qbFkm9Q1dT8",
         template =
             """
             [#{기관명}] 이용 종료 안내
@@ -54,7 +54,7 @@ enum class MessageTemplate(
     private fun format(parameters: Map<String, String>): String {
         var result = template
         parameters.forEach { (key, value) ->
-            result = result.replace("#{$key}", value)
+            result = result.replace(key, value)
         }
         return result
     }
