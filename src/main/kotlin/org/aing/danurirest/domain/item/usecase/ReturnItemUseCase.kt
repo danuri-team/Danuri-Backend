@@ -8,6 +8,7 @@ import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
 import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -16,6 +17,7 @@ class ReturnItemUsecase(
     private val itemJpaRepository: ItemJpaRepository,
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
 ) {
+    @Transactional
     fun execute(request: QrUsageIdRequest) {
         usageHistoryJpaRepository
             .findById(request.usageId)
@@ -30,7 +32,7 @@ class ReturnItemUsecase(
         val now = LocalDateTime.now()
 
         rentals.forEach { rental ->
-            check(rental.returnedAt == null) { throw CustomException(CustomErrorCode.ALREADY_RETURNED) }
+            if (rental.returnedAt != null) return@forEach
 
             val item =
                 itemJpaRepository
