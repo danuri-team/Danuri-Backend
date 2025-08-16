@@ -36,9 +36,12 @@ class SecurityConfiguration(
                 it.requestMatchers(HttpMethod.POST, "/auth/user/**").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.POST, "/auth/device/token").hasRole("ADMIN")
                 // 이용
-                it.requestMatchers(HttpMethod.GET, "/space", "/item").hasRole("DEVICE")
-                it.requestMatchers("/usage", "/space", "/item").hasRole("USER")
-                // 어드민
+                it.requestMatchers(HttpMethod.GET, "/space").hasRole("DEVICE")
+                it.requestMatchers(HttpMethod.GET, "/item").hasRole("DEVICE")
+                it.requestMatchers("/usage/**").hasRole("USER")
+                it.requestMatchers(HttpMethod.POST, "/item").hasRole("DEVICE")
+                it.requestMatchers(HttpMethod.DELETE, "/item").hasRole("DEVICE")
+                // 관리
                 it.requestMatchers("/admin/**").hasRole("ADMIN")
                 // 모니터링
                 it.requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
