@@ -12,6 +12,7 @@ import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
@@ -20,6 +21,7 @@ class RentItemUsecase(
     private val rentalJpaRepository: RentalJpaRepository,
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
 ) {
+    @Transactional
     fun execute(request: ItemRentalRequest): ItemRentalResponse {
         val usage =
             usageHistoryJpaRepository
