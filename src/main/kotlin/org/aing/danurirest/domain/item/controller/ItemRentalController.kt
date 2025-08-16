@@ -25,12 +25,12 @@ class ItemRentalController(
             ResponseEntity.ok(this)
         }
 
-    @DeleteMapping("/return")
+    @DeleteMapping
     fun returnItem(
         @RequestBody request: QrUsageIdRequest,
     ): ResponseEntity<Unit> =
         returnItemUseCase.execute(request).run {
-            ResponseEntity.ok(this)
+            ResponseEntity.noContent().build()
         }
 
     @GetMapping
