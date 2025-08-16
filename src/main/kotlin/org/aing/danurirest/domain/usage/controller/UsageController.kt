@@ -31,7 +31,9 @@ class UsageController(
         }
 
     @DeleteMapping
-    fun checkOutUsingSpace(request: QrUsageIdRequest): ResponseEntity<Unit> =
+    fun checkOutUsingSpace(
+        @RequestBody request: QrUsageIdRequest,
+    ): ResponseEntity<Unit> =
         fetchCheckOutUsecase.execute(request).run {
             ResponseEntity.noContent().build()
         }
