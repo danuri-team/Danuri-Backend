@@ -157,19 +157,21 @@ class UsageHistoryRepositoryImpl(
                 .where(
                     user.id.eq(userId),
                     usage.endAt.isNull.or(usage.endAt.after(LocalDateTime.now())),
-                ).fetch()
+                ).orderBy(usage.startAt.desc())
+                .fetch()
 
         if (results.isEmpty()) {
             return CurrentUsageHistoryDto(
-                isUsingSpace = false
+                isUsingSpace = false,
             )
         }
 
         val first = results.first()
+        val currentUsageId = first.usageId
 
         val rentedItems =
             results
-                .filter { it.itemName != null }
+                .filter { it.usageId == currentUsageId && it.itemName != null }
                 .map {
                     DetailRentedItemInfo(
                         itemName = it.itemName!!,

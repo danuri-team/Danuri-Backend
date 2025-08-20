@@ -29,6 +29,10 @@ class ReturnItemUsecase(
                 .takeIf { it.isNotEmpty() }
                 ?: throw CustomException(CustomErrorCode.NOT_RENTED_ITEM)
 
+        if (rentals.all { it.returnedAt != null }) {
+            throw CustomException(CustomErrorCode.ALREADY_RETURNED_ITEM)
+        }
+
         val now = LocalDateTime.now()
 
         rentals.forEach { rental ->
@@ -45,6 +49,7 @@ class ReturnItemUsecase(
                 item.status = ItemStatus.AVAILABLE
             }
 
+            rental.returnedQuantity = rental.quantity
             rental.returnedAt = now
         }
     }
