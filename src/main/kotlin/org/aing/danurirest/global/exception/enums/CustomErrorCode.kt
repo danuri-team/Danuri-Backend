@@ -40,13 +40,11 @@ enum class CustomErrorCode(
     NOT_FOUND_ITEM(HttpStatus.NOT_FOUND, "품목을 찾을 수 없습니다."),
     ITEM_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "현재 대여할 수 없는 품목입니다."),
     INSUFFICIENT_ITEM_QUANTITY(HttpStatus.BAD_REQUEST, "남은 수량이 부족합니다."),
-    ALREADY_RETURNED(HttpStatus.BAD_REQUEST, "이미 반납된 대여 기록입니다."),
     NOT_RENTED_ITEM(HttpStatus.NOT_FOUND, "대여했던 품목을 찾을 수 없습니다.."),
 
     // Space
     NOT_FOUND_SPACE(HttpStatus.NOT_FOUND, "공간을 찾을 수 없습니다."),
     SPACE_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "이용 가능한 시간이 아닙니다."),
-    NO_OWN_SPACE_OR_AVAILABLE(HttpStatus.BAD_REQUEST, "존재하지 않는 대여 기록입니다."),
     ALREADY_END(HttpStatus.BAD_REQUEST, "이미 종료된 공간 이용 기록입니다."),
 
     // Usage

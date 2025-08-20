@@ -32,5 +32,5 @@ class UsageHistory(
     @Column(name = "start_at", nullable = false)
     val startAt: LocalDateTime,
     @Column(name = "end_at", nullable = true)
-    var endAt: LocalDateTime?,
+    var endAt: LocalDateTime,
 ) : BaseEntity()

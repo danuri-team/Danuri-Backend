@@ -7,9 +7,9 @@ data class CreateUsageHistoryRequest(
     val userId: UUID,
     val spaceId: UUID,
     val startAt: LocalDateTime,
-    val endAt: LocalDateTime?,
+    val endAt: LocalDateTime,
 )
 
 data class UpdateUsageHistoryRequest(
-    val endAt: LocalDateTime?,
+    val endAt: LocalDateTime,
 ) 

@@ -19,12 +19,14 @@ class FetchCheckOutUsecase(
     private val notificationService: NotificationService,
 ) {
     fun execute(request: QrUsageIdRequest) {
+        val now = LocalDateTime.now()
+
         val result =
             usageHistoryJpaRepository
                 .findById(request.usageId)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND) }
 
-        if (result.endAt != null) {
+        if (result.endAt < now) {
             throw CustomException(CustomErrorCode.ALREADY_END)
         }
 

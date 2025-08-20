@@ -159,7 +159,7 @@ class CreateSpaceUsageUsecase(
                             .truncatedTo(ChronoUnit.SECONDS)
                             .toString(),
                     endTime =
-                        usage.endAt!!
+                        usage.endAt
                             .toLocalTime()
                             .truncatedTo(ChronoUnit.SECONDS)
                             .toString(),
