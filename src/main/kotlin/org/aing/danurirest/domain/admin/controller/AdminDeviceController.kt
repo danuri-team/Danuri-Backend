@@ -3,12 +3,9 @@ package org.aing.danurirest.domain.admin.controller
 import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.DeviceResponse
 import org.aing.danurirest.domain.admin.dto.RegisterDeviceRequest
+import org.aing.danurirest.domain.admin.dto.SignInDeviceResponse
 import org.aing.danurirest.domain.admin.dto.UpdateDeviceRequest
-import org.aing.danurirest.domain.admin.usecase.DeleteDeviceUsecase
-import org.aing.danurirest.domain.admin.usecase.GetDeviceUsecase
-import org.aing.danurirest.domain.admin.usecase.GetDevicesUsecase
-import org.aing.danurirest.domain.admin.usecase.RegisterDeviceUsecase
-import org.aing.danurirest.domain.admin.usecase.UpdateDeviceUsecase
+import org.aing.danurirest.domain.admin.usecase.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,6 +25,7 @@ class AdminDeviceController(
     private val getAdminCompanyDevicesUsecase: GetDevicesUsecase,
     private val updateDeviceUsecase: UpdateDeviceUsecase,
     private val deleteDeviceUsecase: DeleteDeviceUsecase,
+    private val signInDeviceUsecase: SignInDeviceUsecase,
 ) {
     @PostMapping
     fun registerDevice(
@@ -66,5 +64,13 @@ class AdminDeviceController(
     ): ResponseEntity<Unit> =
         deleteDeviceUsecase.execute(deviceId).run {
             ResponseEntity.noContent().build()
+        }
+
+    @GetMapping("/{deviceId}/sign-in")
+    fun signInDevice(
+        @PathVariable deviceId: UUID,
+    ): ResponseEntity<SignInDeviceResponse> =
+        signInDeviceUsecase.execute(deviceId).run {
+            ResponseEntity.ok(this)
         }
 }

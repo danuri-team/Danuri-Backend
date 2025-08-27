@@ -11,9 +11,9 @@ object GenerateQrCode {
     private const val HEIGHT = 200
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    fun execute(usageId: String): Result<ByteArray> =
+    fun execute(data: String): Result<ByteArray> =
         try {
-            val encode = MultiFormatWriter().encode(usageId, BarcodeFormat.QR_CODE, WIDTH, HEIGHT)
+            val encode = MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, WIDTH, HEIGHT)
             val out = ByteArrayOutputStream()
             MatrixToImageWriter.writeToStream(encode, "JPG", out)
             Result.success(out.toByteArray())
