@@ -39,7 +39,7 @@ class CreateSpaceUsageUsecase(
     private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
 
     @Transactional
-    fun execute(spaceId: UUID): Boolean {
+    fun execute(spaceId: UUID) {
         val context = PrincipalUtil.getContextDto()
         val userId = context.id ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
 
