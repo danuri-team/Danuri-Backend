@@ -5,7 +5,6 @@ import org.aing.danurirest.domain.admin.dto.FormUpdateRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.util.ValidateJsonSchema
 import org.aing.danurirest.persistence.form.repository.FormJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -21,8 +20,6 @@ class UpdateFormUsecase(
         formId: UUID,
         request: FormUpdateRequest,
     ): FormResponse {
-        ValidateJsonSchema.execute(request.schema)
-
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val form =

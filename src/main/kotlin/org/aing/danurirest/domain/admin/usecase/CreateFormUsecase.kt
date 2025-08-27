@@ -5,7 +5,6 @@ import org.aing.danurirest.domain.admin.dto.FormResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.util.ValidateJsonSchema
 import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
 import org.aing.danurirest.persistence.form.entity.Form
 import org.aing.danurirest.persistence.form.repository.FormJpaRepository
@@ -20,8 +19,6 @@ class CreateFormUsecase(
 ) {
     @Transactional
     fun execute(request: FormCreateRequest): FormResponse {
-        ValidateJsonSchema.execute(request.schema)
-
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
         val company =
             companyRepository

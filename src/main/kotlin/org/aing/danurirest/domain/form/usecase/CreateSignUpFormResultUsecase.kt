@@ -3,8 +3,7 @@ package org.aing.danurirest.domain.form.usecase
 import org.aing.danurirest.domain.form.dto.CreateSignUpFormResultRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.global.security.util.PrincipalUtil
-import org.aing.danurirest.global.util.ValidateJsonSchema
+import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.form.entity.FormResult
 import org.aing.danurirest.persistence.form.repository.FormResultJpaRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
@@ -18,8 +17,6 @@ class CreateSignUpFormResultUsecase(
 ) {
     @Transactional
     fun execute(request: CreateSignUpFormResultRequest) {
-        ValidateJsonSchema.execute(request.result)
-
         val userId = PrincipalUtil.getUserId()
         val user =
             userJpaRepository.findById(userId).orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
