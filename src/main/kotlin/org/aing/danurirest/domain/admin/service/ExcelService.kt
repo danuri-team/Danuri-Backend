@@ -23,7 +23,6 @@ class ExcelService {
         val headerRow = sheet.createRow(0)
         val headers =
             listOf(
-                "사용자 이름",
                 "사용자 연락처",
                 "공간 이름",
                 "시작 시간",
@@ -43,12 +42,11 @@ class ExcelService {
         usageHistories.forEachIndexed { index, history ->
             val row = sheet.createRow(index + 1)
 
-            row.createCell(0).setCellValue(history.userName)
-            row.createCell(1).setCellValue(history.userPhone)
-            row.createCell(2).setCellValue(history.spaceName)
-            row.createCell(3).setCellValue(history.startAt.format(dateFormatter))
-            row.createCell(4).setCellValue(history.endAt?.format(dateFormatter) ?: "사용 중")
-            row.createCell(5).setCellValue(history.rentalCount.toDouble())
+            row.createCell(0).setCellValue(history.userPhone)
+            row.createCell(1).setCellValue(history.spaceName)
+            row.createCell(2).setCellValue(history.startAt.format(dateFormatter))
+            row.createCell(3).setCellValue(history.endAt?.format(dateFormatter) ?: "사용 중")
+            row.createCell(4).setCellValue(history.rentalCount.toDouble())
         }
 
         // 열 너비 자동 조정

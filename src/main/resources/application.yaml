@@ -53,7 +53,13 @@ discord:
 sms:
   apiKey: ${SMS_API_KEY}
   apiSecret: ${SMS_SECRET_KEY}
-  fromnumber: ${SMS_FROM_NUMBER}
+  fromNumber: ${SMS_FROM_NUMBER}
+  pfId: ${SMS_KAKAO_PFID}
+
+s3:
+  endpoint: ${S3_ENDPOINT}
+  access-key: ${S3_API_KEY}
+  secret-key: ${S3_SECRET_KEY}
 
 ---
 spring:

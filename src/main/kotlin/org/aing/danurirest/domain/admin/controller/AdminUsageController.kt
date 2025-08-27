@@ -1,8 +1,8 @@
 package org.aing.danurirest.domain.admin.controller
 
 import jakarta.validation.Valid
-import org.aing.danurirest.domain.admin.dto.CreateUsageHistoryRequest
-import org.aing.danurirest.domain.admin.dto.UpdateUsageHistoryRequest
+import org.aing.danurirest.domain.admin.dto.UsageHistoryCreateRequest
+import org.aing.danurirest.domain.admin.dto.UsageHistoryUpdateRequest
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
 import org.aing.danurirest.domain.admin.service.ExcelService
@@ -31,7 +31,7 @@ class AdminUsageController(
 ) {
     @PostMapping
     fun createUsageHistory(
-        @Valid @RequestBody request: CreateUsageHistoryRequest,
+        @Valid @RequestBody request: UsageHistoryCreateRequest,
     ): ResponseEntity<Unit> =
         createUsageHistoryUsecase.execute(request).run {
             ResponseEntity.noContent().build()
@@ -40,7 +40,7 @@ class AdminUsageController(
     @PutMapping("/{usageId}")
     fun updateUsageHistory(
         @PathVariable usageId: UUID,
-        @Valid @RequestBody request: UpdateUsageHistoryRequest,
+        @Valid @RequestBody request: UsageHistoryUpdateRequest,
     ): ResponseEntity<UsageHistoryResponse> =
         updateUsageHistoryUsecase.execute(usageId, request).run {
             ResponseEntity.ok(this)
@@ -48,7 +48,7 @@ class AdminUsageController(
 
     @PostMapping("/search")
     fun searchUsageHistory(
-        @RequestBody request: UsageHistorySearchRequest,
+        @Valid @RequestBody request: UsageHistorySearchRequest,
     ): ResponseEntity<List<UsageHistoryResponse>> =
         getUsageHistoriesUsecase.execute(request).run {
             ResponseEntity.ok(this)
@@ -64,7 +64,7 @@ class AdminUsageController(
 
     @PostMapping("/export")
     fun exportUsageHistory(
-        @RequestBody request: UsageHistorySearchRequest,
+        @Valid @RequestBody request: UsageHistorySearchRequest,
     ): ResponseEntity<ByteArray> {
         val histories = getUsageHistoriesUsecase.execute(request)
         val excelBytes = excelService.createUsageHistoryExcel(histories)

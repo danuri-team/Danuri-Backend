@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danurirest.domain.admin.dto.UpdateUsageHistoryRequest
+import org.aing.danurirest.domain.admin.dto.UsageHistoryUpdateRequest
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
@@ -18,7 +18,7 @@ class UpdateUsageHistoryUsecase(
 ) {
     fun execute(
         usageHistoryId: UUID,
-        request: UpdateUsageHistoryRequest,
+        request: UsageHistoryUpdateRequest,
     ): UsageHistoryResponse {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 

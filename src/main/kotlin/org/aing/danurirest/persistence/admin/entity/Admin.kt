@@ -1,18 +1,11 @@
 package org.aing.danurirest.persistence.admin.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 import org.aing.danurirest.persistence.BaseEntity
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.company.entity.Company
-import org.aing.danurirest.persistence.usage.entity.UsageHistory
+import org.aing.danurirest.persistence.help.entity.HelpHistory
+import org.aing.danurirest.persistence.help.entity.HelpSetting
 import org.aing.danurirest.persistence.user.Role
 import java.util.UUID
 
@@ -36,4 +29,9 @@ class Admin(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val status: Status = Status.NEED_COMPANY_APPROVE,
+    @OneToMany(mappedBy = "checkedAdmin", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val checkedHelpHistories: List<HelpHistory> = emptyList(),
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "help_setting_id")
+    val helpSetting: HelpSetting,
 ) : BaseEntity()

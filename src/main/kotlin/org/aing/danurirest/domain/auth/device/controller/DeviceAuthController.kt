@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.auth.device.controller
 
+import jakarta.validation.Valid
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.domain.auth.device.dto.DeviceSignInRequest
 import org.aing.danurirest.domain.auth.device.usecase.DeviceSignInUsecase
@@ -16,9 +17,9 @@ class DeviceAuthController(
 ) {
     @PostMapping("/token")
     fun generateDeviceToken(
-        @RequestBody deviceSignInRequest: DeviceSignInRequest,
+        @Valid @RequestBody deviceSignInRequest: DeviceSignInRequest,
     ): ResponseEntity<SignInResponse> =
         deviceSignInUsecase.execute(deviceSignInRequest).run {
             ResponseEntity.ok(this)
         }
-} 
+}

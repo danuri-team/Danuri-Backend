@@ -26,9 +26,6 @@ class RegisterUserUsecase(
         val user =
             User(
                 company = company,
-                name = request.name,
-                sex = request.sex,
-                age = request.age,
                 phone = request.phone,
             )
 

@@ -32,12 +32,16 @@ class SecurityConfiguration(
             .authorizeHttpRequests {
                 // 인증/인가
                 it.requestMatchers(HttpMethod.POST, "/auth/admin/**").permitAll()
+                it.requestMatchers(HttpMethod.GET, "/auth/common/refresh").permitAll()
                 it.requestMatchers(HttpMethod.POST, "/auth/user/**").hasRole("DEVICE")
-                it.requestMatchers(HttpMethod.POST, "/auth/device/token").hasRole("ADMIN")
+                it.requestMatchers(HttpMethod.POST, "/auth/device/token").permitAll()
                 // 이용
-                it.requestMatchers(HttpMethod.GET, "/space", "/item").hasRole("DEVICE")
-                it.requestMatchers(HttpMethod.POST, "/usage", "/space", "/item/**").hasRole("USER")
-                // 어드민
+                it.requestMatchers(HttpMethod.GET, "/item", "/space").hasRole("DEVICE")
+                it.requestMatchers(HttpMethod.POST, "/usage").hasRole("USER")
+                it.requestMatchers("/form").hasRole("USER")
+                it.requestMatchers(HttpMethod.POST, "/item").hasRole("DEVICE")
+                it.requestMatchers(HttpMethod.DELETE, "/item", "/usage").hasRole("DEVICE")
+                // 관리
                 it.requestMatchers("/admin/**").hasRole("ADMIN")
                 // 모니터링
                 it.requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
