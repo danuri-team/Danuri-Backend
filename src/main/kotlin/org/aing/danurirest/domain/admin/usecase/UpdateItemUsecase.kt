@@ -24,8 +24,11 @@ class UpdateItemUsecase(
 
         val item =
             itemJpaRepository
-                .findById(itemId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
+                .findByIdWithLock(itemId)
+
+        if (item == null) {
+            throw CustomException(CustomErrorCode.NOT_FOUND_ITEM)
+        }
 
         if (item.company.id != adminCompanyId) {
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
