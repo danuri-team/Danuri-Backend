@@ -20,12 +20,15 @@ class SignInDeviceUsecase(
     private val s3Service: S3Service,
 ) {
     fun execute(deviceId: UUID): SignInDeviceResponse {
-        val device =
-            deviceJpaRepository.findById(deviceId).orElseThrow {
-                CustomException(CustomErrorCode.NOT_FOUND_DEVICE)
-            }
+        deviceJpaRepository.findById(deviceId).orElseThrow {
+            CustomException(CustomErrorCode.NOT_FOUND_DEVICE)
+        }
 
-        val verifyCode = GenerateRandomCode.execute()
+        var verifyCode: String
+
+        do {
+            verifyCode = GenerateRandomCode.execute()
+        } while (verificationCodeRepository.existsById(verifyCode))
 
         verificationCodeRepository.save(
             VerificationCode(deviceId, verifyCode),
