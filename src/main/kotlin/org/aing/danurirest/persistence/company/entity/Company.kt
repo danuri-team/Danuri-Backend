@@ -4,6 +4,7 @@ import jakarta.persistence.*
 import org.aing.danurirest.persistence.BaseEntity
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.device.entity.Device
+import org.aing.danurirest.persistence.form.entity.Form
 import org.aing.danurirest.persistence.help.entity.HelpHistory
 import org.aing.danurirest.persistence.help.entity.HelpSetting
 import org.aing.danurirest.persistence.item.entity.Item
@@ -28,9 +29,10 @@ class Company(
     val device: List<Device> = emptyList(),
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val spaces: List<Space> = emptyList(),
-    @OneToOne(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val helpHistory: HelpHistory,
-    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    @JoinColumn(name = "help_setting_id")
+    @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val helpHistory: List<HelpHistory> = emptyList(),
+    @OneToOne(mappedBy = "company", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     val helpSetting: HelpSetting,
+    @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val forms: List<Form> = emptyList(),
 ) : BaseEntity()

@@ -1,6 +1,6 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danurirest.domain.admin.dto.CreateUsageHistoryRequest
+import org.aing.danurirest.domain.admin.dto.UsageHistoryCreateRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
@@ -19,7 +19,7 @@ class CreateUsageHistoryUsecase(
     private val spaceJpaRepository: SpaceJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
-    fun execute(request: CreateUsageHistoryRequest) {
+    fun execute(request: UsageHistoryCreateRequest) {
         if (request.startAt.isAfter(request.endAt)) {
             throw CustomException(CustomErrorCode.VALIDATION_ERROR)
         }

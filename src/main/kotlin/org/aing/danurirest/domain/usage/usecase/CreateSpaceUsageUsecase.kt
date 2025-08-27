@@ -39,7 +39,7 @@ class CreateSpaceUsageUsecase(
     private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
 
     @Transactional
-    fun execute(spaceId: UUID): Boolean {
+    fun execute(spaceId: UUID) {
         val context = PrincipalUtil.getContextDto()
         val userId = context.id ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
 
@@ -54,8 +54,6 @@ class CreateSpaceUsageUsecase(
         checkSpaceCurrentUsage(spaceId, now, endTime)
 
         createSpaceUsage(space, userId, now, endTime)
-
-        return true
     }
 
     private fun findSpaceById(spaceId: UUID): Space =
@@ -118,6 +116,10 @@ class CreateSpaceUsageUsecase(
             userJpaRepository
                 .findById(userId)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
+
+        if (user.signUpForm == null) {
+            throw CustomException(CustomErrorCode.NOT_SIGNED_UP)
+        }
 
         val usage =
             usageHistoryJpaRepository.save(

@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.admin.controller
 
+import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.DeleteHelpRequest
 import org.aing.danurirest.domain.admin.usecase.DeleteHelpUsecase
 import org.aing.danurirest.domain.admin.usecase.GetHelpUsecase
@@ -25,7 +26,7 @@ class AdminHelpController(
 
     @DeleteMapping
     fun deleteHelp(
-        @RequestBody request: DeleteHelpRequest,
+        @Valid @RequestBody request: DeleteHelpRequest,
     ): ResponseEntity<Unit> =
         deleteHelpUsecase.execute(request).run {
             ResponseEntity.noContent().build()

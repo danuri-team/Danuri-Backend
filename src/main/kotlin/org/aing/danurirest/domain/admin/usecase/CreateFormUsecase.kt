@@ -1,41 +1,43 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danurirest.domain.admin.dto.ItemCreateRequest
-import org.aing.danurirest.domain.admin.dto.ItemResponse
+import org.aing.danurirest.domain.admin.dto.FormCreateRequest
+import org.aing.danurirest.domain.admin.dto.FormResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
-import org.aing.danurirest.persistence.item.ItemStatus
-import org.aing.danurirest.persistence.item.entity.Item
-import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
+import org.aing.danurirest.persistence.form.entity.Form
+import org.aing.danurirest.persistence.form.repository.FormJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
-class CreateItemUsecase(
-    private val itemJpaRepository: ItemJpaRepository,
+class CreateFormUsecase(
+    private val formJpaRepository: FormJpaRepository,
     private val companyRepository: CompanyJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
-    fun execute(request: ItemCreateRequest): ItemResponse {
+    @Transactional
+    fun execute(request: FormCreateRequest): FormResponse {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
-
         val company =
             companyRepository
                 .findById(adminCompanyId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY) }
 
-        val item =
-            Item(
+        if (request.isSignUpForm && formJpaRepository.existsFormByCompanyIdAndSignUpFormTrue(company.id!!)) {
+            throw CustomException(CustomErrorCode.FORM_ALREADY_SETUP)
+        }
+
+        val form =
+            Form(
+                title = request.title,
+                formSchema = request.schema,
                 company = company,
-                name = request.name,
-                totalQuantity = request.totalQuantity,
-                availableQuantity = request.totalQuantity,
-                status = ItemStatus.AVAILABLE,
+                signUpForm = request.isSignUpForm,
             )
 
-        return ItemResponse.from(itemJpaRepository.save(item))
+        val savedForm = formJpaRepository.save(form)
+        return FormResponse.from(savedForm)
     }
 }
