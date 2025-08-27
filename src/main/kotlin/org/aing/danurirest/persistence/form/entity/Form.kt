@@ -7,12 +7,14 @@ import java.util.*
 
 @Entity
 class Form(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     val id: UUID? = null,
     var title: String,
     @Lob
-    var schema: String,
+    var formSchema: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     val company: Company,
+    @Column(nullable = false, name = "is_for_sign_up")
+    var signUpForm: Boolean = false,
 ) : BaseEntity()

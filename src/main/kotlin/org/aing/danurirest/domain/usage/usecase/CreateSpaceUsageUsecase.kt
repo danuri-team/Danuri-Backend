@@ -54,8 +54,6 @@ class CreateSpaceUsageUsecase(
         checkSpaceCurrentUsage(spaceId, now, endTime)
 
         createSpaceUsage(space, userId, now, endTime)
-
-        return true
     }
 
     private fun findSpaceById(spaceId: UUID): Space =

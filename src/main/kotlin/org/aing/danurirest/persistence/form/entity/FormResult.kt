@@ -1,0 +1,18 @@
+package org.aing.danurirest.persistence.form.entity
+
+import jakarta.persistence.*
+import org.aing.danurirest.persistence.BaseEntity
+import org.aing.danurirest.persistence.user.entity.User
+
+@Entity
+class FormResult(
+    @Id @GeneratedValue
+    val id: Long? = null,
+    @Lob
+    var result: String,
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User,
+    @Column(nullable = false)
+    val isSignUpResult: Boolean,
+) : BaseEntity()

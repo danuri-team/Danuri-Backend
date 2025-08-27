@@ -1,21 +1,19 @@
-package org.aing.danurirest.domain.admin.dto
+package org.aing.danurirest.domain.form.dto
 
 import org.aing.danurirest.persistence.form.entity.Form
 import java.util.UUID
 
-data class FormResponse(
+data class GetSignUpFormResponse(
     val id: UUID,
     val title: String,
     val schema: String,
-    val companyId: UUID,
 ) {
     companion object {
-        fun from(entity: Form): FormResponse =
-            FormResponse(
+        fun from(entity: Form) =
+            GetSignUpFormResponse(
                 id = entity.id!!,
                 title = entity.title,
                 schema = entity.formSchema,
-                companyId = entity.company.id!!,
             )
     }
 }
