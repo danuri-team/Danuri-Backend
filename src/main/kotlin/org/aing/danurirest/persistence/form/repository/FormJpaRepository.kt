@@ -8,7 +8,7 @@ import java.util.UUID
 interface FormJpaRepository : JpaRepository<Form, UUID> {
     fun findAllByCompanyId(companyId: UUID): List<Form>
 
-    fun existsFormBySignUpFormTrue(): Boolean
+    fun existsFormByCompanyIdAndSignUpFormTrue(companyId: UUID): Boolean
 
     fun findByCompanyIdAndSignUpFormTrue(companyId: UUID): Optional<Form>
 }
