@@ -11,7 +11,7 @@ class FormResult(
     @Lob
     var result: String,
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     val user: User,
     @Column(nullable = false)
     val isSignUpResult: Boolean,
