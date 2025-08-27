@@ -1,9 +1,6 @@
 package org.aing.danurirest.domain.admin.dto
 
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Size
+import jakarta.validation.constraints.*
 import org.aing.danurirest.persistence.item.ItemStatus
 
 data class ItemUpdateRequest(
@@ -19,4 +16,8 @@ data class ItemUpdateRequest(
     val availableQuantity: Int,
     @field:NotNull(message = "상태 정보는 필수 입력값입니다.")
     val status: ItemStatus,
-)
+) {
+    @get:AssertTrue(message = "이용 가능 수량은 총 수량을 초과할 수 없습니다.")
+    val isAvailableQuantityValid: Boolean
+        get() = availableQuantity <= totalQuantity
+}
