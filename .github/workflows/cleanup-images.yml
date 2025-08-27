@@ -9,17 +9,13 @@ jobs:
   cleanup:
     name: Cleanup old GHCR images
     runs-on: ubuntu-latest
-
-    permissions:
-      packages: write
-      contents: read
-
     steps:
       - name: Run GHCR Cleanup Action
         uses: dataaxiom/ghcr-cleanup-action@v1
         with:
           token: ${{ secrets.GHCR_TOKEN }}
           keep-n-tagged: 5
+          package: danuri-backend
           exclude-tags: master,develop
           delete-untagged: true
           keep-n-untagged: 0
