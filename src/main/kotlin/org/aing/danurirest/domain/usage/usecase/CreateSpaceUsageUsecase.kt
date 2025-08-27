@@ -97,8 +97,7 @@ class CreateSpaceUsageUsecase(
 
         val isOverlapping =
             currentUsages.any { usage ->
-                (usage.startAt <= endTime) &&
-                    (usage.endAt == null || usage.endAt?.isAfter(now) == true || usage.endAt?.isEqual(now) == true)
+                (usage.startAt <= endTime) && (usage.endAt.isAfter(now) || usage.endAt.isEqual(now))
             }
 
         if (isOverlapping) {
