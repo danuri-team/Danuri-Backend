@@ -11,5 +11,6 @@ data class UsageHistoryCreateRequest(
     val spaceId: UUID,
     @field:NotNull(message = "시작 시간은 필수 입력값입니다.")
     val startAt: LocalDateTime,
-    val endAt: LocalDateTime?,
+    @field:NotNull(message = "종료 시간은 필수 입력값입니다.")
+    val endAt: LocalDateTime,
 )
