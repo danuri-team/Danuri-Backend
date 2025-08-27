@@ -34,12 +34,13 @@ class UpdateFormUsecase(
             throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
-        if (request.isSignUpForm && formJpaRepository.existsFormBySignUpFormTrue() && !form.signUpForm) {
+        if (request.isSignUpForm && formJpaRepository.existsFormByCompanyIdAndSignUpFormTrue(adminCompanyId) && !form.signUpForm) {
             throw CustomException(CustomErrorCode.FORM_ALREADY_SETUP)
         }
 
         form.title = request.title
         form.formSchema = request.schema
+        form.signUpForm = request.isSignUpForm
 
         val savedForm = formJpaRepository.save(form)
         return FormResponse.from(savedForm)

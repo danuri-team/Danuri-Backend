@@ -28,7 +28,7 @@ class CreateFormUsecase(
                 .findById(adminCompanyId)
                 .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_COMPANY) }
 
-        if (request.isSignUpForm && formJpaRepository.existsFormBySignUpFormTrue()) {
+        if (request.isSignUpForm && formJpaRepository.existsFormByCompanyIdAndSignUpFormTrue(company.id!!)) {
             throw CustomException(CustomErrorCode.FORM_ALREADY_SETUP)
         }
 
@@ -37,6 +37,7 @@ class CreateFormUsecase(
                 title = request.title,
                 formSchema = request.schema,
                 company = company,
+                signUpForm = request.isSignUpForm,
             )
 
         val savedForm = formJpaRepository.save(form)
