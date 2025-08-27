@@ -11,7 +11,8 @@ class HelpHistory(
     @Id
     @GeneratedValue
     val id: UUID? = null,
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "company_id", nullable = false)
     val company: Company,
     @ManyToOne
     @JoinColumn(name = "checked_admin_id")
