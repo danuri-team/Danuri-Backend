@@ -117,6 +117,10 @@ class CreateSpaceUsageUsecase(
                 .findById(userId)
                 .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
+        if (user.signUpForm == null) {
+            throw CustomException(CustomErrorCode.NOT_SIGNED_UP)
+        }
+
         val usage =
             usageHistoryJpaRepository.save(
                 UsageHistory(
