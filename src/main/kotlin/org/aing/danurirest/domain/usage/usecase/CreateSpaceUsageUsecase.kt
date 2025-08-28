@@ -15,8 +15,6 @@ import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -35,8 +33,6 @@ class CreateSpaceUsageUsecase(
     companion object {
         private const val USAGE_DURATION_MINUTES = 30L
     }
-
-    private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
 
     @Transactional
     fun execute(spaceId: UUID) {
