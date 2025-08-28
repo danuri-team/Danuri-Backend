@@ -38,7 +38,8 @@ class SecurityConfiguration(
                 // 이용
                 it.requestMatchers(HttpMethod.GET, "/item", "/space").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.POST, "/usage").hasRole("USER")
-                it.requestMatchers("/form").hasRole("USER")
+                it.requestMatchers(HttpMethod.GET, "/form").hasRole("DEVICE")
+                it.requestMatchers(HttpMethod.POST, "/form").hasRole("USER")
                 it.requestMatchers(HttpMethod.POST, "/item").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.DELETE, "/item", "/usage").hasRole("DEVICE")
                 // 관리
