@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import software.amazon.awssdk.core.sync.RequestBody
 import software.amazon.awssdk.services.s3.S3Client
-import software.amazon.awssdk.services.s3.model.GetObjectRequest
-import software.amazon.awssdk.services.s3.model.PutObjectRequest
-import software.amazon.awssdk.services.s3.model.S3Exception
+import software.amazon.awssdk.services.s3.model.*
 import software.amazon.awssdk.services.s3.presigner.S3Presigner
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest
 import java.io.IOException
@@ -107,5 +105,47 @@ class S3Service(
 
         val preSignedUrl = preSigner.presignGetObject(preSignRequest)
         return preSignedUrl.url().toString()
+    }
+
+    fun deleteFiles(
+        bucketType: BucketType,
+        fileNames: List<String>,
+    ) {
+        if (fileNames.isEmpty()) {
+            log.warn("삭제 요청된 파일이 없습니다.")
+            return
+        }
+
+        try {
+            val deleteObjectsRequest =
+                DeleteObjectsRequest
+                    .builder()
+                    .bucket(bucketType.bucketName)
+                    .delete(
+                        Delete
+                            .builder()
+                            .objects(
+                                fileNames.map { fileName ->
+                                    ObjectIdentifier
+                                        .builder()
+                                        .key("${bucketType.folder}/$fileName")
+                                        .build()
+                                },
+                            ).build(),
+                    ).build()
+
+            val response = s3Client.deleteObjects(deleteObjectsRequest)
+
+            if (response.hasErrors()) {
+                response.errors().forEach { err ->
+                    log.error("S3 파일 삭제 실패 | key=${err.key()} | code=${err.code()} | msg=${err.message()}")
+                }
+                throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
+            }
+        } catch (e: S3Exception) {
+            log.error("S3 삭제 중 외부 종속 오류 발생 | ${e.message}")
+        } catch (e: Exception) {
+            log.error("S3 삭제 중 알 수 없는 오류 발생 | ${e.message}")
+        }
     }
 }

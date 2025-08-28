@@ -46,4 +46,10 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
     ): List<UsageHistory>
 
     fun findByUserId(userId: UUID): Optional<UsageHistory>
+
+    @Query("SELECT CAST(u.id AS string) FROM UsageHistory u WHERE u.endAt BETWEEN :startTime AND :endTime")
+    fun findIdsByEndAtBetween(
+        @Param("startTime") startTime: LocalDateTime = LocalDateTime.now().minusDays(1),
+        @Param("endTime") endTime: LocalDateTime = LocalDateTime.now(),
+    ): List<String>
 }
