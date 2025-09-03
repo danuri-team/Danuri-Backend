@@ -18,13 +18,11 @@ enum class CustomErrorCode(
     // Auth
     MISSING_TOKEN(HttpStatus.UNAUTHORIZED, "인증 토큰이 필요합니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh Token입니다."),
-    EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 Refresh Token입니다."),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
     INVALID_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 인증번호입니다."),
-    EXPIRED_AUTH_CODE(HttpStatus.BAD_REQUEST, "만료된 인증번호입니다."),
     TOO_MANY_REQUESTS(HttpStatus.BAD_REQUEST, "요청이 너무 많습니다. 잠시 후 다시 시도해주세요."),
+    ALREADY_SENT_VERIFY_CODE(HttpStatus.CONFLICT, "이미 인증번호가 발송 되었습니다."),
     WRONG_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 비밀번호입니다."),
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
 
     // User
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),

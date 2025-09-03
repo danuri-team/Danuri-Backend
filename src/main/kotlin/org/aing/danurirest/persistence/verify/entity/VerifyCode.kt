@@ -1,14 +1,14 @@
-package org.aing.danurirest.persistence.device.entity
+package org.aing.danurirest.persistence.refreshToken.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.index.Indexed
-import java.util.UUID
 
-@RedisHash(value = "verificationCode", timeToLive = 60L * 3)
-class VerificationCode(
+@RedisHash(value = "refreshToken", timeToLive = 60L * 60 * 24 * 7)
+class VerifyCode(
     @Indexed
-    val id: UUID,
-    @Id
     val code: String,
+    @Id
+    @Indexed
+    val phoneNumber: String,
 )

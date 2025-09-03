@@ -10,6 +10,8 @@ import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
+import org.aing.danurirest.persistence.refreshToken.entity.RefreshToken
+import org.aing.danurirest.persistence.refreshToken.repository.RefreshTokenRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -19,6 +21,7 @@ class SignInUsecase(
     private val jwtProvider: JwtProvider,
     private val passwordEncoder: PasswordEncoder,
     private val loginBucket: Bucket,
+    private val refreshTokenRepository: RefreshTokenRepository,
 ) {
     fun execute(request: SignInRequest): SignInResponse {
         checkRateLimit()
@@ -66,6 +69,14 @@ class SignInUsecase(
                 TokenType.REFRESH_TOKEN,
                 admin.role,
             )
+
+        refreshTokenRepository.save(
+            RefreshToken(
+                admin.id!!,
+                refreshToken.token,
+            ),
+        )
+
         return SignInResponse(accessToken, refreshToken)
     }
 }

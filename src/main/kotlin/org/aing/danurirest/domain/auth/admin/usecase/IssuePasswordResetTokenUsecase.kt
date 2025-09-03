@@ -8,39 +8,23 @@ import org.aing.danurirest.global.security.jwt.JwtProvider
 import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.user.Role
-import org.aing.danurirest.persistence.user.repository.UserAuthCodeJpaRepository
+import org.aing.danurirest.persistence.verify.repository.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 class IssuePasswordResetTokenUsecase(
-    private val userAuthCodeJpaRepository: UserAuthCodeJpaRepository,
+    private val verifyCodeRepository: VerifyCodeRepository,
     private val jwtProvider: JwtProvider,
     private val adminJpaRepository: AdminJpaRepository,
 ) {
     @Transactional
     fun execute(request: AuthorizationCodeRequest): SignInResponse {
-        val userAuthCodes = userAuthCodeJpaRepository.findByPhone(request.phone)
+        val userAuthCode =
+            verifyCodeRepository.findByPhoneNumber(request.phone)
+                ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
 
-        if (userAuthCodes.isEmpty()) {
-            throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
-        }
-
-        // 만료된 인증코드들 삭제
-        val expiredCodes = userAuthCodes.filter { LocalDateTime.now().isAfter(it.expiredAt) }
-        if (expiredCodes.isNotEmpty()) {
-            expiredCodes.forEach { userAuthCodeJpaRepository.delete(it) }
-        }
-
-        // 유효한 인증코드들 중에서 요청된 코드와 일치하는 것 찾기
-        userAuthCodes
-            .filter { LocalDateTime.now().isBefore(it.expiredAt) || LocalDateTime.now().isEqual(it.expiredAt) }
-            .find { it.authCode == request.authCode }
-            ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
-
-        // 사용된 인증코드 삭제 (또는 해당 전화번호의 모든 인증코드 삭제)
-        userAuthCodeJpaRepository.deleteByPhone(request.phone)
+        verifyCodeRepository.delete(userAuthCode)
 
         val user =
             adminJpaRepository

@@ -7,25 +7,20 @@ import org.aing.danurirest.global.third_party.notification.template.MessageValue
 import org.aing.danurirest.global.util.GenerateRandomCode
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
-import org.aing.danurirest.persistence.user.entity.UserAuthCode
-import org.aing.danurirest.persistence.user.repository.UserAuthCodeJpaRepository
+import org.aing.danurirest.persistence.refreshToken.entity.VerifyCode
+import org.aing.danurirest.persistence.verify.repository.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.Exception
-import java.time.LocalDateTime
 import java.util.*
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class SendPasswordResetMessageUsecase(
     private val adminJpaRepository: AdminJpaRepository,
-    private val userAuthCodeJpaRepository: UserAuthCodeJpaRepository,
+    private val verifyCodeRepository: VerifyCodeRepository,
     private val notificationService: NotificationService,
 ) {
-    companion object {
-        private const val AUTH_CODE_EXPIRE_MINUTES = 5L
-    }
-
     fun execute(request: AuthenticationRequest) {
         val admin: Optional<Admin> =
             adminJpaRepository.findByPhone(request.phone)
@@ -33,7 +28,8 @@ class SendPasswordResetMessageUsecase(
         admin.ifPresent { result ->
             run {
                 val authCode = GenerateRandomCode.execute()
-                val expiredAt = LocalDateTime.now().plusMinutes(AUTH_CODE_EXPIRE_MINUTES)
+
+                verifyCodeRepository.save(VerifyCode(authCode, request.phone))
 
                 notificationService.sendNotification(
                     toMessage = result.phone,
@@ -44,15 +40,6 @@ class SendPasswordResetMessageUsecase(
                             verificationCode = authCode,
                         ),
                 )
-
-                val userAuthCode =
-                    UserAuthCode(
-                        phone = result.phone,
-                        authCode = authCode,
-                        expiredAt = expiredAt,
-                    )
-
-                userAuthCodeJpaRepository.save(userAuthCode)
             }
         }
     }
