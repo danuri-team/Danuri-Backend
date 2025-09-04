@@ -10,11 +10,13 @@ enum class CustomErrorCode(
     UNKNOWN_SERVER_ERROR(HttpStatus.BAD_GATEWAY, "알 수 없는 문제가 발생했습니다."),
     VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "찾을 수 없습니다."),
+    ENDPOINT_NOT_FOUND(HttpStatus.NOT_FOUND, "엔드포인트를 찾을 수 없습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증에 실패했습니다."),
     PARAMETER_ERROR(HttpStatus.BAD_REQUEST, "잘못된 파라미터입니다."),
     MISSING_REQUEST_BODY(HttpStatus.BAD_REQUEST, "요청 바디가 누락되었습니다."),
 
     // Auth
+    MISSING_TOKEN(HttpStatus.UNAUTHORIZED, "인증 토큰이 필요합니다."),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh Token입니다."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 Refresh Token입니다."),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
@@ -66,6 +68,5 @@ enum class CustomErrorCode(
     FORM_IS_NOT_SETUP(HttpStatus.NOT_FOUND, "폼 설정이 되어 있지 않습니다."),
     NOT_SIGNED_UP(HttpStatus.BAD_REQUEST, "이용 전 회원가입 폼 입력은 필수입니다."),
     FORM_ALREADY_SETUP(HttpStatus.CONFLICT, "이미 가입 폼 설정이 되어 있습니다. 해제 후 다시 설정 해주세요."),
-    INVALID_JSON_SCHEMA(HttpStatus.BAD_REQUEST, "유효하지 않은 JSON 스키마 형식입니다."),
     FORM_ALREADY_CREATED(HttpStatus.CONFLICT, "이미 폼 입력이 완료되어 있습니다."),
 }

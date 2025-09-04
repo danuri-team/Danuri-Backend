@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.HandlerMethodValidationException
+import org.springframework.web.servlet.NoHandlerFoundException
 import java.lang.RuntimeException
 
 @Slf4j
@@ -47,6 +48,16 @@ class ExceptionHandler {
             CustomExceptionResponse(
                 CustomErrorCode.MISSING_REQUEST_BODY,
                 CustomErrorCode.MISSING_REQUEST_BODY.message,
+            )
+        return ResponseEntity.status(response.status.status).body(response)
+    }
+
+    @ExceptionHandler(NoHandlerFoundException::class)
+    fun handleNoHandlerFoundException(exception: NoHandlerFoundException): ResponseEntity<CustomExceptionResponse> {
+        val response =
+            CustomExceptionResponse(
+                CustomErrorCode.ENDPOINT_NOT_FOUND,
+                CustomErrorCode.ENDPOINT_NOT_FOUND.message,
             )
         return ResponseEntity.status(response.status.status).body(response)
     }

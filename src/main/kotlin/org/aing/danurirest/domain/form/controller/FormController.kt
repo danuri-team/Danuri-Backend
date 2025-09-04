@@ -1,6 +1,7 @@
 package org.aing.danurirest.domain.form.controller
 
 import org.aing.danurirest.domain.form.dto.CreateSignUpFormResultRequest
+import org.aing.danurirest.domain.form.dto.GetSignUpFormResponse
 import org.aing.danurirest.domain.form.usecase.CreateSignUpFormResultUsecase
 import org.aing.danurirest.domain.form.usecase.GetSignUpFormUsecase
 import org.springframework.http.ResponseEntity
@@ -17,11 +18,10 @@ class FormController(
     private val getSignUpFormUsecase: GetSignUpFormUsecase,
 ) {
     @GetMapping
-    fun getSignUpForm() {
+    fun getSignUpForm(): ResponseEntity<GetSignUpFormResponse> =
         getSignUpFormUsecase.execute().run {
             ResponseEntity.ok(this)
         }
-    }
 
     @PostMapping
     fun createSignUpFormResult(
