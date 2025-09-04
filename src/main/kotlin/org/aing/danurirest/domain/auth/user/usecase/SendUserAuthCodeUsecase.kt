@@ -7,8 +7,8 @@ import org.aing.danurirest.global.third_party.notification.service.NotificationS
 import org.aing.danurirest.global.third_party.notification.template.MessageTemplate
 import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
 import org.aing.danurirest.global.util.GenerateRandomCode
-import org.aing.danurirest.persistence.refreshToken.entity.VerifyCode
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
+import org.aing.danurirest.persistence.verify.entity.VerifyCode
 import org.aing.danurirest.persistence.verify.repository.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

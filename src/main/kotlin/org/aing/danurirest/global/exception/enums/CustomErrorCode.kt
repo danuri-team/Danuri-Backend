@@ -21,7 +21,7 @@ enum class CustomErrorCode(
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
     INVALID_AUTH_CODE(HttpStatus.BAD_REQUEST, "유효하지 않은 인증번호입니다."),
     TOO_MANY_REQUESTS(HttpStatus.BAD_REQUEST, "요청이 너무 많습니다. 잠시 후 다시 시도해주세요."),
-    ALREADY_SENT_VERIFY_CODE(HttpStatus.CONFLICT, "이미 인증번호가 발송 되었습니다."),
+    ALREADY_SENT_VERIFY_CODE(HttpStatus.CONFLICT, "이미 인증번호가 발송되었습니다."),
     WRONG_PASSWORD(HttpStatus.UNAUTHORIZED, "잘못된 비밀번호입니다."),
 
     // User
