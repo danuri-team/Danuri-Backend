@@ -11,6 +11,7 @@ import org.aing.danurirest.persistence.device.entity.VerificationCode
 import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
 import org.aing.danurirest.persistence.device.repository.VerificationCodeRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -56,6 +57,7 @@ class SignInDeviceUsecase(
         return SignInDeviceResponse(
             qrLink,
             verifyCode,
+            LocalDateTime.now().plusMinutes(3),
         )
     }
 }
