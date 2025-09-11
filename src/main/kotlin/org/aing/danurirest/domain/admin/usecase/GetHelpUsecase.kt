@@ -26,6 +26,6 @@ class GetHelpUsecase(
             throw CustomException(CustomErrorCode.HELP_NOT_ENABLED)
         }
 
-        return helpHistoryJpaRepository.findAllByCompanyId(companyId)
+        return helpHistoryJpaRepository.findAllByCompanyId(companyId) // DTO로 변환 필요
     }
 }
