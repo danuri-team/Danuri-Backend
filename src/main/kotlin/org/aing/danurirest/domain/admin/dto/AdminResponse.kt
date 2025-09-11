@@ -3,6 +3,7 @@ package org.aing.danurirest.domain.admin.dto
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.user.Role
+import java.time.LocalDateTime
 import java.util.UUID
 
 data class AdminResponse(
@@ -13,6 +14,7 @@ data class AdminResponse(
     val phone: String,
     val role: Role,
     val status: Status,
+    val createdAt: LocalDateTime,
 ) {
     companion object {
         fun from(entity: Admin): AdminResponse =
@@ -24,6 +26,7 @@ data class AdminResponse(
                 phone = entity.phone,
                 role = entity.role,
                 status = entity.status,
+                createdAt = entity.createdAt!!,
             )
     }
-} 
+}
