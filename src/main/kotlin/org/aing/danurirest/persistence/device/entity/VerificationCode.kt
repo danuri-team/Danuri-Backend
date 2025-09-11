@@ -8,7 +8,7 @@ import java.util.UUID
 @RedisHash(value = "verificationCode", timeToLive = 60L * 3)
 class VerificationCode(
     @Indexed
-    val deviceId: UUID,
+    val id: UUID,
     @Id
     val code: String,
 )
