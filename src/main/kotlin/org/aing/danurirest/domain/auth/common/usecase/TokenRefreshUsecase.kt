@@ -9,8 +9,7 @@ import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
-import org.aing.danurirest.persistence.refreshToken.entity.RefreshToken
-import org.aing.danurirest.persistence.refreshToken.repository.RefreshTokenRepository
+import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
 import org.aing.danurirest.persistence.user.Role
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.stereotype.Service
@@ -34,9 +33,8 @@ class TokenRefreshUsecase(
         val role = Role.valueOf(claims["role"] as String)
         val userId = UUID.fromString(claims.subject)
 
-        val storedRefreshToken: RefreshToken =
-            refreshTokenRepository.findByToken(refreshToken)
-                ?: throw CustomException(CustomErrorCode.INVALID_REFRESH_TOKEN)
+        refreshTokenRepository.consume(refreshToken)
+            ?: throw CustomException(CustomErrorCode.INVALID_REFRESH_TOKEN)
 
         when (role) {
             Role.ROLE_ADMIN -> {
@@ -60,16 +58,12 @@ class TokenRefreshUsecase(
                 }
         }
 
-        refreshTokenRepository.delete(storedRefreshToken)
-
         val newAccessToken = jwtProvider.generateToken(userId, TokenType.ACCESS_TOKEN, role)
         val newRefreshToken = jwtProvider.generateToken(userId, TokenType.REFRESH_TOKEN, role)
 
         refreshTokenRepository.save(
-            RefreshToken(
-                userId,
-                newRefreshToken.token,
-            ),
+            userId = userId.toString(),
+            refreshToken = newRefreshToken.token,
         )
 
         return SignInResponse(newAccessToken, newRefreshToken)

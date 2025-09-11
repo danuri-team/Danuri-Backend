@@ -10,8 +10,7 @@ import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
-import org.aing.danurirest.persistence.refreshToken.entity.RefreshToken
-import org.aing.danurirest.persistence.refreshToken.repository.RefreshTokenRepository
+import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -71,10 +70,8 @@ class SignInUsecase(
             )
 
         refreshTokenRepository.save(
-            RefreshToken(
-                admin.id!!,
-                refreshToken.token,
-            ),
+            userId = admin.id!!.toString(),
+            refreshToken = refreshToken.token,
         )
 
         return SignInResponse(accessToken, refreshToken)

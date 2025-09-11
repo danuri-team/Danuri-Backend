@@ -8,8 +8,7 @@ import org.aing.danurirest.global.third_party.notification.template.MessageTempl
 import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
 import org.aing.danurirest.global.util.GenerateRandomCode
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
-import org.aing.danurirest.persistence.verify.entity.VerifyCode
-import org.aing.danurirest.persistence.verify.repository.VerifyCodeRepository
+import org.aing.danurirest.persistence.verify.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,13 +22,16 @@ class SendUserAuthCodeUsecase(
     fun execute(request: AuthenticationRequest) {
         val user = userJpaRepository.findByPhone(request.phone).orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
-        if (verifyCodeRepository.findByPhoneNumber(request.phone) != null) {
+        if (verifyCodeRepository.consume(request.phone) != null) {
             throw CustomException(CustomErrorCode.ALREADY_SENT_VERIFY_CODE)
         }
 
         val authCode = GenerateRandomCode.execute()
 
-        verifyCodeRepository.save(VerifyCode(authCode, request.phone))
+        verifyCodeRepository.save(
+            phoneNumber = request.phone,
+            code = authCode,
+        )
 
         notificationService.sendNotification(
             toMessage = request.phone,

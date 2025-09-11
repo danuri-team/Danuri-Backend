@@ -8,7 +8,7 @@ import org.aing.danurirest.global.security.jwt.JwtProvider
 import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.user.Role
-import org.aing.danurirest.persistence.verify.repository.VerifyCodeRepository
+import org.aing.danurirest.persistence.verify.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,10 +21,12 @@ class IssuePasswordResetTokenUsecase(
     @Transactional
     fun execute(request: AuthorizationCodeRequest): SignInResponse {
         val userAuthCode =
-            verifyCodeRepository.findByPhoneNumber(request.phone)
+            verifyCodeRepository.consume(request.phone)
                 ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
 
-        verifyCodeRepository.delete(userAuthCode)
+        if (userAuthCode != request.authCode) {
+            throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
+        }
 
         val user =
             adminJpaRepository

@@ -1,0 +1,27 @@
+package org.aing.danurirest.persistence.verify
+
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.redis.core.StringRedisTemplate
+import org.springframework.stereotype.Repository
+import java.util.concurrent.TimeUnit
+
+@Repository
+class VerifyCodeRepository(
+    private val stringRedisTemplate: StringRedisTemplate,
+    @Value("\${verify-code.expires}")
+    private val verifyCodeExpireAt: Long,
+) {
+    private fun key(phoneNumber: String) = "verify:$phoneNumber"
+
+    fun save(
+        phoneNumber: String,
+        code: String,
+        ttl: Long = verifyCodeExpireAt,
+    ) {
+        stringRedisTemplate
+            .opsForValue()
+            .set(key(phoneNumber), code, ttl, TimeUnit.MILLISECONDS)
+    }
+
+    fun consume(phoneNumber: String): String? = stringRedisTemplate.opsForValue().getAndDelete(key(phoneNumber))
+}

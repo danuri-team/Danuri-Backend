@@ -10,8 +10,7 @@ import org.aing.danurirest.global.security.jwt.enum.TokenType
 import org.aing.danurirest.persistence.device.entity.Device
 import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
 import org.aing.danurirest.persistence.device.repository.VerificationCodeRepository
-import org.aing.danurirest.persistence.refreshToken.entity.RefreshToken
-import org.aing.danurirest.persistence.refreshToken.repository.RefreshTokenRepository
+import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
 import org.springframework.stereotype.Service
 
 @Service
@@ -30,6 +29,8 @@ class DeviceSignInUsecase(
         val deviceVerifyCode =
             verificationCodeRepository.findByCode(request.code)
                 ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
+
+        verificationCodeRepository.delete(deviceVerifyCode)
 
         val device: Device =
             deviceJpaRepository
@@ -51,10 +52,8 @@ class DeviceSignInUsecase(
             )
 
         refreshTokenRepository.save(
-            RefreshToken(
-                memberId = device.id!!,
-                token = refreshToken.token,
-            ),
+            userId = device.id!!.toString(),
+            refreshToken = refreshToken.token,
         )
 
         return SignInResponse(accessToken, refreshToken)

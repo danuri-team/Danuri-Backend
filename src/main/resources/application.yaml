@@ -11,8 +11,6 @@ spring:
       write-dates-as-timestamps: false
     date-format: yyyy-MM-dd'T'HH:mm:ss
 
-  mvc:
-    throw-exception-if-no-handler-found: true
   web:
     resources:
       add-mappings: false
@@ -67,6 +65,9 @@ s3:
   access-key: ${S3_API_KEY}
   secret-key: ${S3_SECRET_KEY}
 
+verify-code:
+  expires: 180000
+
 ---
 spring:
   config:
@@ -80,8 +81,8 @@ spring:
 jwt:
   access-token-key: ${ACCESS_TOKEN_KEY}
   refresh-token-key: ${REFRESH_TOKEN_KEY}
-  access-token-expires: 26297460000 # 10 month
-  refresh-token-expires: 315569520000 # 10 years
+  access-token-expires: 1800000
+  refresh-token-expires: 604800000
 
 ---
 spring:
@@ -96,4 +97,4 @@ jwt:
   access-token-key: ${ACCESS_TOKEN_KEY}
   refresh-token-key: ${REFRESH_TOKEN_KEY}
   access-token-expires: 1800000 # 30 minutes
-  refresh-token-expires: 4320000000 # 1 day
+  refresh-token-expires: 604800000 # 1 day

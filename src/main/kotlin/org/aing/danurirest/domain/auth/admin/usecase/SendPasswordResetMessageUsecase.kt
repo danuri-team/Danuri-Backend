@@ -7,8 +7,7 @@ import org.aing.danurirest.global.third_party.notification.template.MessageValue
 import org.aing.danurirest.global.util.GenerateRandomCode
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
-import org.aing.danurirest.persistence.verify.entity.VerifyCode
-import org.aing.danurirest.persistence.verify.repository.VerifyCodeRepository
+import org.aing.danurirest.persistence.verify.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.lang.Exception
@@ -29,7 +28,10 @@ class SendPasswordResetMessageUsecase(
             run {
                 val authCode = GenerateRandomCode.execute()
 
-                verifyCodeRepository.save(VerifyCode(authCode, request.phone))
+                verifyCodeRepository.save(
+                    phoneNumber = result.phone,
+                    code = authCode,
+                )
 
                 notificationService.sendNotification(
                     toMessage = result.phone,
