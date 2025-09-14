@@ -32,7 +32,10 @@ class SignInDeviceUsecase(
         } while (verificationCodeRepository.existsById(verifyCode))
 
         verificationCodeRepository.save(
-            VerificationCode(deviceId, verifyCode),
+            VerificationCode(
+                id = deviceId,
+                code = verifyCode,
+            ),
         )
 
         val qr =
