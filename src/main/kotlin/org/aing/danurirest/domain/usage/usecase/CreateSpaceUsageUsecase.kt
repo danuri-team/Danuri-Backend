@@ -74,7 +74,7 @@ class CreateSpaceUsageUsecase(
     ) {
         val nowTime = now.toLocalTime()
 
-        if (nowTime.isBefore(space.startAt) || nowTime.isAfter(space.endAt)) {
+        if (nowTime.isAfter(space.startAt) && nowTime.isBefore(space.endAt)) {
             throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
         }
     }
@@ -85,16 +85,13 @@ class CreateSpaceUsageUsecase(
         endTime: LocalDateTime,
     ) {
         val currentUsages =
-            usageHistoryJpaRepository.spaceUsingTime(
+            usageHistoryJpaRepository.findUsagesBySpaceAndTimeRange(
                 spaceId = spaceId,
-                startTime = now.minusMinutes(USAGE_DURATION_MINUTES),
+                startTime = now,
                 endTime = endTime.plusMinutes(USAGE_DURATION_MINUTES),
             )
 
-        val isOverlapping =
-            currentUsages.any { usage ->
-                (usage.startAt <= endTime) && (usage.endAt.isAfter(now) || usage.endAt.isEqual(now))
-            }
+        val isOverlapping = currentUsages.isNotEmpty()
 
         if (isOverlapping) {
             throw CustomException(CustomErrorCode.USAGE_CONFLICT_SPACE)

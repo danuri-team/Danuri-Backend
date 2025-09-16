@@ -29,7 +29,7 @@ class RentItemUsecase(
                     request.usageId,
                 ).orElseThrow { CustomException(CustomErrorCode.NOT_USAGE_FOUND) }
 
-        if (usage.endAt?.isAfter(LocalDateTime.now()) != true) {
+        if (!usage.endAt.isAfter(LocalDateTime.now())) {
             throw CustomException(CustomErrorCode.ALREADY_END)
         }
 
@@ -46,12 +46,10 @@ class RentItemUsecase(
         updateItemQuantity(item, request.quantity)
 
         return ItemRentalResponse(
-            id = savedRental.id,
             itemId = item.id!!,
             itemName = item.name,
             quantity = request.quantity,
             borrowedAt = savedRental.borrowedAt,
-            returnedQuantity = savedRental.returnedQuantity,
         )
     }
 
@@ -78,7 +76,6 @@ class RentItemUsecase(
             usage = usage,
             quantity = quantity,
             borrowedAt = LocalDateTime.now(),
-            returnedQuantity = 0,
         )
 
     private fun updateItemQuantity(

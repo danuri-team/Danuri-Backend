@@ -1,5 +1,3 @@
-@file:Suppress("ktlint:standard:filename")
-
 package org.aing.danurirest.global.security.configuration
 
 import org.aing.danurirest.global.security.filter.JwtFilter

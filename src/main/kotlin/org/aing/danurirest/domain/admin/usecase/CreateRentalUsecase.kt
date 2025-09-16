@@ -28,7 +28,7 @@ class CreateRentalUsecase(
                 throw CustomException(CustomErrorCode.NOT_USAGE_FOUND)
             }
 
-        usageHistory.endAt?.let {
+        usageHistory.endAt.let {
             if (it < LocalDateTime.now()) {
                 throw CustomException(CustomErrorCode.USAGE_EXPIRED)
             }

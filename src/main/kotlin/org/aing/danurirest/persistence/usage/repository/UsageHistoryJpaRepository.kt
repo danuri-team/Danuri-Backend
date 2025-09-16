@@ -19,7 +19,7 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
             )
         """,
     )
-    fun spaceUsingTime(
+    fun findUsagesBySpaceAndTimeRange(
         @Param("spaceId") spaceId: UUID,
         @Param("startTime") startTime: LocalDateTime,
         @Param("endTime") endTime: LocalDateTime,
