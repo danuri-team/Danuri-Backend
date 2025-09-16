@@ -30,4 +30,9 @@ class Rental(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     var status: RentalStatus = RentalStatus.NOT_CONFIRMED,
-) : BaseEntity()
+) : BaseEntity() {
+    fun markReturned(returnedAt: LocalDateTime) {
+        this.returnedQuantity = this.quantity
+        this.returnedAt = returnedAt
+    }
+}

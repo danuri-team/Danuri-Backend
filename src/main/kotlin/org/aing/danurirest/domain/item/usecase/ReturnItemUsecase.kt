@@ -3,8 +3,8 @@ package org.aing.danurirest.domain.item.usecase
 import org.aing.danurirest.domain.common.dto.QrUsageIdRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
-import org.aing.danurirest.persistence.item.ItemStatus
 import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
+import org.aing.danurirest.persistence.rental.entity.Rental
 import org.aing.danurirest.persistence.rental.repository.RentalJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.springframework.stereotype.Service
@@ -23,7 +23,7 @@ class ReturnItemUsecase(
             .findById(request.usageId)
             .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND) }
 
-        val rentals =
+        val rentals: List<Rental> =
             rentalJpaRepository
                 .findAllByUsageId(request.usageId)
                 .takeIf { it.isNotEmpty() }
@@ -43,14 +43,8 @@ class ReturnItemUsecase(
                     .findById(rental.item.id!!)
                     .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
 
-            item.availableQuantity += 1
-
-            if (item.availableQuantity > 0) {
-                item.status = ItemStatus.AVAILABLE
-            }
-
-            rental.returnedQuantity = rental.quantity
-            rental.returnedAt = now
+            item.returnQuantity(rental.quantity)
+            rental.markReturned(now)
         }
     }
 }
