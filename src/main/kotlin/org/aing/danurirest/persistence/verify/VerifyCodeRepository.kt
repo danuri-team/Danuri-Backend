@@ -16,11 +16,12 @@ class VerifyCodeRepository(
     fun save(
         phoneNumber: String,
         code: String,
-        ttl: Long = verifyCodeExpireAt,
+        ttl: Long? = null,
     ) {
+        val finalTtl = ttl ?: verifyCodeExpireAt
         stringRedisTemplate
             .opsForValue()
-            .set(key(phoneNumber), code, ttl, TimeUnit.MILLISECONDS)
+            .set(key(phoneNumber), code, finalTtl, TimeUnit.MILLISECONDS)
     }
 
     fun consume(phoneNumber: String): String? = stringRedisTemplate.opsForValue().getAndDelete(key(phoneNumber))
