@@ -9,10 +9,8 @@ import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
 import org.aing.danurirest.persistence.user.entity.User
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class CreateUserUsecase(
     private val userRepository: UserJpaRepository,
     private val companyRepository: CompanyJpaRepository,
@@ -32,7 +30,7 @@ class CreateUserUsecase(
 
         userRepository
             .findByPhoneAndCompanyId(request.phone, company.id!!)
-            .ifPresent { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
+            ?.let { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
 
         val user =
             User(

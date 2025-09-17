@@ -9,10 +9,8 @@ import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
 import org.aing.danurirest.persistence.space.entity.Space
 import org.aing.danurirest.persistence.space.repository.SpaceJpaRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class CreateSpaceUsecase(
     private val spaceJpaRepository: SpaceJpaRepository,
     private val companyRepository: CompanyJpaRepository,

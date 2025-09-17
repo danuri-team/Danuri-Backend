@@ -7,6 +7,7 @@ import org.aing.danurirest.persistence.help.entity.HelpHistory
 import org.aing.danurirest.persistence.help.repository.HelpHistoryJpaRepository
 import org.aing.danurirest.persistence.help.repository.HelpSettingJpaRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GetHelpUsecase(
@@ -14,6 +15,7 @@ class GetHelpUsecase(
     private val helpSettingJpaRepository: HelpSettingJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional(readOnly = true)
     fun execute(): List<HelpHistory> {
         val companyId = getAdminCompanyIdUsecase.execute()
         val helpSetting =

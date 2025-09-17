@@ -12,7 +12,6 @@ import java.util.UUID
 interface ItemJpaRepository : JpaRepository<Item, UUID> {
     fun findAllByCompanyId(companyId: UUID): List<Item>
 
-    @Suppress("ktlint:standard:function-naming")
     fun findByCompanyIdAndAvailableQuantityGreaterThanAndStatus(
         companyId: UUID,
         availableQuantity: Int = 0,
@@ -20,8 +19,11 @@ interface ItemJpaRepository : JpaRepository<Item, UUID> {
     ): List<Item>
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT i FROM Item i WHERE i.id = :id")
-    fun findByIdWithLock(
+    @Query("SELECT i FROM Item i WHERE i.id = :id AND i.company.id = :companyId")
+    fun findByIdAndCompanyIdWithLock(
         @Param("id") id: UUID,
+        @Param("companyId") companyId: UUID,
     ): Item?
+
+    fun findByIdAndCompanyId(id: UUID, companyId: UUID): Item?
 }

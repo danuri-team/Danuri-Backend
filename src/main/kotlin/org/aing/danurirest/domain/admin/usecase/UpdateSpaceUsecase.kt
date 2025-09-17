@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
-@Transactional
 class UpdateSpaceUsecase(
     private val spaceJpaRepository: SpaceJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional
     fun execute(
         spaceId: UUID,
         request: SpaceRequest,
@@ -22,13 +22,8 @@ class UpdateSpaceUsecase(
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val space =
-            spaceJpaRepository
-                .findById(spaceId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
-
-        if (space.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+            spaceJpaRepository.findByIdAndCompanyId(spaceId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
 
         space.startAt = request.startAt
         space.name = request.name

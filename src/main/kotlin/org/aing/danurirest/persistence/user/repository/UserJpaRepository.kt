@@ -17,5 +17,7 @@ interface UserJpaRepository : JpaRepository<User, UUID> {
     fun findByPhoneAndCompanyId(
         phone: String,
         companyId: UUID,
-    ): Optional<User>
+    ): User?
+
+    fun findByIdAndCompanyId(id: UUID, companyId: UUID): User?
 }
