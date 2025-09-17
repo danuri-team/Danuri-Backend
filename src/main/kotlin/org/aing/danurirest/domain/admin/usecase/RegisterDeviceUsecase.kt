@@ -19,10 +19,6 @@ class RegisterDeviceUsecase(
 ) {
     @Transactional
     fun execute(registerDeviceRequest: RegisterDeviceRequest) {
-        if (deviceJpaRepository.findById(registerDeviceRequest.deviceId).isPresent) {
-            throw CustomException(CustomErrorCode.DEVICE_ALREADY_REGISTERED)
-        }
-
         val companyId = getAdminCompanyIdUsecase.execute()
 
         val company =
