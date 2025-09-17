@@ -21,10 +21,10 @@ class IssuePasswordResetTokenUsecase(
     @Transactional
     fun execute(request: AuthorizationCodeRequest): SignInResponse {
         val userAuthCode =
-            verifyCodeRepository.consume(request.phone)
+            verifyCodeRepository.consume(request.authCode)
                 ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
 
-        if (userAuthCode != request.authCode) {
+        if (userAuthCode != request.phone) {
             throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
         }
 

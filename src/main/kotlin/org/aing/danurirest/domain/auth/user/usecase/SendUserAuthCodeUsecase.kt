@@ -22,10 +22,6 @@ class SendUserAuthCodeUsecase(
     fun execute(request: AuthenticationRequest) {
         val user = userJpaRepository.findByPhone(request.phone).orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
-        if (verifyCodeRepository.consume(request.phone) != null) {
-            throw CustomException(CustomErrorCode.ALREADY_SENT_VERIFY_CODE)
-        }
-
         val authCode = GenerateRandomCode.execute()
 
         verifyCodeRepository.save(

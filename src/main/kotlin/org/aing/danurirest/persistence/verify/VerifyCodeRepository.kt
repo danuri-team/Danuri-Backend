@@ -11,7 +11,7 @@ class VerifyCodeRepository(
     @Value("\${verify-code.expires}")
     private val verifyCodeExpireAt: Long,
 ) {
-    private fun key(phoneNumber: String) = "verify:$phoneNumber"
+    private fun key(code: String) = "verify:$code"
 
     fun save(
         phoneNumber: String,
@@ -21,8 +21,8 @@ class VerifyCodeRepository(
         val finalTtl = ttl ?: verifyCodeExpireAt
         stringRedisTemplate
             .opsForValue()
-            .set(key(phoneNumber), code, finalTtl, TimeUnit.MILLISECONDS)
+            .set(key(code), phoneNumber, finalTtl, TimeUnit.MILLISECONDS)
     }
 
-    fun consume(phoneNumber: String): String? = stringRedisTemplate.opsForValue().getAndDelete(key(phoneNumber))
+    fun consume(code: String): String? = stringRedisTemplate.opsForValue().getAndDelete(key(code))
 }

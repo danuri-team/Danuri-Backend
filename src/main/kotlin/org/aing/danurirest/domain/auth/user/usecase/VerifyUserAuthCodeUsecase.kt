@@ -22,7 +22,11 @@ class VerifyUserAuthCodeUsecase(
 ) {
     @Transactional
     fun execute(request: AuthorizationCodeRequest): SignInResponse {
-        verifyCodeRepository.consume(request.authCode) ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
+        val verifyCode = verifyCodeRepository.consume(request.authCode) ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
+
+        if (verifyCode != request.phone) {
+            throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
+        }
 
         val user =
             userJpaRepository
