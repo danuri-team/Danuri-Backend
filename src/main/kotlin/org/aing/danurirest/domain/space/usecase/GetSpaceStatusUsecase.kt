@@ -4,11 +4,13 @@ import org.aing.danurirest.domain.space.dto.GetSpaceStatusByDeviceIdResponse
 import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.space.repository.SpaceRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GetSpaceStatusUsecase(
     private val spaceRepository: SpaceRepository,
 ) {
+    @Transactional(readOnly = true)
     fun execute(): List<GetSpaceStatusByDeviceIdResponse> {
         val deviceContextDto = PrincipalUtil.getContextDto()
         return spaceRepository.findSpacesWithAvailabilityByDeviceId(deviceContextDto.id!!).map {

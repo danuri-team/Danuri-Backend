@@ -10,16 +10,15 @@ import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.verify.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.Exception
 import java.util.*
 
 @Service
-@Transactional(rollbackFor = [Exception::class])
 class SendPasswordResetMessageUsecase(
     private val adminJpaRepository: AdminJpaRepository,
     private val verifyCodeRepository: VerifyCodeRepository,
     private val notificationService: NotificationService,
 ) {
+    @Transactional
     fun execute(request: AuthenticationRequest) {
         val admin: Optional<Admin> =
             adminJpaRepository.findByPhone(request.phone)
