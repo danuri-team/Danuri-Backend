@@ -88,7 +88,7 @@ class CreateSpaceUsageUsecase(
             usageHistoryJpaRepository.findUsagesBySpaceAndTimeRange(
                 spaceId = spaceId,
                 startTime = now,
-                endTime = endTime.plusMinutes(USAGE_DURATION_MINUTES),
+                endTime = endTime,
             )
 
         val isOverlapping = currentUsages.isNotEmpty()
