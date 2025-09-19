@@ -34,5 +34,6 @@ class Rental(
     fun markReturned(returnedAt: LocalDateTime) {
         this.returnedQuantity = this.quantity
         this.returnedAt = returnedAt
+        this.status = RentalStatus.RETURNED
     }
 }
