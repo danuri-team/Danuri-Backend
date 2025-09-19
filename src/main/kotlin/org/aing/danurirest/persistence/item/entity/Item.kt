@@ -41,10 +41,12 @@ class Item(
         this.availableQuantity += quantity
 
         val hasStock = availableQuantity > 0
-        val invalidNotAvailable = availableQuantity != 0 && status == ItemStatus.NOT_AVAILABLE
+        val manuallyNotAvailable = status == ItemStatus.NOT_AVAILABLE
 
-        if (hasStock || !invalidNotAvailable) {
+        if (hasStock && !manuallyNotAvailable) {
             this.status = ItemStatus.AVAILABLE
+        } else if (!hasStock) {
+            this.status = ItemStatus.NOT_AVAILABLE
         }
     }
 }
