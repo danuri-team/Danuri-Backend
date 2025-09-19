@@ -74,7 +74,7 @@ class CreateSpaceUsageUsecase(
     ) {
         val nowTime = now.toLocalTime()
 
-        if (nowTime.isAfter(space.startAt) && nowTime.isBefore(space.endAt)) {
+        if (!(nowTime.isAfter(space.startAt) && nowTime.isBefore(space.endAt))) {
             throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
         }
     }
