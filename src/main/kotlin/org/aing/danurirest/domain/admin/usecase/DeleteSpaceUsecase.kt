@@ -15,14 +15,8 @@ class DeleteSpaceUsecase(
     fun execute(spaceId: UUID) {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
-        val space =
-            spaceJpaRepository
-                .findById(spaceId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
-
-        if (space.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+        val space = spaceJpaRepository.findByIdAndCompanyId(spaceId, adminCompanyId)
+            ?: throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
 
         spaceJpaRepository.delete(space)
     }

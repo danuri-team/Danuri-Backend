@@ -6,4 +6,5 @@ import java.util.UUID
 
 interface SpaceJpaRepository : JpaRepository<Space, UUID> {
     fun findAllByCompanyId(companyId: UUID): List<Space>
+    fun findByIdAndCompanyId(id: UUID, companyId: UUID): Space?
 }

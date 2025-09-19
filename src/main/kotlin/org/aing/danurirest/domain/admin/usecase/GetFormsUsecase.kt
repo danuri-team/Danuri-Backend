@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(readOnly = true)
 class GetFormsUsecase(
     private val formJpaRepository: FormJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional(readOnly = true)
     fun execute(): List<FormResponse> {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
         val forms = formJpaRepository.findAllByCompanyId(adminCompanyId)

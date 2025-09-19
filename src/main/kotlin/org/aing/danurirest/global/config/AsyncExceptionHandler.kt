@@ -12,6 +12,8 @@ class AsyncExceptionHandler : AsyncUncaughtExceptionHandler {
         method: Method,
         vararg params: Any?,
     ) {
-        log.error("Async Pool 에서 예외 발생. 메서드: {}, 파라미터: {}", method.name, params, e)
+        if (log.isDebugEnabled) {
+            log.error("비동기 작업 중 예외 발생. 메서드: {}, 파라미터: {}", method.name, params, e)
+        }
     }
 }

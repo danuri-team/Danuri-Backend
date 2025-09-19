@@ -11,4 +11,9 @@ interface DeviceJpaRepository : JpaRepository<Device, UUID> {
     fun findAllByCompanyId(
         @Param("companyId") companyId: UUID,
     ): List<Device>
+
+    fun findByIdAndCompanyId(
+        id: UUID,
+        companyId: UUID,
+    ): Device?
 }

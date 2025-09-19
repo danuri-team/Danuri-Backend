@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
-@Transactional
 class UpdateItemUsecase(
     private val itemJpaRepository: ItemJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional
     fun execute(
         itemId: UUID,
         request: ItemUpdateRequest,
@@ -24,14 +24,10 @@ class UpdateItemUsecase(
 
         val item =
             itemJpaRepository
-                .findByIdWithLock(itemId)
+                .findByIdAndCompanyIdWithLock(itemId, adminCompanyId)
 
         if (item == null) {
             throw CustomException(CustomErrorCode.NOT_FOUND_ITEM)
-        }
-
-        if (item.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
         item.name = request.name

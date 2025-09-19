@@ -13,11 +13,11 @@ import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 @Service
-@Transactional
 class FetchCheckOutUsecase(
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
     private val notificationService: NotificationService,
 ) {
+    @Transactional
     fun execute(request: QrUsageIdRequest) {
         val now = LocalDateTime.now()
 
@@ -46,7 +46,7 @@ class FetchCheckOutUsecase(
                             .truncatedTo(ChronoUnit.SECONDS)
                             .toString(),
                     endTime =
-                        result.endAt!!
+                        result.endAt
                             .toLocalTime()
                             .truncatedTo(ChronoUnit.SECONDS)
                             .toString(),

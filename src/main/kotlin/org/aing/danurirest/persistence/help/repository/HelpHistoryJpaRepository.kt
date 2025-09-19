@@ -6,4 +6,5 @@ import java.util.*
 
 interface HelpHistoryJpaRepository : JpaRepository<HelpHistory, UUID> {
     fun findAllByCompanyId(companyId: UUID): List<HelpHistory>
+    fun findByIdAndCompanyId(id: UUID, companyId: UUID): HelpHistory?
 }

@@ -9,7 +9,6 @@ import org.aing.danurirest.persistence.company.repository.CompanyJpaRepository
 import org.aing.danurirest.persistence.form.entity.Form
 import org.aing.danurirest.persistence.form.repository.FormJpaRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CreateFormUsecase(
@@ -17,7 +16,6 @@ class CreateFormUsecase(
     private val companyRepository: CompanyJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
-    @Transactional
     fun execute(request: FormCreateRequest): FormResponse {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
         val company =

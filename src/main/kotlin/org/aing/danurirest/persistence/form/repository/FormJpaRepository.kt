@@ -11,4 +11,6 @@ interface FormJpaRepository : JpaRepository<Form, UUID> {
     fun existsFormByCompanyIdAndSignUpFormTrue(companyId: UUID): Boolean
 
     fun findByCompanyIdAndSignUpFormTrue(companyId: UUID): Optional<Form>
+
+    fun findByIdAndCompanyId(id: UUID, companyId: UUID): Form?
 }

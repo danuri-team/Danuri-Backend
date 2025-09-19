@@ -13,4 +13,6 @@ interface AdminJpaRepository : JpaRepository<Admin, UUID> {
     fun findAllByCompanyId(companyId: UUID): List<Admin>
 
     fun findByPhone(phone: String): Optional<Admin>
+
+    fun findByIdAndCompanyId(id: UUID, companyId: UUID): Admin?
 }
