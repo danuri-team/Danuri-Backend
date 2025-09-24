@@ -25,7 +25,7 @@ class SecurityConfiguration(
             .csrf { it.disable() }
             .formLogin { it.disable() }
             .cors {
-                corsConfig()
+                it.configurationSource(corsConfig())
             }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
@@ -57,6 +57,7 @@ class SecurityConfiguration(
                 it.requestMatchers("/admin/**").hasRole("ADMIN")
 
                 // 그 외
+                it.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 it.anyRequest().permitAll()
             }.build()
 
