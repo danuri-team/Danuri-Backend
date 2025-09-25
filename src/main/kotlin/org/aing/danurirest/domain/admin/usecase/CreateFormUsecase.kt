@@ -36,6 +36,8 @@ class CreateFormUsecase(
             )
 
         val savedForm = formJpaRepository.save(form)
-        return FormResponse.from(savedForm)
+        return FormResponse.from(
+            savedForm,
+        )
     }
 }

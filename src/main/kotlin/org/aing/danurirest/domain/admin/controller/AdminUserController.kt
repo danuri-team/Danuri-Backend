@@ -1,6 +1,7 @@
 package org.aing.danurirest.domain.admin.controller
 
 import jakarta.validation.Valid
+import org.aing.danurirest.domain.admin.dto.GetUsersAndFormHeaderList
 import org.aing.danurirest.domain.admin.dto.UserRequest
 import org.aing.danurirest.domain.admin.dto.UserResponse
 import org.aing.danurirest.domain.admin.usecase.CreateUserUsecase
@@ -62,7 +63,7 @@ class AdminUserController(
         }
 
     @GetMapping
-    fun getCurrentCompanyUsers(): ResponseEntity<List<UserResponse>> =
+    fun getCurrentCompanyUsers(): ResponseEntity<GetUsersAndFormHeaderList> =
         getCompanyUsersUsecase.execute().run {
             ResponseEntity.ok(this)
         }

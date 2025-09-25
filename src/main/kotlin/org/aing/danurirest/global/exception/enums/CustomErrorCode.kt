@@ -64,6 +64,7 @@ enum class CustomErrorCode(
 
     // Form
     FORM_IS_NOT_SETUP(HttpStatus.NOT_FOUND, "폼 설정이 되어 있지 않습니다."),
+    FORM_IS_NOT_VALID(HttpStatus.INTERNAL_SERVER_ERROR, "폼이 올바르게 저장되지 않았어요. 문의를 통해 해결해주세요."),
     NOT_SIGNED_UP(HttpStatus.BAD_REQUEST, "이용 전 회원가입 폼 입력은 필수입니다."),
     FORM_ALREADY_SETUP(HttpStatus.CONFLICT, "이미 가입 폼 설정이 되어 있습니다. 해제 후 다시 설정 해주세요."),
     FORM_ALREADY_CREATED(HttpStatus.CONFLICT, "이미 폼 입력이 완료되어 있습니다."),
