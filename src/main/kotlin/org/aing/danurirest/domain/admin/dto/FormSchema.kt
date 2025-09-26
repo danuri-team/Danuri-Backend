@@ -7,7 +7,7 @@ data class FormSchema(
     val key: String,
     val type: FormType,
     val label: String,
-    val options: List<FormSchemaOptions>,
+    val options: List<FormSchemaOptions>?,
     val placeholder: String?,
     val isRequired: Boolean,
     val isMultiSelect: Boolean,
