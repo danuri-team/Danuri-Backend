@@ -9,7 +9,6 @@ import org.aing.danurirest.persistence.device.entity.Device
 import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
 import org.aing.danurirest.persistence.user.Role
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RegisterDeviceUsecase(
@@ -17,12 +16,7 @@ class RegisterDeviceUsecase(
     private val companyJpaRepository: CompanyJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
-    @Transactional
     fun execute(registerDeviceRequest: RegisterDeviceRequest) {
-        if (deviceJpaRepository.findById(registerDeviceRequest.deviceId).isPresent) {
-            throw CustomException(CustomErrorCode.DEVICE_ALREADY_REGISTERED)
-        }
-
         val companyId = getAdminCompanyIdUsecase.execute()
 
         val company =

@@ -13,17 +13,12 @@ class DeleteDeviceUsecase(
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     fun execute(deviceId: UUID) {
-        val device =
-            deviceJpaRepository
-                .findById(deviceId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_DEVICE) }
-
         val companyId = getAdminCompanyIdUsecase.execute()
 
-        if (device.company.id != companyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+        val device =
+            deviceJpaRepository.findByIdAndCompanyId(deviceId, companyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND_DEVICE)
 
-        deviceJpaRepository.deleteById(deviceId)
+        deviceJpaRepository.delete(device)
     }
 }

@@ -7,12 +7,14 @@ import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
 import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GetItemListUsecase(
     private val itemJpaRepository: ItemJpaRepository,
     private val deviceJpaRepository: DeviceJpaRepository,
 ) {
+    @Transactional(readOnly = true)
     fun execute(): List<ItemListResponse> {
         val deviceContextDto = PrincipalUtil.getContextDto()
         val device =

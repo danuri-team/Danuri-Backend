@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-@Transactional
 class UpdateFormUsecase(
     private val formJpaRepository: FormJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional
     fun execute(
         formId: UUID,
         request: FormUpdateRequest,
@@ -23,13 +23,8 @@ class UpdateFormUsecase(
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val form =
-            formJpaRepository
-                .findById(formId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND) }
-
-        if (form.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+            formJpaRepository.findByIdAndCompanyId(formId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND)
 
         if (request.isSignUpForm && formJpaRepository.existsFormByCompanyIdAndSignUpFormTrue(adminCompanyId) && !form.signUpForm) {
             throw CustomException(CustomErrorCode.FORM_ALREADY_SETUP)

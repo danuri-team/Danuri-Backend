@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class CreateUsageHistoryUsecase(
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
     private val userRepository: UserJpaRepository,
     private val spaceJpaRepository: SpaceJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional
     fun execute(request: UsageHistoryCreateRequest) {
         if (request.startAt.isAfter(request.endAt)) {
             throw CustomException(CustomErrorCode.VALIDATION_ERROR)
@@ -27,22 +27,12 @@ class CreateUsageHistoryUsecase(
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val user =
-            userRepository
-                .findById(request.userId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
-
-        if (user.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+            userRepository.findByIdAndCompanyId(request.userId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND_USER)
 
         val space =
-            spaceJpaRepository
-                .findById(request.spaceId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_SPACE) }
-
-        if (space.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+            spaceJpaRepository.findByIdAndCompanyId(request.spaceId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND_SPACE)
 
         val usageHistory =
             UsageHistory(

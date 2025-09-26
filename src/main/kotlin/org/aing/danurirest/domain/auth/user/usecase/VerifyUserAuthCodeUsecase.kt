@@ -6,39 +6,27 @@ import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider
 import org.aing.danurirest.global.security.jwt.enum.TokenType
+import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
 import org.aing.danurirest.persistence.user.Role
-import org.aing.danurirest.persistence.user.repository.UserAuthCodeJpaRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
+import org.aing.danurirest.persistence.verify.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 class VerifyUserAuthCodeUsecase(
     private val userJpaRepository: UserJpaRepository,
-    private val userAuthCodeJpaRepository: UserAuthCodeJpaRepository,
+    private val refreshTokenRepository: RefreshTokenRepository,
     private val jwtProvider: JwtProvider,
+    private val verifyCodeRepository: VerifyCodeRepository,
 ) {
     @Transactional
     fun execute(request: AuthorizationCodeRequest): SignInResponse {
-        val userAuthCodes = userAuthCodeJpaRepository.findByPhone(request.phone)
+        val verifyCode = verifyCodeRepository.consume(request.authCode) ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
 
-        if (userAuthCodes.isEmpty()) {
+        if (verifyCode != request.phone) {
             throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
         }
-
-        val now = LocalDateTime.now()
-        val expiredCodes = userAuthCodes.filter { now.isAfter(it.expiredAt) }
-        if (expiredCodes.isNotEmpty()) {
-            expiredCodes.forEach { userAuthCodeJpaRepository.delete(it) }
-        }
-
-        userAuthCodes
-            .filter { !now.isAfter(it.expiredAt) }
-            .find { it.authCode == request.authCode }
-            ?: throw CustomException(CustomErrorCode.INVALID_AUTH_CODE)
-
-        userAuthCodeJpaRepository.deleteByPhone(request.phone)
 
         val user =
             userJpaRepository
@@ -58,6 +46,11 @@ class VerifyUserAuthCodeUsecase(
                 tokenType = TokenType.REFRESH_TOKEN,
                 role = Role.ROLE_USER,
             )
+
+        refreshTokenRepository.save(
+            userId = user.id!!.toString(),
+            refreshToken = refreshToken.token,
+        )
 
         return SignInResponse(accessToken, refreshToken)
     }

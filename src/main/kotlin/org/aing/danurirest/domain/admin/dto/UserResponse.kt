@@ -7,6 +7,7 @@ import java.util.UUID
 data class UserResponse(
     val id: UUID,
     val phone: String,
+    val signUpFormSchema: String?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime?,
     val usageCount: Int,
@@ -16,6 +17,7 @@ data class UserResponse(
             UserResponse(
                 id = entity.id!!,
                 phone = entity.phone,
+                signUpFormSchema = entity.signUpForm?.result,
                 createdAt = entity.createdAt!!,
                 updatedAt = entity.updatedAt,
                 usageCount = entity.usages.size,

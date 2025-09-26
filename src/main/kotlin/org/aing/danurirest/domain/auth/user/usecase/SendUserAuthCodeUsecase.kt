@@ -7,40 +7,27 @@ import org.aing.danurirest.global.third_party.notification.service.NotificationS
 import org.aing.danurirest.global.third_party.notification.template.MessageTemplate
 import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
 import org.aing.danurirest.global.util.GenerateRandomCode
-import org.aing.danurirest.persistence.user.entity.UserAuthCode
-import org.aing.danurirest.persistence.user.repository.UserAuthCodeJpaRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
+import org.aing.danurirest.persistence.verify.VerifyCodeRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class SendUserAuthCodeUsecase(
     private val userJpaRepository: UserJpaRepository,
     private val notificationService: NotificationService,
-    private val userAuthCodeJpaRepository: UserAuthCodeJpaRepository,
+    private val verifyCodeRepository: VerifyCodeRepository,
 ) {
-    companion object {
-        private const val AUTH_CODE_EXPIRE_MINUTES = 5L
-    }
-
     fun execute(request: AuthenticationRequest) {
         val user = userJpaRepository.findByPhone(request.phone).orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_USER) }
 
-        userAuthCodeJpaRepository.deleteByPhone(request.phone)
-
         val authCode = GenerateRandomCode.execute()
-        val expiredAt = LocalDateTime.now().plusMinutes(AUTH_CODE_EXPIRE_MINUTES)
 
-        val userAuthCode =
-            UserAuthCode(
-                phone = request.phone,
-                authCode = authCode,
-                expiredAt = expiredAt,
-            )
-
-        userAuthCodeJpaRepository.save(userAuthCode)
+        verifyCodeRepository.save(
+            phoneNumber = request.phone,
+            code = authCode,
+        )
 
         notificationService.sendNotification(
             toMessage = request.phone,

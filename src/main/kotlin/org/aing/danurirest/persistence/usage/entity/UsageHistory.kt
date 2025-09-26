@@ -31,6 +31,6 @@ class UsageHistory(
     val rental: List<Rental> = emptyList(),
     @Column(name = "start_at", nullable = false)
     val startAt: LocalDateTime,
-    @Column(name = "end_at", nullable = true)
+    @Column(name = "end_at", nullable = false)
     var endAt: LocalDateTime,
 ) : BaseEntity()

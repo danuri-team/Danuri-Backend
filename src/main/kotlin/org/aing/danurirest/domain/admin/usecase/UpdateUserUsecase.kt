@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
-@Transactional
 class UpdateUserUsecase(
     private val userJpaRepository: UserJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional
     fun execute(
         userId: UUID,
         request: UserRequest,
@@ -22,18 +22,13 @@ class UpdateUserUsecase(
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val user =
-            userJpaRepository
-                .findById(userId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND_USER) }
-
-        if (user.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+            userJpaRepository.findByIdAndCompanyId(userId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND_USER)
 
         if (user.phone != request.phone) {
             userJpaRepository
                 .findByPhoneAndCompanyId(request.phone, user.company.id!!)
-                .ifPresent { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
+                ?.let { throw CustomException(CustomErrorCode.DUPLICATE_USER) }
         }
 
         user.phone = request.phone

@@ -15,38 +15,32 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-@Transactional
 class CreateRentalUsecase(
     private val rentalJpaRepository: RentalJpaRepository,
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
     private val itemRepository: ItemJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional
     fun execute(request: CreateRentalRequest) {
-        val usageHistory =
-            usageHistoryJpaRepository.findById(request.usageId).orElseThrow {
-                throw CustomException(CustomErrorCode.NOT_USAGE_FOUND)
-            }
+        val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
-        usageHistory.endAt?.let {
+        val usageHistory =
+            usageHistoryJpaRepository.findByIdAndUserCompanyId(request.usageId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_USAGE_FOUND)
+
+        usageHistory.endAt.let {
             if (it < LocalDateTime.now()) {
                 throw CustomException(CustomErrorCode.USAGE_EXPIRED)
             }
         }
 
         val item =
-            itemRepository
-                .findById(request.itemId)
-                .orElseThrow { CustomException(CustomErrorCode.NOT_FOUND_ITEM) }
+            itemRepository.findByIdAndCompanyIdWithLock(request.itemId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND_ITEM)
 
         if (item.status == ItemStatus.NOT_AVAILABLE || item.availableQuantity < request.quantity) {
             throw CustomException(CustomErrorCode.ITEM_NOT_AVAILABLE)
-        }
-
-        val adminCompanyId = getAdminCompanyIdUsecase.execute()
-
-        if (item.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
         }
 
         rentalJpaRepository.save(

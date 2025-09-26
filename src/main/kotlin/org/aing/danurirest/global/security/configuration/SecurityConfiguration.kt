@@ -1,5 +1,3 @@
-@file:Suppress("ktlint:standard:filename")
-
 package org.aing.danurirest.global.security.configuration
 
 import org.aing.danurirest.global.security.filter.JwtFilter
@@ -27,7 +25,7 @@ class SecurityConfiguration(
             .csrf { it.disable() }
             .formLogin { it.disable() }
             .cors {
-                corsConfig()
+                it.configurationSource(corsConfig())
             }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
@@ -49,7 +47,7 @@ class SecurityConfiguration(
                 it.requestMatchers(HttpMethod.GET, "/form").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.POST, "/item").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.DELETE, "/item", "/usage").hasRole("DEVICE")
-                it.requestMatchers("/help/**").hasRole("DEVICE")
+//                it.requestMatchers("/help/**").hasRole("DEVICE") -> TODO // 운영 계획 다시 논의 필요
 
                 // USER
                 it.requestMatchers(HttpMethod.POST, "/usage").hasRole("USER")
@@ -59,6 +57,7 @@ class SecurityConfiguration(
                 it.requestMatchers("/admin/**").hasRole("ADMIN")
 
                 // 그 외
+                it.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 it.anyRequest().permitAll()
             }.build()
 

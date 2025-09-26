@@ -10,22 +10,17 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
 @Service
-@Transactional(readOnly = true)
 class GetFormUsecase(
     private val formJpaRepository: FormJpaRepository,
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
+    @Transactional(readOnly = true)
     fun execute(formId: UUID): FormResponse {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
         val form =
-            formJpaRepository
-                .findById(formId)
-                .orElseThrow { throw CustomException(CustomErrorCode.NOT_FOUND) }
-
-        if (form.company.id != adminCompanyId) {
-            throw CustomException(CustomErrorCode.COMPANY_MISMATCH)
-        }
+            formJpaRepository.findByIdAndCompanyId(formId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND)
 
         return FormResponse.from(form)
     }

@@ -36,4 +36,17 @@ class Item(
     val company: Company,
     @OneToMany(mappedBy = "item", cascade = [CascadeType.ALL], orphanRemoval = true)
     val rentals: MutableList<Rental> = mutableListOf(),
-) : BaseEntity()
+) : BaseEntity() {
+    fun returnQuantity(quantity: Int) {
+        this.availableQuantity += quantity
+
+        val hasStock = availableQuantity > 0
+        val manuallyNotAvailable = status == ItemStatus.NOT_AVAILABLE
+
+        if (hasStock && !manuallyNotAvailable) {
+            this.status = ItemStatus.AVAILABLE
+        } else if (!hasStock) {
+            this.status = ItemStatus.NOT_AVAILABLE
+        }
+    }
+}

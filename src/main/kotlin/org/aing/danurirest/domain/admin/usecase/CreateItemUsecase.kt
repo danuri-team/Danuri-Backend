@@ -10,10 +10,8 @@ import org.aing.danurirest.persistence.item.ItemStatus
 import org.aing.danurirest.persistence.item.entity.Item
 import org.aing.danurirest.persistence.item.repository.ItemJpaRepository
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class CreateItemUsecase(
     private val itemJpaRepository: ItemJpaRepository,
     private val companyRepository: CompanyJpaRepository,

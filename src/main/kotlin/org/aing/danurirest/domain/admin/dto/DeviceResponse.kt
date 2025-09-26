@@ -6,6 +6,7 @@ import java.util.UUID
 
 data class DeviceResponse(
     val id: UUID,
+    val name: String,
     val createdAt: LocalDateTime,
 ) {
     companion object {
@@ -13,6 +14,7 @@ data class DeviceResponse(
             DeviceResponse(
                 id = device.id!!,
                 createdAt = device.createdAt!!,
+                name = device.name,
             )
     }
 }

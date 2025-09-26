@@ -1,18 +1,20 @@
 package org.aing.danurirest.domain.admin.usecase
 
-import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
+import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GetUsageHistoriesUsecase(
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
     private val usageHistoryRepository: UsageHistoryRepository,
 ) {
+    @Transactional(readOnly = true)
     fun execute(request: UsageHistorySearchRequest): List<UsageHistoryResponse> {
         val companyId = getAdminCompanyIdUsecase.execute()
 
