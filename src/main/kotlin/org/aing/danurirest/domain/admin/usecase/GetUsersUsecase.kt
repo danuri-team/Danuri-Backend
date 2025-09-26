@@ -32,13 +32,12 @@ class GetUsersUsecase(
                     companyId,
                 ).orElseThrow { CustomException(CustomErrorCode.FORM_IS_NOT_SETUP) }
 
-        val json: List<FormSchema> = emptyList()
-
-        try {
-            objectMapper.readValue<List<FormSchema>>(form.formSchema)
-        } catch (e: JsonProcessingException) {
-            throw CustomException(CustomErrorCode.FORM_IS_NOT_VALID)
-        }
+        val json: List<FormSchema> =
+            try {
+                objectMapper.readValue<List<FormSchema>>(form.formSchema)
+            } catch (e: JsonProcessingException) {
+                throw CustomException(CustomErrorCode.FORM_IS_NOT_VALID)
+            }
 
         val headerList = json.map { it.label }
 
