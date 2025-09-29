@@ -75,6 +75,7 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.13.13")
 
     // Root
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -95,4 +96,8 @@ allOpen {
 
 tasks.getByName("jar") {
     enabled = false
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
 }
