@@ -100,6 +100,10 @@ sentry {
     authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
 
+tasks.named("generateSentryBundleIdJava") {
+    dependsOn("kspKotlin")
+}
+
 tasks.getByName("jar") {
     enabled = false
 }
