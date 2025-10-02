@@ -93,6 +93,13 @@ allOpen {
     annotation("jakarta.persistence.Embeddable")
 }
 
+sentry {
+    includeSourceContext = true
+    org = "sentry"
+    projectName = "main-backend"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+}
+
 tasks.getByName("jar") {
     enabled = false
 }
