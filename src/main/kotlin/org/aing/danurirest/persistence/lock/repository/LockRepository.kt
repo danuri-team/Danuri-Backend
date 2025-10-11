@@ -11,7 +11,7 @@ class LockRepository(
     fun lock(key: LockKeys): Boolean =
         redisTemplate
             .opsForValue()
-            .setIfAbsent(key.toString(), "lock", Duration.ofSeconds(3))
+            .setIfAbsent(key.toString(), "lock", Duration.ofMinutes(1))
             ?: false
 
     fun unlock(key: LockKeys): Boolean = redisTemplate.delete(key.toString())
