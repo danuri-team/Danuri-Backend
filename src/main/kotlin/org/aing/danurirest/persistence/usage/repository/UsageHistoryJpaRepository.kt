@@ -35,4 +35,9 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
         @Param("id") id: UUID,
         @Param("companyId") companyId: UUID,
     ): UsageHistory?
+
+    fun findByEndAtBetweenAndNotifiedAtIsNull(
+        startTime: LocalDateTime,
+        endTime: LocalDateTime,
+    ): List<UsageHistory>
 }
