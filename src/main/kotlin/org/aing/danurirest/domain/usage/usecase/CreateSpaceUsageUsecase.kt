@@ -50,7 +50,7 @@ class CreateSpaceUsageUsecase(
 
         checkUserCurrentUsage(userId)
 
-        checkSpaceAvailableTime(space, startTime)
+        checkSpaceAvailableTime(space, startTime, endTime)
 
         if (!space.allowOverlap) {
             checkSpaceCurrentUsage(spaceId, startTime, endTime)
@@ -77,11 +77,13 @@ class CreateSpaceUsageUsecase(
 
     private fun checkSpaceAvailableTime(
         space: Space,
-        now: LocalDateTime,
+        startTime: LocalDateTime,
+        endTime: LocalDateTime,
     ) {
-        val nowTime = now.toLocalTime()
+        val startLocalTime = startTime.toLocalTime()
+        val endLocalTime = endTime.toLocalTime()
 
-        if (!(nowTime.isAfter(space.startAt) && nowTime.isBefore(space.endAt))) {
+        if (startLocalTime < space.startAt || (endLocalTime > space.endAt && endLocalTime != LocalTime.MIDNIGHT)) {
             throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
         }
     }
