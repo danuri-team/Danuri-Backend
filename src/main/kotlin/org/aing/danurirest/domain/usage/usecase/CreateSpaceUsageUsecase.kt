@@ -47,7 +47,9 @@ class CreateSpaceUsageUsecase(
 
         checkSpaceAvailableTime(space, now)
 
-        checkSpaceCurrentUsage(spaceId, now, endTime)
+        if (!space.allowOverlap) {
+            checkSpaceCurrentUsage(spaceId, now, endTime)
+        }
 
         createSpaceUsage(space, userId, now, endTime)
     }
