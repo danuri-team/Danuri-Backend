@@ -83,7 +83,11 @@ class CreateSpaceUsageUsecase(
         val startLocalTime = startTime.toLocalTime()
         val endLocalTime = endTime.toLocalTime()
 
-        if (startLocalTime < space.startAt || (endLocalTime > space.endAt && endLocalTime != LocalTime.MIDNIGHT)) {
+        if (startLocalTime < space.startAt || endLocalTime > space.endAt) {
+            throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
+        }
+
+        if (endLocalTime == LocalTime.MIDNIGHT && space.endAt != LocalTime.MIDNIGHT) {
             throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
         }
     }
