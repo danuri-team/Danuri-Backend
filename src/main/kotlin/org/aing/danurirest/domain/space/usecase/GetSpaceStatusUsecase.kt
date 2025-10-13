@@ -9,7 +9,6 @@ import org.aing.danurirest.persistence.space.repository.SpaceRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -19,15 +18,16 @@ class GetSpaceStatusUsecase(
 ) {
     @Transactional(readOnly = true)
     fun execute(): List<GetSpaceStatusByDeviceIdResponse> {
+        val now = LocalDateTime.now()
         val deviceContextDto = PrincipalUtil.getContextDto()
         val spacesWithBookings = spaceRepository.findSpacesWithBookingsByDeviceId(deviceContextDto.id!!)
-        val currentTime = LocalTime.now()
+        val currentTime = now.toLocalTime()
 
         return spacesWithBookings
             .filter { it.space.endAt > currentTime }
             .map { dto ->
-                val timeSlots = generateTimeSlots(dto.space, dto.bookedRanges)
-                val isAvailable = isCurrentlyAvailable(dto.space, dto.bookedRanges, currentTime)
+                val timeSlots = generateTimeSlots(dto.space, dto.bookedRanges, now)
+                val isAvailable = isCurrentlyAvailable(dto.space, dto.bookedRanges, now)
 
                 GetSpaceStatusByDeviceIdResponse.from(
                     entity = dto.space,
@@ -40,9 +40,9 @@ class GetSpaceStatusUsecase(
     private fun isCurrentlyAvailable(
         space: Space,
         bookedRanges: List<BookedTimeRange>,
-        currentTime: LocalTime,
+        now: LocalDateTime,
     ): Boolean {
-        if (currentTime !in space.startAt..space.endAt) {
+        if (now.toLocalTime() !in space.startAt..space.endAt) {
             return false
         }
 
@@ -50,7 +50,6 @@ class GetSpaceStatusUsecase(
             return true
         }
 
-        val now = LocalDateTime.now()
         return bookedRanges.none {
             now.isAfter(it.startTime) && now.isBefore(it.endTime)
         }
@@ -59,11 +58,10 @@ class GetSpaceStatusUsecase(
     private fun generateTimeSlots(
         space: Space,
         bookedRanges: List<BookedTimeRange>,
+        now: LocalDateTime,
     ): List<SpaceTimeSlot> {
         val slots = mutableListOf<SpaceTimeSlot>()
         val slotDuration = Duration.ofMinutes(30)
-        val now = LocalDateTime.now()
-        val today = LocalDate.now()
         val currentTimeRounded =
             now
                 .toLocalTime()
@@ -79,8 +77,8 @@ class GetSpaceStatusUsecase(
 
             val isBooked =
                 bookedRanges.any { booking ->
-                    val slotStart = LocalDateTime.of(today, currentTime)
-                    val slotEndTime = LocalDateTime.of(today, slotEnd)
+                    val slotStart = LocalDateTime.of(now.toLocalDate(), currentTime)
+                    val slotEndTime = LocalDateTime.of(now.toLocalDate(), slotEnd)
 
                     slotStart.isBefore(booking.endTime) && slotEndTime.isAfter(booking.startTime)
                 }
