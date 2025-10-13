@@ -21,7 +21,7 @@ class UsageController(
     @PostMapping
     fun useSpace(
         @RequestParam spaceId: UUID,
-        @RequestParam @DateTimeFormat(pattern = "kk:mm:ss") startAt: LocalTime,
+        @RequestParam @DateTimeFormat(pattern = "HH:mm:ss") startAt: LocalTime,
     ): ResponseEntity<Unit> =
         createSpaceUsageUsecase.execute(spaceId, startAt).run {
             ResponseEntity.noContent().build()
