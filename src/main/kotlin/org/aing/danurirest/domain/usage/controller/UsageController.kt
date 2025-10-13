@@ -5,8 +5,10 @@ import org.aing.danurirest.domain.usage.usecase.CreateSpaceUsageUsecase
 import org.aing.danurirest.domain.usage.usecase.FetchCheckOutUsecase
 import org.aing.danurirest.domain.usage.usecase.GetCurrentUsageInfoUsecase
 import org.aing.danurirest.persistence.usage.dto.CurrentUsageHistoryDto
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalTime
 import java.util.UUID
 
 @RestController
@@ -19,8 +21,9 @@ class UsageController(
     @PostMapping
     fun useSpace(
         @RequestParam spaceId: UUID,
+        @RequestParam @DateTimeFormat(pattern = "kk:mm:ss") startAt: LocalTime,
     ): ResponseEntity<Unit> =
-        createSpaceUsageUsecase.execute(spaceId).run {
+        createSpaceUsageUsecase.execute(spaceId, startAt).run {
             ResponseEntity.noContent().build()
         }
 
