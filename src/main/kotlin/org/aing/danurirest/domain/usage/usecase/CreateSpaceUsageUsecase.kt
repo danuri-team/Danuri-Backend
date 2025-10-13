@@ -80,14 +80,19 @@ class CreateSpaceUsageUsecase(
         startTime: LocalDateTime,
         endTime: LocalDateTime,
     ) {
-        val startLocalTime = startTime.toLocalTime()
-        val endLocalTime = endTime.toLocalTime()
+        val today = startTime.toLocalDate()
 
-        if (startLocalTime < space.startAt || endLocalTime > space.endAt) {
-            throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
-        }
+        val spaceStartTime = LocalDateTime.of(today, space.startAt)
+        val spaceEndTime = LocalDateTime.of(today, space.endAt)
 
-        if (endLocalTime == LocalTime.MIDNIGHT && space.endAt != LocalTime.MIDNIGHT) {
+        val adjustedSpaceEndTime =
+            if (space.endAt == LocalTime.MIDNIGHT || space.endAt < space.startAt) {
+                spaceEndTime.plusDays(1)
+            } else {
+                spaceEndTime
+            }
+
+        if (startTime < spaceStartTime || endTime > adjustedSpaceEndTime) {
             throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
         }
     }
