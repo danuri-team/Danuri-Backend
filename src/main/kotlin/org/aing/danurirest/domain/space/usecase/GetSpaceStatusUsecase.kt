@@ -67,31 +67,35 @@ class GetSpaceStatusUsecase(
                 .toLocalTime()
                 .let { LocalTime.of(it.hour, if (it.minute < 30) 0 else 30) }
 
-        var currentTime = maxOf(space.startAt, currentTimeRounded)
-        val threeHoursLater = currentTimeRounded.plusHours(3)
+        var currentSlot = now.toLocalDate().atTime(maxOf(space.startAt, currentTimeRounded))
+        val threeHoursLater = now.plusHours(3)
 
-        val endTime = minOf(threeHoursLater, space.endAt)
+        val spaceEndDateTime =
+            if (space.endAt <= space.startAt) {
+                now.toLocalDate().plusDays(1).atTime(space.endAt)
+            } else {
+                now.toLocalDate().atTime(space.endAt)
+            }
 
-        while (currentTime.plusMinutes(30) <= endTime) {
-            val slotEnd = currentTime.plus(slotDuration)
+        val endSlot = minOf(threeHoursLater, spaceEndDateTime)
+
+        while (currentSlot.plusMinutes(30) <= endSlot) {
+            val slotEnd = currentSlot.plus(slotDuration)
 
             val isBooked =
                 bookedRanges.any { booking ->
-                    val slotStart = LocalDateTime.of(now.toLocalDate(), currentTime)
-                    val slotEndTime = LocalDateTime.of(now.toLocalDate(), slotEnd)
-
-                    slotStart.isBefore(booking.endTime) && slotEndTime.isAfter(booking.startTime)
+                    currentSlot.isBefore(booking.endTime) && slotEnd.isAfter(booking.startTime)
                 }
 
             slots.add(
                 SpaceTimeSlot(
-                    startTime = currentTime,
-                    endTime = slotEnd,
+                    startTime = currentSlot.toLocalTime(),
+                    endTime = slotEnd.toLocalTime(),
                     isAvailable = !isBooked || space.allowOverlap,
                 ),
             )
 
-            currentTime = slotEnd
+            currentSlot = slotEnd
         }
 
         return slots
