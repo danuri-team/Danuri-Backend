@@ -27,29 +27,41 @@ class SpaceRepositoryImpl(
         val startOfDay = date.atStartOfDay()
         val endOfDay = date.atTime(LocalTime.MAX)
 
-        val results =
+        // 1. Space만 먼저 조회
+        val spaces =
             queryFactory
-                .select(space, usageHistory)
-                .from(space)
+                .selectFrom(space)
                 .join(device)
                 .on(device.company.eq(space.company))
-                .leftJoin(usageHistory)
-                .on(
-                    usageHistory.space.id.eq(space.id),
-                    usageHistory.startAt.between(startOfDay, endOfDay),
-                ).where(device.id.eq(deviceId))
+                .where(device.id.eq(deviceId))
                 .fetch()
 
-        return results
-            .groupBy { it.get(space)!! }
-            .map { (spaceEntity, tuples) ->
-                SpaceWithBookingsDto(
-                    space = spaceEntity,
-                    bookedRanges =
-                        tuples
-                            .mapNotNull { it.get(usageHistory) }
-                            .map { BookedTimeRange(it.startAt, it.endAt) },
-                )
-            }
+        if (spaces.isEmpty()) {
+            return emptyList()
+        }
+
+        // 2. 해당 Space들의 UsageHistory만 별도로 조회
+        val spaceIds = spaces.mapNotNull { it.id }
+        val usageHistories =
+            queryFactory
+                .selectFrom(usageHistory)
+                .where(
+                    usageHistory.space.id.`in`(spaceIds),
+                    usageHistory.startAt.between(startOfDay, endOfDay),
+                ).fetch()
+
+        // 3. Space ID로 그룹핑
+        val usagesBySpaceId = usageHistories.groupBy { it.space.id }
+
+        // 4. DTO 조합
+        return spaces.map { spaceEntity ->
+            SpaceWithBookingsDto(
+                space = spaceEntity,
+                bookedRanges =
+                    usagesBySpaceId[spaceEntity.id]
+                        ?.map { BookedTimeRange(it.startAt, it.endAt) }
+                        ?: emptyList(),
+            )
+        }
     }
 }
