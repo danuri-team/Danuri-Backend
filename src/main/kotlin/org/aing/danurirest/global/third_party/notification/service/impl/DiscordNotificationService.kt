@@ -35,7 +35,7 @@ class DiscordNotificationService(
         try {
             discordFeignClient.sendMessage(DiscordMessage(content = discordMessageContent))
         } catch (e: Exception) {
-            log.error("[비동기 작업 에러] 카카오톡 알림 발송에 실패했어요. ${e.message}")
+            log.error("[비동기 작업 에러] 디스코드 알림 발송에 실패했어요. ${e.message}")
             throw CustomException(CustomErrorCode.UNKNOWN_SERVER_ERROR)
         }
     }

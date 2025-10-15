@@ -17,7 +17,9 @@ import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.*
 
@@ -35,21 +37,26 @@ class CreateSpaceUsageUsecase(
     }
 
     @Transactional
-    fun execute(spaceId: UUID) {
+    fun execute(
+        spaceId: UUID,
+        reserveTime: LocalTime,
+    ) {
         val context = PrincipalUtil.getContextDto()
         val userId = context.id ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
 
         val space = findSpaceById(spaceId)
-        val now = LocalDateTime.now()
-        val endTime = now.plusMinutes(USAGE_DURATION_MINUTES)
+        val startTime = LocalDateTime.of(LocalDate.now(), reserveTime)
+        val endTime = startTime.plusMinutes(USAGE_DURATION_MINUTES)
 
         checkUserCurrentUsage(userId)
 
-        checkSpaceAvailableTime(space, now)
+        checkSpaceAvailableTime(space, startTime, endTime)
 
-        checkSpaceCurrentUsage(spaceId, now, endTime)
+        if (!space.allowOverlap) {
+            checkSpaceCurrentUsage(spaceId, startTime, endTime)
+        }
 
-        createSpaceUsage(space, userId, now, endTime)
+        createSpaceUsage(space, userId, startTime, endTime)
     }
 
     private fun findSpaceById(spaceId: UUID): Space =
@@ -70,11 +77,22 @@ class CreateSpaceUsageUsecase(
 
     private fun checkSpaceAvailableTime(
         space: Space,
-        now: LocalDateTime,
+        startTime: LocalDateTime,
+        endTime: LocalDateTime,
     ) {
-        val nowTime = now.toLocalTime()
+        val today = startTime.toLocalDate()
 
-        if (!(nowTime.isAfter(space.startAt) && nowTime.isBefore(space.endAt))) {
+        val spaceStartTime = LocalDateTime.of(today, space.startAt)
+        val spaceEndTime = LocalDateTime.of(today, space.endAt)
+
+        val adjustedSpaceEndTime =
+            if (space.endAt == LocalTime.MIDNIGHT || space.endAt < space.startAt) {
+                spaceEndTime.plusDays(1)
+            } else {
+                spaceEndTime
+            }
+
+        if (startTime < spaceStartTime || endTime > adjustedSpaceEndTime) {
             throw CustomException(CustomErrorCode.SPACE_NOT_AVAILABLE)
         }
     }

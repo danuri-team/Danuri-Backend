@@ -47,6 +47,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     runtimeOnly("com.mysql:mysql-connector-j")
+    implementation("org.flywaydb:flyway-mysql")
+    implementation("org.flywaydb:flyway-core")
     implementation("io.github.openfeign.querydsl:querydsl-core:6.11")
     ksp("io.github.openfeign.querydsl:querydsl-ksp-codegen:6.11")
     implementation("io.github.openfeign.querydsl:querydsl-jpa:6.11")
@@ -91,6 +93,17 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+sentry {
+    includeSourceContext = true
+    org = "sentry"
+    projectName = "main-backend"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+}
+
+tasks.named("generateSentryBundleIdJava") {
+    dependsOn("kspKotlin")
 }
 
 tasks.getByName("jar") {
