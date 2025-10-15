@@ -32,6 +32,10 @@ spring:
       port: ${REDIS_PORT}
       host: ${REDIS_HOST}
 
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
 management:
   metrics:
     tags:
@@ -75,7 +79,7 @@ spring:
       on-profile: dev
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 
 jwt:
@@ -91,7 +95,7 @@ spring:
       on-profile: prod
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
 
 jwt:
   access-token-key: ${ACCESS_TOKEN_KEY}
