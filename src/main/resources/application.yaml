@@ -10,12 +10,14 @@ spring:
     serialization:
       write-dates-as-timestamps: false
     date-format: yyyy-MM-dd'T'HH:mm:ss
+    time-zone: Asia/Seoul
 
   web:
     resources:
       add-mappings: false
 
   jpa:
+    open-in-view: false
     properties:
       hibernate:
         format_sql: true
@@ -26,11 +28,18 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
   data:
     redis:
       port: ${REDIS_PORT}
       host: ${REDIS_HOST}
+      timeout: 3000ms
 
 management:
   metrics:
@@ -49,6 +58,7 @@ sentry:
   max-request-body-size: always
   send-default-pii: true
   traces-sample-rate: 1.0
+  environment: ${spring.profiles.active}
 
 discord:
   name: discord-feign-client
@@ -103,3 +113,7 @@ jwt:
   refresh-token-key: ${REFRESH_TOKEN_KEY}
   access-token-expires: 1800000 # 30 minutes
   refresh-token-expires: 604800000 # 1 day
+
+
+sentry:
+  traces-sample-rate: 0.1
