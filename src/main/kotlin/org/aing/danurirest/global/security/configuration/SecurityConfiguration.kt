@@ -3,6 +3,7 @@ package org.aing.danurirest.global.security.configuration
 import org.aing.danurirest.global.security.filter.JwtFilter
 import org.aing.danurirest.global.security.handler.CustomAuthenticationEntryPoint
 import org.aing.danurirest.global.security.jwt.JwtProvider
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -18,6 +19,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class SecurityConfiguration(
     private val jwtProvider: JwtProvider,
     private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
+    @Value("\${cors.allowed-origins}")
+    private val allowedOrigins: String,
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain =
@@ -62,16 +65,43 @@ class SecurityConfiguration(
             }.build()
 
     fun corsConfig(): CorsConfigurationSource {
-        val corsConfigurationSource = CorsConfiguration()
-        corsConfigurationSource.addAllowedHeader("*")
-        corsConfigurationSource.addAllowedMethod("*")
-        corsConfigurationSource.addAllowedOriginPattern("*")
-        corsConfigurationSource.addExposedHeader("*")
-        corsConfigurationSource.allowCredentials = true
+        val corsConfiguration = CorsConfiguration()
+
+        corsConfiguration.allowedOrigins = listOf(allowedOrigins)
+
+        corsConfiguration.allowedMethods =
+            listOf(
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE",
+                "PATCH",
+                "OPTIONS",
+            )
+
+        corsConfiguration.allowedHeaders =
+            listOf(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers",
+            )
+
+        corsConfiguration.exposedHeaders =
+            listOf(
+                "Authorization",
+                "Content-Disposition",
+            )
+
+        corsConfiguration.maxAge = 3600L
+        corsConfiguration.allowCredentials = true
 
         val urlBasedCorsConfigurationSource = UrlBasedCorsConfigurationSource()
 
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfigurationSource)
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration)
         return urlBasedCorsConfigurationSource
     }
 }
