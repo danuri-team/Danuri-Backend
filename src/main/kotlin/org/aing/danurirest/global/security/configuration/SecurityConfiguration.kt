@@ -20,7 +20,7 @@ class SecurityConfiguration(
     private val jwtProvider: JwtProvider,
     private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
     @Value("\${cors.allowed-origins}")
-    private val allowedOrigins: String,
+    private val allowedOrigins: List<String>,
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain =
@@ -67,7 +67,7 @@ class SecurityConfiguration(
     fun corsConfig(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration()
 
-        corsConfiguration.allowedOrigins = listOf(allowedOrigins)
+        corsConfiguration.allowedOriginPatterns = allowedOrigins
 
         corsConfiguration.allowedMethods =
             listOf(
