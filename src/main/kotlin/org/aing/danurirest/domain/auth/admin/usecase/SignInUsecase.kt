@@ -1,6 +1,8 @@
 package org.aing.danurirest.domain.auth.admin.usecase
 
 import io.github.bucket4j.Bucket
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.global.exception.CustomException
@@ -22,7 +24,10 @@ class SignInUsecase(
     private val loginBucket: Bucket,
     private val refreshTokenRepository: RefreshTokenRepository,
 ) {
-    fun execute(request: SignInRequest): SignInResponse {
+    fun execute(
+        request: SignInRequest,
+        response: HttpServletResponse,
+    ) {
         checkRateLimit()
 
         val admin = findAdminByEmail(request.email)
@@ -32,7 +37,26 @@ class SignInUsecase(
             throw CustomException(CustomErrorCode.NEED_COMPANY_APPROVE)
         }
 
-        return generateTokens(admin)
+        val token = generateTokens(admin)
+
+        val accessTokenCookie =
+            Cookie("accessToken", token.accessToken.token).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/"
+                maxAge = 3600
+            }
+
+        val refreshTokenCookie =
+            Cookie("refreshToken", token.refreshToken?.token).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/"
+                maxAge = 604800
+            }
+
+        response.addCookie(accessTokenCookie)
+        response.addCookie(refreshTokenCookie)
     }
 
     private fun checkRateLimit() {
