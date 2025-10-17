@@ -45,6 +45,7 @@ class SignInUsecase(
                 secure = true
                 path = "/"
                 maxAge = 3600
+                setAttribute("SameSite", "Strict")
             }
 
         val refreshTokenCookie =
@@ -53,6 +54,7 @@ class SignInUsecase(
                 secure = true
                 path = "/"
                 maxAge = 604800
+                setAttribute("SameSite", "Strict")
             }
 
         response.addCookie(accessTokenCookie)
