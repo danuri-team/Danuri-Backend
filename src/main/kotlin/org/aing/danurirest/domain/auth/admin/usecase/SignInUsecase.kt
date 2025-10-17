@@ -1,6 +1,8 @@
 package org.aing.danurirest.domain.auth.admin.usecase
 
 import io.github.bucket4j.Bucket
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.global.exception.CustomException
@@ -11,6 +13,7 @@ import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -21,8 +24,15 @@ class SignInUsecase(
     private val passwordEncoder: PasswordEncoder,
     private val loginBucket: Bucket,
     private val refreshTokenRepository: RefreshTokenRepository,
+    @Value("\${jwt.access-token-expires}")
+    private val accessTokenExpires: Long,
+    @Value("\${jwt.refresh-token-expires}")
+    private val refreshTokenExpires: Long,
 ) {
-    fun execute(request: SignInRequest): SignInResponse {
+    fun execute(
+        request: SignInRequest,
+        response: HttpServletResponse,
+    ) {
         checkRateLimit()
 
         val admin = findAdminByEmail(request.email)
@@ -32,7 +42,28 @@ class SignInUsecase(
             throw CustomException(CustomErrorCode.NEED_COMPANY_APPROVE)
         }
 
-        return generateTokens(admin)
+        val token = generateTokens(admin)
+
+        val accessTokenCookie =
+            Cookie("accessToken", token.accessToken.token).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/"
+                maxAge = accessTokenExpires.toInt()
+                setAttribute("SameSite", "Strict")
+            }
+
+        val refreshTokenCookie =
+            Cookie("refreshToken", token.refreshToken?.token).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/"
+                maxAge = refreshTokenExpires.toInt()
+                setAttribute("SameSite", "Strict")
+            }
+
+        response.addCookie(accessTokenCookie)
+        response.addCookie(refreshTokenCookie)
     }
 
     private fun checkRateLimit() {

@@ -1,6 +1,9 @@
 package org.aing.danurirest.domain.auth.common.usecase
 
 import io.jsonwebtoken.Claims
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
@@ -12,6 +15,7 @@ import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
 import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
 import org.aing.danurirest.persistence.user.Role
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -22,18 +26,32 @@ class TokenRefreshUsecase(
     private val deviceJpaRepository: DeviceJpaRepository,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val userJpaRepository: UserJpaRepository,
+    @Value("\${jwt.access-token-expires}")
+    private val accessTokenExpires: Long,
+    @Value("\${jwt.refresh-token-expires}")
+    private val refreshTokenExpires: Long,
 ) {
-    fun execute(refreshToken: String): SignInResponse {
+    fun execute(
+        refreshToken: String?,
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+    ): SignInResponse {
+        val token = refreshToken ?: request.cookies?.firstOrNull { it.name == "refreshToken" }?.value
+
+        if (token.isNullOrBlank()) {
+            throw CustomException(CustomErrorCode.MISSING_TOKEN)
+        }
+
         val claims: Claims =
             jwtProvider.getPayload(
-                token = refreshToken,
+                token = token,
                 tokenType = TokenType.REFRESH_TOKEN,
             )
 
         val role = Role.valueOf(claims["role"] as String)
         val userId = UUID.fromString(claims.subject)
 
-        refreshTokenRepository.consume(refreshToken)
+        refreshTokenRepository.consume(token)
             ?: throw CustomException(CustomErrorCode.INVALID_REFRESH_TOKEN)
 
         when (role) {
@@ -65,6 +83,27 @@ class TokenRefreshUsecase(
             userId = userId.toString(),
             refreshToken = newRefreshToken.token,
         )
+
+        val accessTokenCookie =
+            Cookie("accessToken", newAccessToken.token).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/"
+                maxAge = accessTokenExpires.toInt()
+                setAttribute("SameSite", "Strict")
+            }
+
+        val refreshTokenCookie =
+            Cookie("refreshToken", newRefreshToken.token).apply {
+                isHttpOnly = true
+                secure = true
+                path = "/"
+                maxAge = refreshTokenExpires.toInt()
+                setAttribute("SameSite", "Strict")
+            }
+
+        response.addCookie(accessTokenCookie)
+        response.addCookie(refreshTokenCookie)
 
         return SignInResponse(newAccessToken, newRefreshToken)
     }
