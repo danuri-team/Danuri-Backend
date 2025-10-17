@@ -15,6 +15,7 @@ import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
 import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
 import org.aing.danurirest.persistence.user.Role
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -25,6 +26,10 @@ class TokenRefreshUsecase(
     private val deviceJpaRepository: DeviceJpaRepository,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val userJpaRepository: UserJpaRepository,
+    @Value("\${jwt.access-token-expires}")
+    private val accessTokenExpires: Long,
+    @Value("\${jwt.refresh-token-expires}")
+    private val refreshTokenExpires: Long,
 ) {
     fun execute(
         refreshToken: String?,
@@ -84,7 +89,7 @@ class TokenRefreshUsecase(
                 isHttpOnly = true
                 secure = true
                 path = "/"
-                maxAge = 3600
+                maxAge = accessTokenExpires.toInt()
                 setAttribute("SameSite", "Strict")
             }
 
@@ -93,7 +98,7 @@ class TokenRefreshUsecase(
                 isHttpOnly = true
                 secure = true
                 path = "/"
-                maxAge = 604800
+                maxAge = refreshTokenExpires.toInt()
                 setAttribute("SameSite", "Strict")
             }
 

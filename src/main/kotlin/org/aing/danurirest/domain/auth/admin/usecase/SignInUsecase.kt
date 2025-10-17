@@ -13,6 +13,7 @@ import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.refreshToken.RefreshTokenRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -23,6 +24,10 @@ class SignInUsecase(
     private val passwordEncoder: PasswordEncoder,
     private val loginBucket: Bucket,
     private val refreshTokenRepository: RefreshTokenRepository,
+    @Value("\${jwt.access-token-expires}")
+    private val accessTokenExpires: Long,
+    @Value("\${jwt.refresh-token-expires}")
+    private val refreshTokenExpires: Long,
 ) {
     fun execute(
         request: SignInRequest,
@@ -44,7 +49,7 @@ class SignInUsecase(
                 isHttpOnly = true
                 secure = true
                 path = "/"
-                maxAge = 3600
+                maxAge = accessTokenExpires.toInt()
                 setAttribute("SameSite", "Strict")
             }
 
@@ -53,7 +58,7 @@ class SignInUsecase(
                 isHttpOnly = true
                 secure = true
                 path = "/"
-                maxAge = 604800
+                maxAge = refreshTokenExpires.toInt()
                 setAttribute("SameSite", "Strict")
             }
 
