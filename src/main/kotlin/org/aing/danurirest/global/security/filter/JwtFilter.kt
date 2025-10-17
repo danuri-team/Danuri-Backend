@@ -15,7 +15,7 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        val token = request.getHeader("Authorization")
+        val token = jwtProvider.resolveToken(request)
 
         if (token != null) {
             val authentication = jwtProvider.getAuthentication(token)

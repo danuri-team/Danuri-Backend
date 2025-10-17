@@ -1,5 +1,7 @@
 package org.aing.danurirest.domain.auth.common.controller
 
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
 import org.aing.danurirest.domain.auth.common.usecase.TokenRefreshUsecase
 import org.springframework.http.ResponseEntity
@@ -15,9 +17,11 @@ class CommonAuthController(
 ) {
     @GetMapping("refresh")
     fun refreshToken(
-        @RequestHeader("Refresh-Token") refreshToken: String,
+        @RequestHeader("Refresh-Token") refreshToken: String?,
+        request: HttpServletRequest,
+        response: HttpServletResponse,
     ): ResponseEntity<SignInResponse> =
-        refreshTokenUsecase.execute(refreshToken).run {
+        refreshTokenUsecase.execute(refreshToken, request, response).run {
             ResponseEntity.ok(this)
         }
 }

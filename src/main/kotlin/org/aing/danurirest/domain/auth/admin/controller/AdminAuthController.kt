@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.auth.admin.controller
 
+import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
 import org.aing.danurirest.domain.auth.admin.dto.SignUpAdminRequest
@@ -27,8 +28,9 @@ class AdminAuthController(
     @PostMapping("sign-in")
     fun signIn(
         @Valid @RequestBody signInRequest: SignInRequest,
-    ): ResponseEntity<SignInResponse> =
-        signInUsecase.execute(signInRequest).run {
+        response: HttpServletResponse,
+    ): ResponseEntity<Unit> =
+        signInUsecase.execute(signInRequest, response).run {
             ResponseEntity.ok(this)
         }
 

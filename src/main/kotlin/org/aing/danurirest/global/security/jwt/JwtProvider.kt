@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.dto.ContextDto
@@ -35,8 +36,7 @@ class JwtProvider(
     private val authDetailsService: AuthDetailService,
 ) {
     fun getAuthentication(token: String?): UsernamePasswordAuthenticationToken {
-        val resolvedToken = resolveToken(token)
-        val payload = getPayload(resolvedToken, TokenType.ACCESS_TOKEN)
+        val payload = getPayload(token, TokenType.ACCESS_TOKEN)
 
         val userDetails =
             when (Role.valueOf(payload["role"] as String)) {
@@ -58,12 +58,20 @@ class JwtProvider(
         )
     }
 
-    private fun resolveToken(token: String?): String? =
-        if (token == null || !token.startsWith("Bearer ")) {
-            null
-        } else {
-            token.substring(7)
+    fun resolveToken(request: HttpServletRequest): String? {
+        val bearerToken = request.getHeader("Authorization")
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7)
         }
+
+        val cookies = request.cookies
+        if (cookies != null) {
+            val tokenCookie = cookies.firstOrNull { it.name == "accessToken" }
+            return tokenCookie?.value
+        }
+
+        return null
+    }
 
     fun getPayload(
         token: String?,
