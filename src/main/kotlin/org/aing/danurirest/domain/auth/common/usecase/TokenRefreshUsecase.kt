@@ -90,7 +90,6 @@ class TokenRefreshUsecase(
                 secure = true
                 path = "/"
                 maxAge = accessTokenExpires.toInt()
-                setAttribute("SameSite", "Strict")
             }
 
         val refreshTokenCookie =
@@ -99,7 +98,6 @@ class TokenRefreshUsecase(
                 secure = true
                 path = "/"
                 maxAge = refreshTokenExpires.toInt()
-                setAttribute("SameSite", "Strict")
             }
 
         response.addCookie(accessTokenCookie)
