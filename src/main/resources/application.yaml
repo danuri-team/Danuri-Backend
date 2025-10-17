@@ -97,7 +97,7 @@ jwt:
   refresh-token-expires: 604800000
 
 cors:
-  allowed-origins: "*"
+  allowed-origins: http://localhost:3000, https://admin.danuri.cloud
 
 ---
 spring:
