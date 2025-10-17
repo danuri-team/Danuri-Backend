@@ -96,6 +96,9 @@ jwt:
   access-token-expires: 1800000
   refresh-token-expires: 604800000
 
+cors:
+  allowed-origins: http://localhost:3000, https://admin.danuri.cloud
+
 ---
 spring:
   config:
@@ -107,6 +110,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    validate-on-migrate: true
 
 jwt:
   access-token-key: ${ACCESS_TOKEN_KEY}
@@ -114,6 +118,8 @@ jwt:
   access-token-expires: 1800000 # 30 minutes
   refresh-token-expires: 604800000 # 1 day
 
+cors:
+  allowed-origins: https://admin.danuri.cloud
 
 sentry:
   traces-sample-rate: 0.1
