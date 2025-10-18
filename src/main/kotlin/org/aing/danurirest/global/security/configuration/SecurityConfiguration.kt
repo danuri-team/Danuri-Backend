@@ -1,5 +1,6 @@
 package org.aing.danurirest.global.security.configuration
 
+import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.global.security.filter.JwtFilter
 import org.aing.danurirest.global.security.handler.CustomAuthenticationEntryPoint
 import org.aing.danurirest.global.security.jwt.JwtProvider
@@ -29,6 +30,13 @@ class SecurityConfiguration(
             .formLogin { it.disable() }
             .cors {
                 it.configurationSource(corsConfig())
+            }.logout { logout ->
+                logout
+                    .logoutUrl("/auth/common/sign-out")
+                    .logoutSuccessHandler { _, response, _ ->
+                        response.status = HttpServletResponse.SC_OK
+                        response.contentType = "application/json"
+                    }.deleteCookies("accessToken", "refreshToken")
             }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
