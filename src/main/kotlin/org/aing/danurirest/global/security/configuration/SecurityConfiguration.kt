@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.global.security.filter.JwtFilter
 import org.aing.danurirest.global.security.handler.CustomAuthenticationEntryPoint
 import org.aing.danurirest.global.security.jwt.JwtProvider
+import org.aing.danurirest.global.util.CookieUtil
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -36,7 +37,13 @@ class SecurityConfiguration(
                     .logoutSuccessHandler { _, response, _ ->
                         response.status = HttpServletResponse.SC_OK
                         response.contentType = "application/json"
-                    }.deleteCookies("accessToken", "refreshToken")
+
+                        val accessTokenCookie = CookieUtil.createDeletionCookie("accessToken")
+                        val refreshTokenCookie = CookieUtil.createDeletionCookie("refreshToken")
+
+                        response.addHeader("Set-Cookie", accessTokenCookie.toString())
+                        response.addHeader("Set-Cookie", refreshTokenCookie.toString())
+                    }
             }.sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
