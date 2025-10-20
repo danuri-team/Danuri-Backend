@@ -1,7 +1,6 @@
 package org.aing.danurirest.domain.auth.common.usecase
 
 import io.jsonwebtoken.Claims
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
@@ -9,6 +8,7 @@ import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider
 import org.aing.danurirest.global.security.jwt.enum.TokenType
+import org.aing.danurirest.global.util.CookieUtil
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
 import org.aing.danurirest.persistence.device.repository.DeviceJpaRepository
@@ -85,25 +85,21 @@ class TokenRefreshUsecase(
         )
 
         val accessTokenCookie =
-            Cookie("accessToken", newAccessToken.token).apply {
-                isHttpOnly = true
-                secure = true
-                path = "/"
-                maxAge = accessTokenExpires.toInt()
-                setAttribute("SameSite", "None")
-            }
+            CookieUtil.createSecureCookie(
+                name = "accessToken",
+                value = newAccessToken.token,
+                maxAge = accessTokenExpires,
+            )
 
         val refreshTokenCookie =
-            Cookie("refreshToken", newRefreshToken.token).apply {
-                isHttpOnly = true
-                secure = true
-                path = "/"
-                maxAge = refreshTokenExpires.toInt()
-                setAttribute("SameSite", "None")
-            }
+            CookieUtil.createSecureCookie(
+                name = "refreshToken",
+                value = newRefreshToken.token,
+                maxAge = refreshTokenExpires,
+            )
 
-        response.addCookie(accessTokenCookie)
-        response.addCookie(refreshTokenCookie)
+        response.addHeader("Set-Cookie", accessTokenCookie.toString())
+        response.addHeader("Set-Cookie", refreshTokenCookie.toString())
 
         return SignInResponse(newAccessToken, newRefreshToken)
     }

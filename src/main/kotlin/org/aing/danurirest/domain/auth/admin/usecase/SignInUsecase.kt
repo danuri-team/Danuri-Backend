@@ -1,7 +1,6 @@
 package org.aing.danurirest.domain.auth.admin.usecase
 
 import io.github.bucket4j.Bucket
-import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
 import org.aing.danurirest.domain.auth.admin.dto.SignInRequest
 import org.aing.danurirest.domain.auth.common.dto.SignInResponse
@@ -9,6 +8,7 @@ import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.security.jwt.JwtProvider
 import org.aing.danurirest.global.security.jwt.enum.TokenType
+import org.aing.danurirest.global.util.CookieUtil
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.admin.entity.Admin
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
@@ -45,25 +45,21 @@ class SignInUsecase(
         val token = generateTokens(admin)
 
         val accessTokenCookie =
-            Cookie("accessToken", token.accessToken.token).apply {
-                isHttpOnly = true
-                secure = true
-                path = "/"
-                maxAge = accessTokenExpires.toInt()
-                setAttribute("SameSite", "None")
-            }
+            CookieUtil.createSecureCookie(
+                name = "accessToken",
+                value = token.accessToken.token,
+                maxAge = accessTokenExpires,
+            )
 
         val refreshTokenCookie =
-            Cookie("refreshToken", token.refreshToken?.token).apply {
-                isHttpOnly = true
-                secure = true
-                path = "/"
-                maxAge = refreshTokenExpires.toInt()
-                setAttribute("SameSite", "None")
-            }
+            CookieUtil.createSecureCookie(
+                name = "refreshToken",
+                value = token.refreshToken?.token ?: "",
+                maxAge = refreshTokenExpires,
+            )
 
-        response.addCookie(accessTokenCookie)
-        response.addCookie(refreshTokenCookie)
+        response.addHeader("Set-Cookie", accessTokenCookie.toString())
+        response.addHeader("Set-Cookie", refreshTokenCookie.toString())
     }
 
     private fun checkRateLimit() {
