@@ -27,7 +27,7 @@ class GetSpaceStatusUsecase(
             .filter { it.space.endAt > currentTime }
             .map { dto ->
                 val timeSlots = generateTimeSlots(dto.space, dto.bookedRanges, now)
-                val isAvailable = isCurrentlyAvailable(dto.space, dto.bookedRanges, now)
+                val isAvailable = isCurrentlyAvailable(dto.space, now)
 
                 GetSpaceStatusByDeviceIdResponse.from(
                     entity = dto.space,
@@ -39,21 +39,8 @@ class GetSpaceStatusUsecase(
 
     private fun isCurrentlyAvailable(
         space: Space,
-        bookedRanges: List<BookedTimeRange>,
         now: LocalDateTime,
-    ): Boolean {
-        if (now.toLocalTime() !in space.startAt..space.endAt) {
-            return false
-        }
-
-        if (space.allowOverlap) {
-            return true
-        }
-
-        return bookedRanges.none {
-            now.isAfter(it.startTime) && now.isBefore(it.endTime)
-        }
-    }
+    ): Boolean = now.toLocalTime() in space.startAt..space.endAt
 
     private fun generateTimeSlots(
         space: Space,
