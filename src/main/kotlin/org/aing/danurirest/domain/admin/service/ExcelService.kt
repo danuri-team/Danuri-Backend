@@ -11,9 +11,9 @@ import java.io.ByteArrayOutputStream
 import java.time.format.DateTimeFormatter
 
 @Service
-class ExcelService {
-    private val objectMapper = ObjectMapper()
-
+class ExcelService(
+    private val objectMapper: ObjectMapper,
+) {
     fun createUsageHistoryExcel(
         usageHistories: List<UsageHistoryResponse>,
         signUpForm: Form,
