@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GetUsageHistoriesUsecase(
-    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
     private val usageHistoryRepository: UsageHistoryRepository,
+    private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     @Transactional(readOnly = true)
     fun execute(request: UsageHistorySearchRequest): List<UsageHistoryResponse> {

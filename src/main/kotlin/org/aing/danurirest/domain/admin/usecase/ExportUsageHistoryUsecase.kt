@@ -19,7 +19,7 @@ class ExportUsageHistoryUsecase(
     @Transactional(readOnly = true)
     fun execute(request: UsageHistorySearchRequest): ByteArray {
         val companyId = getAdminCompanyIdUsecase.execute()
-        val histories = getUsageHistoriesUsecase.execute(request, companyId)
+        val histories = getUsageHistoriesUsecase.execute(request)
         val signUpForm =
             formJpaRepository.findByCompanyIdAndSignUpFormTrue(companyId).orElseThrow {
                 CustomException(
