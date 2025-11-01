@@ -78,6 +78,10 @@ s3:
 verify-code:
   expires: 180000
 
+short-url:
+  name: short-url-feign-client
+  maker-url: ${SHORT_URL_MAKER_URL}
+
 ---
 spring:
   config:

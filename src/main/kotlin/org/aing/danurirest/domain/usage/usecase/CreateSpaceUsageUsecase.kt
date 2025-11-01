@@ -7,6 +7,7 @@ import org.aing.danurirest.global.third_party.notification.template.MessageTempl
 import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
 import org.aing.danurirest.global.third_party.s3.BucketType
 import org.aing.danurirest.global.third_party.s3.service.S3Service
+import org.aing.danurirest.global.third_party.shortUrl.service.ShortUrlService
 import org.aing.danurirest.global.util.GenerateQrCode
 import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.space.entity.Space
@@ -31,6 +32,7 @@ class CreateSpaceUsageUsecase(
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
     private val notificationService: NotificationService,
     private val s3Service: S3Service,
+    private val shortUrlService: ShortUrlService,
 ) {
     companion object {
         private const val USAGE_DURATION_MINUTES = 30L
@@ -157,6 +159,12 @@ class CreateSpaceUsageUsecase(
                 fileName,
             )
 
+        val shortQrLink = try {
+            shortUrlService.execute(qrLink)
+        } catch (e: Exception) {
+            qrLink
+        }
+
         notificationService.sendNotification(
             toMessage = user.phone,
             template = MessageTemplate.SPACE_REGISTRATION,
@@ -175,7 +183,7 @@ class CreateSpaceUsageUsecase(
                             .toLocalTime()
                             .truncatedTo(ChronoUnit.SECONDS)
                             .toString(),
-                    qrLink = qrLink,
+                    qrLink = shortQrLink,
                 ),
         )
     }
