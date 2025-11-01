@@ -58,7 +58,7 @@ class ExcelService {
             row.createCell(3).setCellValue(history.rentalCount.toDouble())
             row.createCell(4).setCellValue(history.userPhone)
 
-            val formResult = objectMapper.readTree(history.formResult.result)
+            val formResult = objectMapper.readTree(history.formResult)
             formLabels.forEachIndexed { formIdx, label ->
                 val answer = formResult.get(label)?.asText() ?: ""
                 row.createCell(baseHeaders.size + formIdx).setCellValue(answer)
