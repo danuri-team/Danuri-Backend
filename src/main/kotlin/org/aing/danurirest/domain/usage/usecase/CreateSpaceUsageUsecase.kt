@@ -7,6 +7,7 @@ import org.aing.danurirest.global.third_party.notification.template.MessageTempl
 import org.aing.danurirest.global.third_party.notification.template.MessageValueTemplate
 import org.aing.danurirest.global.third_party.s3.BucketType
 import org.aing.danurirest.global.third_party.s3.service.S3Service
+import org.aing.danurirest.global.third_party.shortUrl.service.ShortUrlService
 import org.aing.danurirest.global.util.GenerateQrCode
 import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.space.entity.Space
@@ -15,6 +16,8 @@ import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -31,10 +34,13 @@ class CreateSpaceUsageUsecase(
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
     private val notificationService: NotificationService,
     private val s3Service: S3Service,
+    private val shortUrlService: ShortUrlService,
 ) {
     companion object {
         private const val USAGE_DURATION_MINUTES = 30L
     }
+
+    private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
 
     @Transactional
     fun execute(
@@ -157,6 +163,14 @@ class CreateSpaceUsageUsecase(
                 fileName,
             )
 
+        val shortQrLink =
+            try {
+                shortUrlService.execute(qrLink)
+            } catch (e: Exception) {
+                log.warn("QR 링크 단축에 실패하여 원본 링크를 사용합니다. error: {}", e.message)
+                qrLink
+            }
+
         notificationService.sendNotification(
             toMessage = user.phone,
             template = MessageTemplate.SPACE_REGISTRATION,
@@ -175,7 +189,7 @@ class CreateSpaceUsageUsecase(
                             .toLocalTime()
                             .truncatedTo(ChronoUnit.SECONDS)
                             .toString(),
-                    qrLink = qrLink,
+                    qrLink = shortQrLink,
                 ),
         )
     }
