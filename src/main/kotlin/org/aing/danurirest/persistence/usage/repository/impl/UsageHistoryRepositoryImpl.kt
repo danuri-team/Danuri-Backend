@@ -42,7 +42,7 @@ class UsageHistoryRepositoryImpl(
 
     override fun findAllByCompanyIdAndDateRange(
         companyId: UUID,
-        startDate: LocalDateTime,
+        startDate: LocalDateTime?,
         endDate: LocalDateTime?,
     ): List<UsageHistory> {
         val qUsage = QUsageHistory.usageHistory
@@ -51,9 +51,12 @@ class UsageHistoryRepositoryImpl(
         val whereConditions =
             mutableListOf(
                 qSpace.company.id.eq(companyId),
-                qUsage.startAt.goe(startDate),
-                qUsage.endAt.isNull.or(qUsage.endAt.goe(startDate)),
             )
+
+        startDate?.let {
+            whereConditions.add(qUsage.startAt.goe(it))
+            whereConditions.add(qUsage.endAt.isNull.or(qUsage.endAt.goe(it)))
+        }
 
         endDate?.let {
             whereConditions.add(qUsage.startAt.loe(it))
@@ -70,7 +73,7 @@ class UsageHistoryRepositoryImpl(
 
     override fun findAllByCompanyIdAndSpaceIdAndDateRange(
         spaceId: UUID,
-        startDate: LocalDateTime,
+        startDate: LocalDateTime?,
         endDate: LocalDateTime?,
         companyId: UUID,
     ): List<UsageHistory> {
@@ -81,9 +84,12 @@ class UsageHistoryRepositoryImpl(
             mutableListOf(
                 qSpace.id.eq(spaceId),
                 qSpace.company.id.eq(companyId),
-                qUsage.startAt.goe(startDate),
-                qUsage.endAt.isNull.or(qUsage.endAt.goe(startDate)),
             )
+
+        startDate?.let {
+            whereConditions.add(qUsage.startAt.goe(it))
+            whereConditions.add(qUsage.endAt.isNull.or(qUsage.endAt.goe(it)))
+        }
 
         endDate?.let {
             whereConditions.add(qUsage.startAt.loe(it))
@@ -100,7 +106,7 @@ class UsageHistoryRepositoryImpl(
 
     override fun findAllByUserIdAndDateRangeAndCompanyId(
         userId: UUID,
-        startDate: LocalDateTime,
+        startDate: LocalDateTime?,
         endDate: LocalDateTime?,
         companyId: UUID,
     ): MutableList<UsageHistory> {
@@ -111,9 +117,12 @@ class UsageHistoryRepositoryImpl(
             mutableListOf(
                 qUser.id.eq(userId),
                 qUser.company.id.eq(companyId),
-                qUsage.startAt.goe(startDate),
-                qUsage.endAt.isNull.or(qUsage.endAt.goe(startDate)),
             )
+
+        startDate?.let {
+            whereConditions.add(qUsage.startAt.goe(it))
+            whereConditions.add(qUsage.endAt.isNull.or(qUsage.endAt.goe(it)))
+        }
 
         endDate?.let {
             whereConditions.add(qUsage.startAt.loe(it))

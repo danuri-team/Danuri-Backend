@@ -16,20 +16,20 @@ interface UsageHistoryRepository {
 
     fun findAllByCompanyIdAndDateRange(
         companyId: UUID,
-        startDate: LocalDateTime,
+        startDate: LocalDateTime?,
         endDate: LocalDateTime?,
     ): List<UsageHistory>
 
     fun findAllByCompanyIdAndSpaceIdAndDateRange(
         spaceId: UUID,
-        startDate: LocalDateTime,
+        startDate: LocalDateTime?,
         endDate: LocalDateTime?,
         companyId: UUID,
     ): List<UsageHistory>
 
     fun findAllByUserIdAndDateRangeAndCompanyId(
         userId: UUID,
-        startDate: LocalDateTime,
+        startDate: LocalDateTime?,
         endDate: LocalDateTime?,
         companyId: UUID,
     ): MutableList<UsageHistory>?
