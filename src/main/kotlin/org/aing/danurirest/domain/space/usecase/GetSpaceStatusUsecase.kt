@@ -69,14 +69,24 @@ class GetSpaceStatusUsecase(
         while (currentSlot.plusMinutes(30) <= endSlot) {
             val slotEnd = currentSlot.plus(slotDuration)
 
+            val adjustedStartTime =
+                maxOf(
+                    currentSlot,
+                    bookedRanges
+                        .filter { it.endTime.isAfter(currentSlot) && it.endTime.isBefore(slotEnd) }
+                        .filter { Duration.between(it.endTime, slotEnd).toMinutes() >= 10 }
+                        .maxOfOrNull { it.endTime }
+                        ?: currentSlot,
+                )
+
             val isBooked =
                 bookedRanges.any { booking ->
-                    currentSlot.isBefore(booking.endTime) && slotEnd.isAfter(booking.startTime)
+                    adjustedStartTime.isBefore(booking.endTime) && slotEnd.isAfter(booking.startTime)
                 }
 
             slots.add(
                 SpaceTimeSlot(
-                    startTime = currentSlot.toLocalTime(),
+                    startTime = adjustedStartTime.toLocalTime(),
                     endTime = slotEnd.toLocalTime(),
                     isAvailable = !isBooked || space.allowOverlap,
                 ),
