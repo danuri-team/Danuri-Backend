@@ -16,6 +16,10 @@ import java.time.LocalTime
 class GetSpaceStatusUsecase(
     private val spaceRepository: SpaceRepository,
 ) {
+    companion object {
+        private const val MINIMUM_USABLE_DURATION_MINUTES = 10L
+    }
+
     @Transactional(readOnly = true)
     fun execute(): List<GetSpaceStatusByDeviceIdResponse> {
         val now = LocalDateTime.now()
@@ -69,15 +73,16 @@ class GetSpaceStatusUsecase(
         while (currentSlot.plusMinutes(30) <= endSlot) {
             val slotEnd = currentSlot.plus(slotDuration)
 
-            val adjustedStartTime =
-                maxOf(
-                    currentSlot,
-                    bookedRanges
-                        .filter { it.endTime.isAfter(currentSlot) && it.endTime.isBefore(slotEnd) }
-                        .filter { Duration.between(it.endTime, slotEnd).toMinutes() >= 10 }
-                        .maxOfOrNull { it.endTime }
-                        ?: currentSlot,
-                )
+            val latestEndTime =
+                bookedRanges
+                    .asSequence()
+                    .filter {
+                        it.endTime.isAfter(currentSlot) &&
+                            it.endTime.isBefore(slotEnd) &&
+                            Duration.between(it.endTime, slotEnd).toMinutes() >= MINIMUM_USABLE_DURATION_MINUTES
+                    }.maxOfOrNull { it.endTime }
+
+            val adjustedStartTime = latestEndTime ?: currentSlot
 
             val isBooked =
                 bookedRanges.any { booking ->
