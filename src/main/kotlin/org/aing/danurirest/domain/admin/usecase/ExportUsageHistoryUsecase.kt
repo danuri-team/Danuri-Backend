@@ -1,11 +1,13 @@
 package org.aing.danurirest.domain.admin.usecase
 
+import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
 import org.aing.danurirest.domain.admin.service.ExcelService
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.form.repository.FormJpaRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -20,7 +22,19 @@ class ExportUsageHistoryUsecase(
     @Transactional(readOnly = true)
     fun execute(request: UsageHistorySearchRequest): ByteArray {
         val companyId = getAdminCompanyIdUsecase.execute()
-        val histories = getUsageHistoriesUsecase.execute(request, Pageable.unpaged()).content
+
+        val allHistories = mutableListOf<UsageHistoryResponse>()
+        var pageable: Pageable = PageRequest.of(0, 100)
+
+        while (true) {
+            val page = getUsageHistoriesUsecase.execute(request, pageable)
+            allHistories.addAll(page.content)
+            if (!page.hasNext()) {
+                break
+            }
+            pageable = page.nextPageable()
+        }
+
         val signUpForm =
             formJpaRepository.findByCompanyIdAndSignUpFormTrue(companyId).orElseThrow {
                 CustomException(
@@ -28,6 +42,6 @@ class ExportUsageHistoryUsecase(
                 )
             }
 
-        return excelService.createUsageHistoryExcel(histories, signUpForm)
+        return excelService.createUsageHistoryExcel(allHistories, signUpForm)
     }
 }
