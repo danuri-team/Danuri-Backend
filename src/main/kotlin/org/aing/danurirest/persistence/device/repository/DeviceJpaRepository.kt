@@ -1,6 +1,8 @@
 package org.aing.danurirest.persistence.device.repository
 
 import org.aing.danurirest.persistence.device.entity.Device
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -11,6 +13,12 @@ interface DeviceJpaRepository : JpaRepository<Device, UUID> {
     fun findAllByCompanyId(
         @Param("companyId") companyId: UUID,
     ): List<Device>
+
+    @Query("SELECT d FROM Device d WHERE d.company.id = :companyId")
+    fun findAllByCompanyId(
+        @Param("companyId") companyId: UUID,
+        pageable: Pageable,
+    ): Page<Device>
 
     fun findByIdAndCompanyId(
         id: UUID,

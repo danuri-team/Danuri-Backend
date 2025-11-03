@@ -23,4 +23,4 @@ class GetRentalUsecase(
             }
         return rental
     }
-} 
+}

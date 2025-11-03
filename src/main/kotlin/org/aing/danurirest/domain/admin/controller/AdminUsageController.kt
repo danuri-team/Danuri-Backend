@@ -10,6 +10,9 @@ import org.aing.danurirest.domain.admin.usecase.ExportUsageHistoryUsecase
 import org.aing.danurirest.domain.admin.usecase.GetUsageHistoriesUsecase
 import org.aing.danurirest.domain.admin.usecase.GetUsageHistoryUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateUsageHistoryUsecase
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -49,8 +52,9 @@ class AdminUsageController(
     @PostMapping("/search")
     fun searchUsageHistory(
         @Valid @RequestBody request: UsageHistorySearchRequest,
-    ): ResponseEntity<List<UsageHistoryResponse>> =
-        getUsageHistoriesUsecase.execute(request).run {
+        @PageableDefault(size = 20) pageable: Pageable,
+    ): ResponseEntity<Page<UsageHistoryResponse>> =
+        getUsageHistoriesUsecase.execute(request, pageable).run {
             ResponseEntity.ok(this)
         }
 

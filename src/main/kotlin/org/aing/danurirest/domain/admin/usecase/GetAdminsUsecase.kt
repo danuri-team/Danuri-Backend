@@ -3,6 +3,8 @@ package org.aing.danurirest.domain.admin.usecase
 import org.aing.danurirest.domain.admin.dto.AdminResponse
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.persistence.admin.repository.AdminJpaRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,9 +14,9 @@ class GetAdminsUsecase(
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     @Transactional(readOnly = true)
-    fun execute(): List<AdminResponse> {
+    fun execute(pageable: Pageable): Page<AdminResponse> {
         val companyId = getAdminCompanyIdUsecase.execute()
-        val admins = adminJpaRepository.findAllByCompanyId(companyId)
+        val admins = adminJpaRepository.findAllByCompanyId(companyId, pageable)
         return admins.map { AdminResponse.from(it) }
     }
 }

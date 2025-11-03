@@ -9,6 +9,9 @@ import org.aing.danurirest.domain.admin.usecase.GetAdminsUsecase
 import org.aing.danurirest.domain.admin.usecase.GetCurrentAdminUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateAdminPasswordUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateAdminUsecase
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -42,8 +45,10 @@ class AdminManagementController(
         }
 
     @GetMapping
-    fun getAdminsByCompany(): ResponseEntity<List<AdminResponse>> =
-        getCompanyAdminsUsecase.execute().run {
+    fun getAdminsByCompany(
+        @PageableDefault(size = 20) pageable: Pageable,
+    ): ResponseEntity<Page<AdminResponse>> =
+        getCompanyAdminsUsecase.execute(pageable).run {
             ResponseEntity.ok(this)
         }
 

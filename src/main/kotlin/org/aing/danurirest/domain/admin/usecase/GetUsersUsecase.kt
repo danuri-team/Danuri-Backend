@@ -11,6 +11,7 @@ import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.form.repository.FormJpaRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,9 +23,9 @@ class GetUsersUsecase(
     private val objectMapper: ObjectMapper,
 ) {
     @Transactional(readOnly = true)
-    fun execute(): GetUsersAndFormHeaderList {
+    fun execute(pageable: Pageable): GetUsersAndFormHeaderList {
         val companyId = getAdminCompanyIdUsecase.execute()
-        val users = userJpaRepository.findAllByCompanyId(companyId)
+        val users = userJpaRepository.findAllByCompanyId(companyId, pageable)
 
         val form =
             formJpaRepository

@@ -1,6 +1,8 @@
 package org.aing.danurirest.persistence.user.repository
 
 import org.aing.danurirest.persistence.user.entity.User
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.Optional
@@ -8,7 +10,10 @@ import java.util.UUID
 
 @Repository
 interface UserJpaRepository : JpaRepository<User, UUID> {
-    fun findAllByCompanyId(companyId: UUID): List<User>
+    fun findAllByCompanyId(
+        companyId: UUID,
+        pageable: Pageable,
+    ): Page<User>
 
     fun findByPhone(phone: String): Optional<User>
 
@@ -19,5 +24,8 @@ interface UserJpaRepository : JpaRepository<User, UUID> {
         companyId: UUID,
     ): User?
 
-    fun findByIdAndCompanyId(id: UUID, companyId: UUID): User?
+    fun findByIdAndCompanyId(
+        id: UUID,
+        companyId: UUID,
+    ): User?
 }

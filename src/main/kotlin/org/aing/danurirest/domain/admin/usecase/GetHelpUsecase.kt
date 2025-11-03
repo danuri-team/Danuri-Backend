@@ -6,6 +6,8 @@ import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.help.entity.HelpHistory
 import org.aing.danurirest.persistence.help.repository.HelpHistoryJpaRepository
 import org.aing.danurirest.persistence.help.repository.HelpSettingJpaRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,7 +18,7 @@ class GetHelpUsecase(
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     @Transactional(readOnly = true)
-    fun execute(): List<HelpHistory> {
+    fun execute(pageable: Pageable): Page<HelpHistory> {
         val companyId = getAdminCompanyIdUsecase.execute()
         val helpSetting =
             helpSettingJpaRepository
@@ -28,6 +30,6 @@ class GetHelpUsecase(
             throw CustomException(CustomErrorCode.HELP_NOT_ENABLED)
         }
 
-        return helpHistoryJpaRepository.findAllByCompanyId(companyId) // DTO로 변환 필요
+        return helpHistoryJpaRepository.findAllByCompanyId(companyId, pageable) // DTO로 변환 필요
     }
 }
