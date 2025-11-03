@@ -90,11 +90,15 @@ class RentalRepositoryImpl(
 
         val results = query.fetch()
 
-        val total = queryFactory.select(rental.count())
-            .from(rental)
-            .innerJoin(rental.item, item)
-            .where(item.company.id.eq(companyId))
-            .fetchOne() ?: 0L
+        val total =
+            queryFactory
+                .select(rental.count())
+                .from(rental)
+                .innerJoin(rental.item, item)
+                .innerJoin(rental.usage, usage)
+                .innerJoin(usage.user, user)
+                .where(item.company.id.eq(companyId))
+                .fetchOne() ?: 0L
 
         return PageImpl(results, pageable, total)
     }
