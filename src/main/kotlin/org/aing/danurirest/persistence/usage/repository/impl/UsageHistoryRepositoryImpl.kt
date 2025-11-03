@@ -48,36 +48,6 @@ class UsageHistoryRepositoryImpl(
         companyId: UUID,
         startDate: LocalDateTime?,
         endDate: LocalDateTime?,
-    ): List<UsageHistory> {
-        val qUsage = QUsageHistory.usageHistory
-        val qSpace = QSpace.space
-
-        val whereConditions =
-            mutableListOf(
-                qSpace.company.id.eq(companyId),
-            )
-
-        startDate?.let {
-            whereConditions.add(qUsage.startAt.goe(it))
-            whereConditions.add(qUsage.endAt.isNull.or(qUsage.endAt.goe(it)))
-        }
-
-        endDate?.let {
-            whereConditions.add(qUsage.startAt.loe(it))
-        }
-
-        return queryFactory
-            .selectFrom(qUsage)
-            .join(qUsage.space, qSpace)
-            .where(*whereConditions.toTypedArray())
-            .orderBy(qUsage.startAt.desc())
-            .fetch()
-    }
-
-    override fun findAllByCompanyIdAndDateRange(
-        companyId: UUID,
-        startDate: LocalDateTime?,
-        endDate: LocalDateTime?,
         pageable: Pageable,
     ): Page<UsageHistory> {
         val qUsage = QUsageHistory.usageHistory
@@ -128,38 +98,6 @@ class UsageHistoryRepositoryImpl(
         startDate: LocalDateTime?,
         endDate: LocalDateTime?,
         companyId: UUID,
-    ): List<UsageHistory> {
-        val qUsage = QUsageHistory.usageHistory
-        val qSpace = QSpace.space
-
-        val whereConditions =
-            mutableListOf(
-                qSpace.id.eq(spaceId),
-                qSpace.company.id.eq(companyId),
-            )
-
-        startDate?.let {
-            whereConditions.add(qUsage.startAt.goe(it))
-            whereConditions.add(qUsage.endAt.isNull.or(qUsage.endAt.goe(it)))
-        }
-
-        endDate?.let {
-            whereConditions.add(qUsage.startAt.loe(it))
-        }
-
-        return queryFactory
-            .selectFrom(qUsage)
-            .join(qUsage.space, qSpace)
-            .where(*whereConditions.toTypedArray())
-            .orderBy(qUsage.startAt.desc())
-            .fetch()
-    }
-
-    override fun findAllByCompanyIdAndSpaceIdAndDateRange(
-        spaceId: UUID,
-        startDate: LocalDateTime?,
-        endDate: LocalDateTime?,
-        companyId: UUID,
         pageable: Pageable,
     ): Page<UsageHistory> {
         val qUsage = QUsageHistory.usageHistory
@@ -189,51 +127,21 @@ class UsageHistoryRepositoryImpl(
                 .where(*whereConditions.toTypedArray())
                 .orderBy(*orderSpecifiers.toTypedArray())
 
-        val results = query
-            .offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
-            .fetch()
+        val results =
+            query
+                .offset(pageable.offset)
+                .limit(pageable.pageSize.toLong())
+                .fetch()
 
-        val total = queryFactory
-            .select(qUsage.count())
-            .from(qUsage)
-            .join(qUsage.space, qSpace)
-            .where(*whereConditions.toTypedArray())
-            .fetchOne() ?: 0L
+        val total =
+            queryFactory
+                .select(qUsage.count())
+                .from(qUsage)
+                .join(qUsage.space, qSpace)
+                .where(*whereConditions.toTypedArray())
+                .fetchOne() ?: 0L
 
         return PageImpl(results, pageable, total)
-    }
-
-    override fun findAllByUserIdAndDateRangeAndCompanyId(
-        userId: UUID,
-        startDate: LocalDateTime?,
-        endDate: LocalDateTime?,
-        companyId: UUID,
-    ): MutableList<UsageHistory> {
-        val qUsage = QUsageHistory.usageHistory
-        val qUser = QUser.user
-
-        val whereConditions =
-            mutableListOf(
-                qUser.id.eq(userId),
-                qUser.company.id.eq(companyId),
-            )
-
-        startDate?.let {
-            whereConditions.add(qUsage.startAt.goe(it))
-            whereConditions.add(qUsage.endAt.isNull.or(qUsage.endAt.goe(it)))
-        }
-
-        endDate?.let {
-            whereConditions.add(qUsage.startAt.loe(it))
-        }
-
-        return queryFactory
-            .selectFrom(qUsage)
-            .join(qUsage.user, qUser)
-            .where(*whereConditions.toTypedArray())
-            .orderBy(qUsage.startAt.desc())
-            .fetch()
     }
 
     override fun findAllByUserIdAndDateRangeAndCompanyId(
@@ -270,17 +178,19 @@ class UsageHistoryRepositoryImpl(
                 .where(*whereConditions.toTypedArray())
                 .orderBy(*orderSpecifiers.toTypedArray())
 
-        val results = query
-            .offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
-            .fetch()
+        val results =
+            query
+                .offset(pageable.offset)
+                .limit(pageable.pageSize.toLong())
+                .fetch()
 
-        val total = queryFactory
-            .select(qUsage.count())
-            .from(qUsage)
-            .join(qUsage.user, qUser)
-            .where(*whereConditions.toTypedArray())
-            .fetchOne() ?: 0L
+        val total =
+            queryFactory
+                .select(qUsage.count())
+                .from(qUsage)
+                .join(qUsage.user, qUser)
+                .where(*whereConditions.toTypedArray())
+                .fetchOne() ?: 0L
 
         return PageImpl(results, pageable, total)
     }

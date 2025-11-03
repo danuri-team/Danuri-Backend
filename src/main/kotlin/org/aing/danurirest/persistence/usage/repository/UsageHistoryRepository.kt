@@ -20,12 +20,6 @@ interface UsageHistoryRepository {
         companyId: UUID,
         startDate: LocalDateTime?,
         endDate: LocalDateTime?,
-    ): List<UsageHistory>
-
-    fun findAllByCompanyIdAndDateRange(
-        companyId: UUID,
-        startDate: LocalDateTime?,
-        endDate: LocalDateTime?,
         pageable: Pageable,
     ): Page<UsageHistory>
 
@@ -34,22 +28,8 @@ interface UsageHistoryRepository {
         startDate: LocalDateTime?,
         endDate: LocalDateTime?,
         companyId: UUID,
-    ): List<UsageHistory>
-
-    fun findAllByCompanyIdAndSpaceIdAndDateRange(
-        spaceId: UUID,
-        startDate: LocalDateTime?,
-        endDate: LocalDateTime?,
-        companyId: UUID,
         pageable: Pageable,
     ): Page<UsageHistory>
-
-    fun findAllByUserIdAndDateRangeAndCompanyId(
-        userId: UUID,
-        startDate: LocalDateTime?,
-        endDate: LocalDateTime?,
-        companyId: UUID,
-    ): MutableList<UsageHistory>?
 
     fun findAllByUserIdAndDateRangeAndCompanyId(
         userId: UUID,
