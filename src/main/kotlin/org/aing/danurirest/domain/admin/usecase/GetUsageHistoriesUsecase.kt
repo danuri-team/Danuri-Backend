@@ -3,9 +3,9 @@ package org.aing.danurirest.domain.admin.usecase
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
-import org.aing.danurirest.global.exception.CustomException
-import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,7 +15,10 @@ class GetUsageHistoriesUsecase(
     private val getAdminCompanyIdUsecase: GetAdminCompanyIdUsecase,
 ) {
     @Transactional(readOnly = true)
-    fun execute(request: UsageHistorySearchRequest): List<UsageHistoryResponse> {
+    fun execute(
+        request: UsageHistorySearchRequest,
+        pageable: Pageable,
+    ): Page<UsageHistoryResponse> {
         val companyId = getAdminCompanyIdUsecase.execute()
 
         val histories =
@@ -26,6 +29,7 @@ class GetUsageHistoriesUsecase(
                         request.startDate,
                         request.endDate,
                         companyId,
+                        pageable,
                     )
                 }
                 request.userId != null -> {
@@ -34,6 +38,7 @@ class GetUsageHistoriesUsecase(
                         request.startDate,
                         request.endDate,
                         companyId,
+                        pageable,
                     )
                 }
                 else -> {
@@ -41,14 +46,11 @@ class GetUsageHistoriesUsecase(
                         companyId,
                         request.startDate,
                         request.endDate,
+                        pageable,
                     )
                 }
             }
 
-        if (histories != null) {
-            return histories.map { UsageHistoryResponse.from(it) }
-        } else {
-            throw CustomException(CustomErrorCode.NOT_FOUND)
-        }
+        return histories.map { UsageHistoryResponse.from(it) }
     }
 }

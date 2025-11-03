@@ -9,6 +9,9 @@ import org.aing.danurirest.domain.admin.usecase.GetRentalUsecase
 import org.aing.danurirest.domain.admin.usecase.GetRentalsUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateRentalUsecase
 import org.aing.danurirest.persistence.rental.dto.RentalResponse
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
@@ -36,7 +39,9 @@ class AdminRentalController(
     ): ResponseEntity<RentalResponse> = getRentalUsecase.execute(rentalId).run { ResponseEntity.ok(this) }
 
     @GetMapping
-    fun getAllRentals(): ResponseEntity<List<RentalResponse>> = getAllRentalsUsecase.execute().run { ResponseEntity.ok(this) }
+    fun getAllRentals(
+        @PageableDefault(size = 20) pageable: Pageable,
+    ): ResponseEntity<Page<RentalResponse>> = getAllRentalsUsecase.execute(pageable).run { ResponseEntity.ok(this) }
 
     @PutMapping("/{rentalId}")
     fun updateRental(
