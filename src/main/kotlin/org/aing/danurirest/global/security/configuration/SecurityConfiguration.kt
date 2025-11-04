@@ -65,7 +65,6 @@ class SecurityConfiguration(
                 it.requestMatchers(HttpMethod.GET, "/form").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.POST, "/item").hasRole("DEVICE")
                 it.requestMatchers(HttpMethod.DELETE, "/item", "/usage").hasRole("DEVICE")
-//                it.requestMatchers("/help/**").hasRole("DEVICE") -> TODO // 운영 계획 다시 논의 필요
 
                 // USER
                 it.requestMatchers(HttpMethod.POST, "/usage").hasRole("USER")
