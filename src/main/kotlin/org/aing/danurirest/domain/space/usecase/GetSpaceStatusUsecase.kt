@@ -16,6 +16,10 @@ import java.time.LocalTime
 class GetSpaceStatusUsecase(
     private val spaceRepository: SpaceRepository,
 ) {
+    companion object {
+        private const val MINIMUM_USABLE_DURATION_MINUTES = 10L
+    }
+
     @Transactional(readOnly = true)
     fun execute(): List<GetSpaceStatusByDeviceIdResponse> {
         val now = LocalDateTime.now()
@@ -69,14 +73,25 @@ class GetSpaceStatusUsecase(
         while (currentSlot.plusMinutes(30) <= endSlot) {
             val slotEnd = currentSlot.plus(slotDuration)
 
+            val latestEndTime =
+                bookedRanges
+                    .asSequence()
+                    .filter {
+                        it.endTime.isAfter(currentSlot) &&
+                            it.endTime.isBefore(slotEnd) &&
+                            Duration.between(it.endTime, slotEnd).toMinutes() >= MINIMUM_USABLE_DURATION_MINUTES
+                    }.maxOfOrNull { it.endTime }
+
+            val adjustedStartTime = latestEndTime ?: currentSlot
+
             val isBooked =
                 bookedRanges.any { booking ->
-                    currentSlot.isBefore(booking.endTime) && slotEnd.isAfter(booking.startTime)
+                    adjustedStartTime.isBefore(booking.endTime) && slotEnd.isAfter(booking.startTime)
                 }
 
             slots.add(
                 SpaceTimeSlot(
-                    startTime = currentSlot.toLocalTime(),
+                    startTime = adjustedStartTime.toLocalTime(),
                     endTime = slotEnd.toLocalTime(),
                     isAvailable = !isBooked || space.allowOverlap,
                 ),

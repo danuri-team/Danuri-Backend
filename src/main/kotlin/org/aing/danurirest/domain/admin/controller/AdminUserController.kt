@@ -9,6 +9,8 @@ import org.aing.danurirest.domain.admin.usecase.DeleteUserUsecase
 import org.aing.danurirest.domain.admin.usecase.GetUserUsecase
 import org.aing.danurirest.domain.admin.usecase.GetUsersUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateUserUsecase
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -63,8 +65,10 @@ class AdminUserController(
         }
 
     @GetMapping
-    fun getCurrentCompanyUsers(): ResponseEntity<GetUsersAndFormHeaderList> =
-        getCompanyUsersUsecase.execute().run {
+    fun getCurrentCompanyUsers(
+        @PageableDefault(size = 20) pageable: Pageable,
+    ): ResponseEntity<GetUsersAndFormHeaderList> =
+        getCompanyUsersUsecase.execute(pageable).run {
             ResponseEntity.ok(this)
         }
 }

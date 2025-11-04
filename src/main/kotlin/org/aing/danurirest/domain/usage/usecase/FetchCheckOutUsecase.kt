@@ -19,7 +19,7 @@ class FetchCheckOutUsecase(
 ) {
     @Transactional
     fun execute(request: QrUsageIdRequest) {
-        val now = LocalDateTime.now()
+        val now = LocalDateTime.now().withNano(0)
 
         val result =
             usageHistoryJpaRepository
@@ -30,7 +30,7 @@ class FetchCheckOutUsecase(
             throw CustomException(CustomErrorCode.ALREADY_END)
         }
 
-        result.endAt = LocalDateTime.now()
+        result.endAt = now
 
         notificationService.sendNotification(
             toMessage = result.user.phone,

@@ -15,8 +15,9 @@ class DeleteItemUsecase(
     fun execute(itemId: UUID) {
         val adminCompanyId = getAdminCompanyIdUsecase.execute()
 
-        val item = itemJpaRepository.findByIdAndCompanyId(itemId, adminCompanyId)
-            ?: throw CustomException(CustomErrorCode.NOT_FOUND_ITEM)
+        val item =
+            itemJpaRepository.findByIdAndCompanyId(itemId, adminCompanyId)
+                ?: throw CustomException(CustomErrorCode.NOT_FOUND_ITEM)
 
         itemJpaRepository.delete(item)
     }

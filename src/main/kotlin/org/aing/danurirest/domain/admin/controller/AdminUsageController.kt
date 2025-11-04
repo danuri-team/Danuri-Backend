@@ -2,14 +2,17 @@ package org.aing.danurirest.domain.admin.controller
 
 import jakarta.validation.Valid
 import org.aing.danurirest.domain.admin.dto.UsageHistoryCreateRequest
-import org.aing.danurirest.domain.admin.dto.UsageHistoryUpdateRequest
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
-import org.aing.danurirest.domain.admin.service.ExcelService
+import org.aing.danurirest.domain.admin.dto.UsageHistoryUpdateRequest
 import org.aing.danurirest.domain.admin.usecase.CreateUsageHistoryUsecase
+import org.aing.danurirest.domain.admin.usecase.ExportUsageHistoryUsecase
 import org.aing.danurirest.domain.admin.usecase.GetUsageHistoriesUsecase
 import org.aing.danurirest.domain.admin.usecase.GetUsageHistoryUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateUsageHistoryUsecase
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -27,7 +30,7 @@ class AdminUsageController(
     private val getUsageHistoryUsecase: GetUsageHistoryUsecase,
     private val getUsageHistoriesUsecase: GetUsageHistoriesUsecase,
     private val updateUsageHistoryUsecase: UpdateUsageHistoryUsecase,
-    private val excelService: ExcelService,
+    private val exportUsageHistoryUsecase: ExportUsageHistoryUsecase,
 ) {
     @PostMapping
     fun createUsageHistory(
@@ -49,8 +52,9 @@ class AdminUsageController(
     @PostMapping("/search")
     fun searchUsageHistory(
         @Valid @RequestBody request: UsageHistorySearchRequest,
-    ): ResponseEntity<List<UsageHistoryResponse>> =
-        getUsageHistoriesUsecase.execute(request).run {
+        @PageableDefault(size = 20) pageable: Pageable,
+    ): ResponseEntity<Page<UsageHistoryResponse>> =
+        getUsageHistoriesUsecase.execute(request, pageable).run {
             ResponseEntity.ok(this)
         }
 
@@ -66,8 +70,7 @@ class AdminUsageController(
     fun exportUsageHistory(
         @Valid @RequestBody request: UsageHistorySearchRequest,
     ): ResponseEntity<ByteArray> {
-        val histories = getUsageHistoriesUsecase.execute(request)
-        val excelBytes = excelService.createUsageHistoryExcel(histories)
+        val excelBytes = exportUsageHistoryUsecase.execute(request)
 
         return ResponseEntity
             .ok()

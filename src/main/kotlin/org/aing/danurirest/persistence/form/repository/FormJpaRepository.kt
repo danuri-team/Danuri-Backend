@@ -1,6 +1,8 @@
 package org.aing.danurirest.persistence.form.repository
 
 import org.aing.danurirest.persistence.form.entity.Form
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 import java.util.UUID
@@ -8,9 +10,17 @@ import java.util.UUID
 interface FormJpaRepository : JpaRepository<Form, UUID> {
     fun findAllByCompanyId(companyId: UUID): List<Form>
 
+    fun findAllByCompanyId(
+        companyId: UUID,
+        pageable: Pageable,
+    ): Page<Form>
+
     fun existsFormByCompanyIdAndSignUpFormTrue(companyId: UUID): Boolean
 
     fun findByCompanyIdAndSignUpFormTrue(companyId: UUID): Optional<Form>
 
-    fun findByIdAndCompanyId(id: UUID, companyId: UUID): Form?
+    fun findByIdAndCompanyId(
+        id: UUID,
+        companyId: UUID,
+    ): Form?
 }

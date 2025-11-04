@@ -32,7 +32,6 @@ class SignUpUsecase(
                 email = signUpAdminRequest.email,
                 password = passwordEncoder.encode(signUpAdminRequest.password),
                 phone = signUpAdminRequest.phone,
-                helpSetting = company.helpSetting,
             ),
         )
     }

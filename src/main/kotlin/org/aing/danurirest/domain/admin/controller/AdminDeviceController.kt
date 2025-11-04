@@ -6,6 +6,9 @@ import org.aing.danurirest.domain.admin.dto.RegisterDeviceRequest
 import org.aing.danurirest.domain.admin.dto.SignInDeviceResponse
 import org.aing.danurirest.domain.admin.dto.UpdateDeviceRequest
 import org.aing.danurirest.domain.admin.usecase.*
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -44,8 +47,10 @@ class AdminDeviceController(
         }
 
     @GetMapping
-    fun getAllDevices(): ResponseEntity<List<DeviceResponse>> =
-        getAdminCompanyDevicesUsecase.execute().run {
+    fun getAllDevices(
+        @PageableDefault(size = 20) pageable: Pageable,
+    ): ResponseEntity<Page<DeviceResponse>> =
+        getAdminCompanyDevicesUsecase.execute(pageable).run {
             ResponseEntity.ok(this)
         }
 

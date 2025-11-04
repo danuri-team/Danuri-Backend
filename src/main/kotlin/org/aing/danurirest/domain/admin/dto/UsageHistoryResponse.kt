@@ -12,6 +12,7 @@ data class UsageHistoryResponse(
     val spaceName: String,
     val startAt: LocalDateTime,
     val endAt: LocalDateTime?,
+    val formResult: String,
     val rentalCount: Int,
 ) {
     companion object {
@@ -20,6 +21,7 @@ data class UsageHistoryResponse(
                 id = usageHistory.id!!,
                 userId = usageHistory.user.id!!,
                 userPhone = usageHistory.user.phone,
+                formResult = usageHistory.user.signUpForm?.result!!,
                 spaceId = usageHistory.space.id!!,
                 spaceName = usageHistory.space.name,
                 startAt = usageHistory.startAt,

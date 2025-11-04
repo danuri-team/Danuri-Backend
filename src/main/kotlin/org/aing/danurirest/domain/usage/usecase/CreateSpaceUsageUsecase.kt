@@ -36,10 +36,6 @@ class CreateSpaceUsageUsecase(
     private val s3Service: S3Service,
     private val shortUrlService: ShortUrlService,
 ) {
-    companion object {
-        private const val USAGE_DURATION_MINUTES = 30L
-    }
-
     private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
 
     @Transactional
@@ -52,7 +48,16 @@ class CreateSpaceUsageUsecase(
 
         val space = findSpaceById(spaceId)
         val startTime = LocalDateTime.of(LocalDate.now(), reserveTime)
-        val endTime = startTime.plusMinutes(USAGE_DURATION_MINUTES)
+        val endReserveTime =
+            reserveTime
+                .truncatedTo(ChronoUnit.HOURS)
+                .plusMinutes(if (reserveTime.minute < 30) 30 else 60)
+        val endTime =
+            if (endReserveTime.isBefore(reserveTime)) {
+                LocalDateTime.of(LocalDate.now().plusDays(1), endReserveTime)
+            } else {
+                LocalDateTime.of(LocalDate.now(), endReserveTime)
+            }
 
         checkUserCurrentUsage(userId)
 
