@@ -4,8 +4,6 @@ import jakarta.persistence.*
 import org.aing.danurirest.persistence.BaseEntity
 import org.aing.danurirest.persistence.admin.Status
 import org.aing.danurirest.persistence.company.entity.Company
-import org.aing.danurirest.persistence.help.entity.HelpHistory
-import org.aing.danurirest.persistence.help.entity.HelpSetting
 import org.aing.danurirest.persistence.user.Role
 import java.util.UUID
 
@@ -29,9 +27,4 @@ class Admin(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     val status: Status = Status.NEED_COMPANY_APPROVE,
-    @OneToMany(mappedBy = "checkedAdmin")
-    val checkedHelpHistories: List<HelpHistory> = emptyList(),
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "help_setting_id")
-    val helpSetting: HelpSetting,
 ) : BaseEntity()

@@ -58,10 +58,6 @@ enum class CustomErrorCode(
     NOT_FOUND_DEVICE(HttpStatus.NOT_FOUND, "기기를 찾을 수 없습니다."),
     DEVICE_ALREADY_REGISTERED(HttpStatus.CONFLICT, "이미 등록된 기기입니다."),
 
-    // Help
-    NOT_FOUND_HELP(HttpStatus.NOT_FOUND, "도움을 찾을 수 없습니다."),
-    HELP_NOT_ENABLED(HttpStatus.BAD_GATEWAY, "도움 기능이 활성화되어 있지 않습니다."),
-
     // Form
     FORM_IS_NOT_SETUP(HttpStatus.NOT_FOUND, "폼 설정이 되어 있지 않습니다."),
     FORM_IS_NOT_VALID(HttpStatus.INTERNAL_SERVER_ERROR, "폼이 올바르게 저장되지 않았어요. 문의를 통해 해결해주세요."),
