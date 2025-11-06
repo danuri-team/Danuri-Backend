@@ -5,6 +5,7 @@ import org.aing.danurirest.domain.admin.dto.SpaceRequest
 import org.aing.danurirest.domain.admin.dto.SpaceResponse
 import org.aing.danurirest.domain.admin.usecase.CreateSpaceUsecase
 import org.aing.danurirest.domain.admin.usecase.DeleteSpaceUsecase
+import org.aing.danurirest.domain.admin.usecase.ExportMonthlyUsageExcelUsecase
 import org.aing.danurirest.domain.admin.usecase.GetSpaceUsecase
 import org.aing.danurirest.domain.admin.usecase.GetSpacesUsecase
 import org.aing.danurirest.domain.admin.usecase.UpdateSpaceUsecase
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
@@ -30,6 +32,7 @@ class AdminSpaceController(
     private val deleteSpaceUsecase: DeleteSpaceUsecase,
     private val getSpaceUsecase: GetSpaceUsecase,
     private val getCompanySpacesUsecase: GetSpacesUsecase,
+    private val exportMonthlyUsageExcelUsecase: ExportMonthlyUsageExcelUsecase,
 ) {
     @PostMapping
     fun createSpace(
@@ -71,4 +74,19 @@ class AdminSpaceController(
         getCompanySpacesUsecase.execute(pageable).run {
             ResponseEntity.ok(this)
         }
+
+    @GetMapping("/{spaceId}/monthly-usage-excel")
+    fun exportMonthlyUsageExcel(
+        @PathVariable spaceId: UUID,
+        @RequestParam year: Int,
+        @RequestParam month: Int,
+    ): ResponseEntity<ByteArray> {
+        val excelBytes = exportMonthlyUsageExcelUsecase.execute(spaceId, year, month)
+
+        return ResponseEntity
+            .ok()
+            .header("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            .header("Content-Disposition", "attachment; filename=monthly_usage_${year}_$month.xlsx")
+            .body(excelBytes)
+    }
 }
