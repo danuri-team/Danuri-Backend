@@ -1,5 +1,6 @@
 package org.aing.danurirest.domain.usage.usecase
 
+import org.aing.danurirest.domain.usage.dto.CreateSpaceUsageRequest
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.global.third_party.notification.service.NotificationService
@@ -12,7 +13,9 @@ import org.aing.danurirest.global.util.GenerateQrCode
 import org.aing.danurirest.global.util.PrincipalUtil
 import org.aing.danurirest.persistence.space.entity.Space
 import org.aing.danurirest.persistence.space.repository.SpaceJpaRepository
+import org.aing.danurirest.persistence.usage.entity.AdditionalParticipant
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
+import org.aing.danurirest.persistence.usage.repository.AdditionalParticipantJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryJpaRepository
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
 import org.aing.danurirest.persistence.user.repository.UserJpaRepository
@@ -24,7 +27,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
-import java.util.*
+import java.util.UUID
 
 @Service
 class CreateSpaceUsageUsecase(
@@ -32,6 +35,7 @@ class CreateSpaceUsageUsecase(
     private val spaceJpaRepository: SpaceJpaRepository,
     private val userJpaRepository: UserJpaRepository,
     private val usageHistoryJpaRepository: UsageHistoryJpaRepository,
+    private val additionalParticipantJpaRepository: AdditionalParticipantJpaRepository,
     private val notificationService: NotificationService,
     private val s3Service: S3Service,
     private val shortUrlService: ShortUrlService,
@@ -39,21 +43,18 @@ class CreateSpaceUsageUsecase(
     private val log: Logger = LoggerFactory.getLogger(CreateSpaceUsageUsecase::class.java)
 
     @Transactional
-    fun execute(
-        spaceId: UUID,
-        reserveTime: LocalTime,
-    ) {
+    fun execute(request: CreateSpaceUsageRequest) {
         val context = PrincipalUtil.getContextDto()
         val userId = context.id ?: throw CustomException(CustomErrorCode.UNAUTHORIZED)
 
-        val space = findSpaceById(spaceId)
-        val startTime = LocalDateTime.of(LocalDate.now(), reserveTime)
+        val space = findSpaceById(request.spaceId)
+        val startTime = LocalDateTime.of(LocalDate.now(), request.startAt)
         val endReserveTime =
-            reserveTime
+            request.startAt
                 .truncatedTo(ChronoUnit.HOURS)
-                .plusMinutes(if (reserveTime.minute < 30) 30 else 60)
+                .plusMinutes(if (request.startAt.minute < 30) 30 else 60)
         val endTime =
-            if (endReserveTime.isBefore(reserveTime)) {
+            if (endReserveTime.isBefore(request.startAt)) {
                 LocalDateTime.of(LocalDate.now().plusDays(1), endReserveTime)
             } else {
                 LocalDateTime.of(LocalDate.now(), endReserveTime)
@@ -64,10 +65,10 @@ class CreateSpaceUsageUsecase(
         checkSpaceAvailableTime(space, startTime, endTime)
 
         if (!space.allowOverlap) {
-            checkSpaceCurrentUsage(spaceId, startTime, endTime)
+            checkSpaceCurrentUsage(request.spaceId, startTime, endTime)
         }
 
-        createSpaceUsage(space, userId, startTime, endTime)
+        createSpaceUsage(space, userId, startTime, endTime, request)
     }
 
     private fun findSpaceById(spaceId: UUID): Space =
@@ -132,6 +133,7 @@ class CreateSpaceUsageUsecase(
         userId: UUID,
         startTime: LocalDateTime,
         endTime: LocalDateTime,
+        request: CreateSpaceUsageRequest,
     ) {
         val user =
             userJpaRepository
@@ -151,6 +153,18 @@ class CreateSpaceUsageUsecase(
                     endAt = endTime,
                 ),
             )
+
+        request.additionalParticipants.forEach { dto ->
+            additionalParticipantJpaRepository.save(
+                AdditionalParticipant(
+                    usageHistory = usage,
+                    sex = dto.sex,
+                    ageGroup = dto.ageGroup,
+                    count = dto.count,
+                    maxCount = dto.count,
+                ),
+            )
+        }
 
         val qr = GenerateQrCode.execute("""{"usageId":"${usage.id}"}""")
 
