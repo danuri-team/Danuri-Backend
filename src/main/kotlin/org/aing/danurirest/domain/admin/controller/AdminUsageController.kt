@@ -1,6 +1,8 @@
 package org.aing.danurirest.domain.admin.controller
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import org.aing.danurirest.domain.admin.dto.UsageHistoryCreateRequest
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
@@ -10,11 +12,13 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
 @RestController
 @RequestMapping("/admin/usage")
+@Validated
 class AdminUsageController(
     private val createUsageHistoryUsecase: CreateUsageHistoryUsecase,
     private val getUsageHistoryUsecase: GetUsageHistoryUsecase,
@@ -73,8 +77,14 @@ class AdminUsageController(
     @GetMapping("/{spaceId}/monthly-usage-excel")
     fun exportMonthlyUsageExcel(
         @PathVariable spaceId: UUID,
-        @RequestParam year: Int,
-        @RequestParam month: Int,
+        @RequestParam
+        @Min(2000)
+        @Max(2100)
+        year: Int,
+        @RequestParam
+        @Min(1)
+        @Max(12)
+        month: Int,
     ): ResponseEntity<ByteArray> {
         val excelBytes = exportMonthlyUsageExcelUsecase.execute(spaceId, year, month)
 
