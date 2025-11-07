@@ -40,4 +40,21 @@ interface UsageHistoryJpaRepository : JpaRepository<UsageHistory, UUID> {
         startTime: LocalDateTime,
         endTime: LocalDateTime,
     ): List<UsageHistory>
+
+    @Query(
+        """
+            SELECT u FROM UsageHistory u
+            LEFT JOIN FETCH u.additionalParticipants
+            LEFT JOIN FETCH u.user usr
+            LEFT JOIN FETCH usr.signUpForm
+            WHERE u.space.id = :spaceId
+            AND u.startAt >= :startTime
+            AND u.startAt < :endTime
+        """,
+    )
+    fun findBySpaceAndMonth(
+        @Param("spaceId") spaceId: UUID,
+        @Param("startTime") startTime: LocalDateTime,
+        @Param("endTime") endTime: LocalDateTime,
+    ): List<UsageHistory>
 }
