@@ -161,7 +161,6 @@ class CreateSpaceUsageUsecase(
                     sex = dto.sex,
                     ageGroup = dto.ageGroup,
                     count = dto.count,
-                    maxCount = dto.count,
                 ),
             )
         }

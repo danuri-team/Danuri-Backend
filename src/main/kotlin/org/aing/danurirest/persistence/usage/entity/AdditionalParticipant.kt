@@ -30,6 +30,4 @@ class AdditionalParticipant(
     val ageGroup: Age,
     @Column(nullable = false)
     val count: Int,
-    @Column(name = "max_count", nullable = false)
-    val maxCount: Int,
 ) : BaseEntity()
