@@ -154,16 +154,16 @@ class CreateSpaceUsageUsecase(
                 ),
             )
 
-        request.additionalParticipants.forEach { dto ->
-            additionalParticipantJpaRepository.save(
+        val additionalParticipants =
+            request.additionalParticipants.map { dto ->
                 AdditionalParticipant(
                     usageHistory = usage,
                     sex = dto.sex,
                     ageGroup = dto.ageGroup,
                     count = dto.count,
-                ),
-            )
-        }
+                )
+            }
+        additionalParticipantJpaRepository.saveAll(additionalParticipants)
 
         val qr = GenerateQrCode.execute("""{"usageId":"${usage.id}"}""")
 
