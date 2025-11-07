@@ -9,7 +9,6 @@ import org.aing.danurirest.persistence.usage.dto.CurrentUsageHistoryDto
 import org.aing.danurirest.persistence.usage.dto.DetailRentedItemInfo
 import org.aing.danurirest.persistence.usage.dto.DetailUsageInfo
 import org.aing.danurirest.persistence.usage.dto.QCurrentUsageFlatDto
-import org.aing.danurirest.persistence.usage.entity.QAdditionalParticipant
 import org.aing.danurirest.persistence.usage.entity.QUsageHistory
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import org.aing.danurirest.persistence.usage.repository.UsageHistoryRepository
@@ -26,20 +25,6 @@ import java.util.UUID
 class UsageHistoryRepositoryImpl(
     private val queryFactory: JPAQueryFactory,
 ) : UsageHistoryRepository {
-    private fun eagerLoadAdditionalParticipants(usageHistories: List<UsageHistory>) {
-        if (usageHistories.isEmpty()) return
-
-        val usageIds = usageHistories.mapNotNull { it.id }
-        if (usageIds.isEmpty()) return
-
-        val qParticipant = QAdditionalParticipant.additionalParticipant
-
-        queryFactory
-            .selectFrom(qParticipant)
-            .where(qParticipant.usageHistory.id.`in`(usageIds))
-            .fetch()
-    }
-
     override fun findByIdAndCompanyId(
         usageId: UUID,
         companyId: UUID,
@@ -97,8 +82,6 @@ class UsageHistoryRepositoryImpl(
                 .limit(pageable.pageSize.toLong())
                 .fetch()
 
-        eagerLoadAdditionalParticipants(results)
-
         val total =
             queryFactory
                 .select(qUsage.count())
@@ -150,8 +133,6 @@ class UsageHistoryRepositoryImpl(
                 .limit(pageable.pageSize.toLong())
                 .fetch()
 
-        eagerLoadAdditionalParticipants(results)
-
         val total =
             queryFactory
                 .select(qUsage.count())
@@ -202,8 +183,6 @@ class UsageHistoryRepositoryImpl(
                 .offset(pageable.offset)
                 .limit(pageable.pageSize.toLong())
                 .fetch()
-
-        eagerLoadAdditionalParticipants(results)
 
         val total =
             queryFactory
