@@ -48,6 +48,12 @@ class KakaoNotificationService(
             variables = params.toMap() as HashMap<String, String>
         }
 
+        kakaoOption.variables?.let { vars ->
+            vars["#{링크}"]?.let { link ->
+                vars["#{링크}"] = link.replace("https://", "")
+            }
+        }
+
         val message =
             Message(
                 from = solFrom,
