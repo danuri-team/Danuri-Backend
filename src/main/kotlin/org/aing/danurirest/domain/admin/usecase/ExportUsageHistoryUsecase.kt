@@ -2,7 +2,7 @@ package org.aing.danurirest.domain.admin.usecase
 
 import org.aing.danurirest.domain.admin.dto.UsageHistoryResponse
 import org.aing.danurirest.domain.admin.dto.UsageHistorySearchRequest
-import org.aing.danurirest.domain.admin.service.ExcelService
+import org.aing.danurirest.domain.admin.service.excel.ExcelService
 import org.aing.danurirest.domain.auth.admin.usecase.GetAdminCompanyIdUsecase
 import org.aing.danurirest.global.exception.CustomException
 import org.aing.danurirest.global.exception.enums.CustomErrorCode

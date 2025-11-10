@@ -82,6 +82,21 @@ short-url:
   name: short-url-feign-client
   maker-url: ${SHORT_URL_MAKER_URL}
 
+excel:
+  template:
+    path: template/space_usage_history.xlsx
+  data:
+    start-row: 4
+    summary-row-offset: 1
+  style:
+    font-name: 맑은 고딕
+    font-size: 10
+  format:
+    date-time: yyyy-MM-dd HH:mm:ss
+  form:
+    age-field: 나이
+    sex-field: 성별
+
 ---
 spring:
   config:

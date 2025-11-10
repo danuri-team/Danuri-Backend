@@ -9,6 +9,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import org.hibernate.annotations.BatchSize
 import org.aing.danurirest.persistence.BaseEntity
 import org.aing.danurirest.persistence.rental.entity.Rental
 import org.aing.danurirest.persistence.space.entity.Space
@@ -29,6 +30,9 @@ class UsageHistory(
     val space: Space,
     @OneToMany(mappedBy = "usage", cascade = [CascadeType.ALL])
     val rental: List<Rental> = emptyList(),
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "usageHistory", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val additionalParticipants: List<AdditionalParticipant> = emptyList(),
     @Column(name = "start_at", nullable = false)
     val startAt: LocalDateTime,
     @Column(name = "end_at", nullable = false)
