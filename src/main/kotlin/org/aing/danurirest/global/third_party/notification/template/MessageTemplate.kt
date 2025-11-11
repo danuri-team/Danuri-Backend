@@ -10,7 +10,7 @@ enum class MessageTemplate(
     ),
 
     SPACE_REGISTRATION(
-        templateId = "KA01TP250717034426750fYNSMbPdfdc",
+        templateId = "KA01TP251110113312244j0OsqUaLY4z",
         template =
             """
             [#{기관명}] 공간 이용 등록

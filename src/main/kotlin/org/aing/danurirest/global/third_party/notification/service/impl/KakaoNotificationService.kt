@@ -50,7 +50,7 @@ class KakaoNotificationService(
 
         kakaoOption.variables?.let { vars ->
             vars["#{링크}"]?.let { link ->
-                vars["#{링크}"] = link.replace("https://", "")
+                vars["#{링크}"] = link.removePrefix("https://")
             }
         }
 
