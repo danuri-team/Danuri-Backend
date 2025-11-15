@@ -7,8 +7,12 @@ import org.aing.danurirest.global.exception.enums.CustomErrorCode
 import org.aing.danurirest.persistence.form.entity.Form
 import org.aing.danurirest.persistence.space.entity.Space
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
+import org.aing.danurirest.persistence.user.Age
+import org.aing.danurirest.persistence.user.Sex
+import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -127,7 +131,7 @@ class ExcelService(
     private fun writeUsageHistoryHeader(
         sheet: Sheet,
         formLabels: List<String>,
-        headerStyle: org.apache.poi.ss.usermodel.CellStyle,
+        headerStyle: CellStyle,
     ) {
         val headerRow = sheet.createRow(0)
         val baseHeaders = listOf("공간 이름", "시작 시간", "종료 시간", "대여 항목 수", "연락처")
@@ -200,9 +204,9 @@ class ExcelService(
     private fun writeDailyStatisticsData(
         sheet: Sheet,
         yearMonth: YearMonth,
-        dailyStats: Map<Int, Map<org.aing.danurirest.persistence.user.Age, Map<org.aing.danurirest.persistence.user.Sex, Int>>>,
-        redFontStyle: org.apache.poi.ss.usermodel.CellStyle,
-        blueFontStyle: org.apache.poi.ss.usermodel.CellStyle,
+        dailyStats: Map<Int, Map<Age, Map<Sex, Int>>>,
+        redFontStyle: CellStyle,
+        blueFontStyle: CellStyle,
     ) {
         val daysInMonth = yearMonth.lengthOfMonth()
         val year = yearMonth.year
@@ -280,7 +284,7 @@ class ExcelService(
         }
     }
 
-    private fun convertWorkbookToByteArray(workbook: org.apache.poi.xssf.usermodel.XSSFWorkbook): ByteArray =
+    private fun convertWorkbookToByteArray(workbook: XSSFWorkbook): ByteArray =
         workbook.use { wb ->
             ByteArrayOutputStream().use { outputStream ->
                 wb.write(outputStream)
