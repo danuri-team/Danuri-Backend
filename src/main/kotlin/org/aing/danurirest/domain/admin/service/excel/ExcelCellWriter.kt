@@ -107,6 +107,10 @@ class ExcelCellWriter(
 
             dayTotal += male + female
             colIndex += 2
+
+            if (age == Age.OUT_OF_SCHOOL_YOUTH) {
+                colIndex += 2
+            }
         }
 
         if (dayTotal > 0) {
