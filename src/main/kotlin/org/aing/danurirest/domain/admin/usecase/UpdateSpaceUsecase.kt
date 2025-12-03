@@ -29,6 +29,9 @@ class UpdateSpaceUsecase(
         space.name = request.name
         space.endAt = request.endAt
 
+        request.allowOverlap?.let { space.allowOverlap = it }
+        request.allowMultiSpaceBooking?.let { space.allowMultiSpaceBooking = it }
+
         spaceJpaRepository.save(space)
     }
 }
