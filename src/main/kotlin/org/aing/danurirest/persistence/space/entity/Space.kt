@@ -20,7 +20,9 @@ class Space(
     @Column(nullable = false, length = 50)
     var name: String,
     @Column(nullable = false)
-    val allowOverlap: Boolean = false,
+    var allowOverlap: Boolean = false,
+    @Column(nullable = false)
+    var allowMultiSpaceBooking: Boolean = false,
     @Column(nullable = false)
     var startAt: LocalTime,
     @Column(nullable = false)
