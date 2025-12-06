@@ -7,7 +7,7 @@ import org.aing.danurirest.persistence.form.entity.FormResult
 import org.aing.danurirest.persistence.usage.entity.UsageHistory
 import java.util.UUID
 
-@Entity
+@Entity(name = "users")
 class User(
     @Id
     @GeneratedValue
