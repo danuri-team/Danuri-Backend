@@ -1,54 +1,54 @@
-ALTER TABLE danuri_prod.user
+ALTER TABLE user
     DROP FOREIGN KEY FK2yuxsfrkkrnkn5emoobcnnc3r;
 
-ALTER TABLE danuri_prod.usage_history
+ALTER TABLE usage_history
     DROP FOREIGN KEY FK9cxquw9seccmm2q6mxf1vqhc7;
 
-ALTER TABLE danuri_prod.form_result
+ALTER TABLE form_result
     DROP FOREIGN KEY FKfnsvjxihpgpncxskfcisqk61i;
 
-ALTER TABLE danuri_prod.space
+ALTER TABLE space
     ADD allow_multi_space_booking BIT(1) NULL DEFAULT 0;
 
-ALTER TABLE danuri_prod.space
+ALTER TABLE space
     MODIFY allow_multi_space_booking BIT(1) NOT NULL DEFAULT 0;
 
 RENAME TABLE "USER" TO users;
 
-DROP TABLE danuri_prod.user;
+DROP TABLE user;
 
-ALTER TABLE danuri_prod.`admin`
+ALTER TABLE `admin`
     DROP COLUMN help_setting_id;
 
-ALTER TABLE danuri_prod.`admin`
+ALTER TABLE `admin`
     DROP COLUMN `role`;
 
-ALTER TABLE danuri_prod.`admin`
+ALTER TABLE `admin`
     DROP COLUMN status;
 
-ALTER TABLE danuri_prod.space
+ALTER TABLE space
     MODIFY allow_overlap BIT(1) NOT NULL;
 
-ALTER TABLE danuri_prod.`admin`
+ALTER TABLE `admin`
     ADD `role` VARCHAR(255) NOT NULL;
 
-ALTER TABLE danuri_prod.device
+ALTER TABLE device
     DROP COLUMN `role`;
 
-ALTER TABLE danuri_prod.device
+ALTER TABLE device
     ADD `role` VARCHAR(255) NOT NULL;
 
-ALTER TABLE danuri_prod.`admin`
+ALTER TABLE `admin`
     ADD status VARCHAR(255) NOT NULL;
 
-ALTER TABLE danuri_prod.item
+ALTER TABLE item
     DROP COLUMN status;
 
-ALTER TABLE danuri_prod.item
+ALTER TABLE item
     ADD status VARCHAR(255) NOT NULL;
 
-ALTER TABLE danuri_prod.rental
+ALTER TABLE rental
     DROP COLUMN status;
 
-ALTER TABLE danuri_prod.rental
+ALTER TABLE rental
     ADD status VARCHAR(255) NOT NULL;
