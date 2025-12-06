@@ -8,10 +8,10 @@ ALTER TABLE danuri_prod.form_result
     DROP FOREIGN KEY FKfnsvjxihpgpncxskfcisqk61i;
 
 ALTER TABLE danuri_prod.space
-    ADD allow_multi_space_booking BIT(1) NULL;
+    ADD allow_multi_space_booking BIT(1) NULL DEFAULT 0;
 
 ALTER TABLE danuri_prod.space
-    MODIFY allow_multi_space_booking BIT(1) NOT NULL;
+    MODIFY allow_multi_space_booking BIT(1) NOT NULL DEFAULT 0;
 
 RENAME TABLE "USER" TO users;
 
