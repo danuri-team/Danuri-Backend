@@ -30,6 +30,8 @@ class CreateSpaceUsecase(
                 name = request.name,
                 startAt = request.startAt,
                 endAt = request.endAt,
+                allowOverlap = request.allowOverlap ?: false,
+                allowMultiSpaceBooking = request.allowMultiSpaceBooking ?: false,
             )
 
         return SpaceResponse.from(spaceJpaRepository.save(space))
