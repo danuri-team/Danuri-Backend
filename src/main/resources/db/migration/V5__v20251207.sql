@@ -15,40 +15,23 @@ ALTER TABLE space
 
 RENAME TABLE "USER" TO users;
 
-DROP TABLE user;
-
 ALTER TABLE `admin`
     DROP COLUMN help_setting_id;
 
-ALTER TABLE `admin`
-    DROP COLUMN `role`;
+ALTER TABLE admin
+    MODIFY role VARCHAR(255) NOT NULL;
 
-ALTER TABLE `admin`
-    DROP COLUMN status;
+ALTER TABLE admin
+    MODIFY status VARCHAR(255) NOT NULL;
 
 ALTER TABLE space
     MODIFY allow_overlap BIT(1) NOT NULL;
 
-ALTER TABLE `admin`
-    ADD `role` VARCHAR(255) NOT NULL;
-
 ALTER TABLE device
-    DROP COLUMN `role`;
-
-ALTER TABLE device
-    ADD `role` VARCHAR(255) NOT NULL;
-
-ALTER TABLE `admin`
-    ADD status VARCHAR(255) NOT NULL;
+    MODIFY role VARCHAR(255) NOT NULL;
 
 ALTER TABLE item
-    DROP COLUMN status;
-
-ALTER TABLE item
-    ADD status VARCHAR(255) NOT NULL;
+    MODIFY status VARCHAR(255) NOT NULL;
 
 ALTER TABLE rental
-    DROP COLUMN status;
-
-ALTER TABLE rental
-    ADD status VARCHAR(255) NOT NULL;
+    MODIFY status VARCHAR(255) NOT NULL;
