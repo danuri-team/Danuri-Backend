@@ -13,4 +13,6 @@ data class SpaceRequest(
     val startAt: LocalTime,
     @field:NotNull(message = "종료 시간은 필수 입력값입니다.")
     val endAt: LocalTime,
+    val allowOverlap: Boolean?,
+    val allowMultiSpaceBooking: Boolean?,
 )

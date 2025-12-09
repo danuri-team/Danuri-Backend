@@ -10,6 +10,8 @@ data class SpaceResponse(
     val startAt: LocalTime,
     val endAt: LocalTime,
     val usageCount: Int,
+    val allowOverlap: Boolean,
+    val allowMultiSpaceBooking: Boolean,
 ) {
     companion object {
         fun from(entity: Space): SpaceResponse =
@@ -19,6 +21,8 @@ data class SpaceResponse(
                 startAt = entity.startAt,
                 endAt = entity.endAt,
                 usageCount = entity.usage.size,
+                allowOverlap = entity.allowOverlap,
+                allowMultiSpaceBooking = entity.allowMultiSpaceBooking,
             )
     }
 }

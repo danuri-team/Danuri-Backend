@@ -54,7 +54,9 @@ class CreateSpaceUsageUsecase(
                 LocalDateTime.of(LocalDate.now(), endReserveTime)
             }
 
-        checkUserCurrentUsage(userId)
+        if (!space.allowMultiSpaceBooking) {
+            checkUserCurrentUsage(userId)
+        }
 
         checkSpaceAvailableTime(space, startTime, endTime)
 

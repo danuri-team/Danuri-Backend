@@ -85,7 +85,7 @@ jobs:
 
       - name: Update Kubernetes resources
         run: |
-          cd danuri-devops/overlays/production/
+          cd danuri-devops/danuri-backend/overlays/production/
           kustomize edit set image ${{ env.IMAGE_NAME }}:${{ steps.image.outputs.version }}
           cat kustomization.yaml
 
