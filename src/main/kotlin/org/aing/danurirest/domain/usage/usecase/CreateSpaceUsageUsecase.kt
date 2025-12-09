@@ -79,7 +79,13 @@ class CreateSpaceUsageUsecase(
             )
 
         if (userCurrentUsages.isUsingSpace) {
-            throw CustomException(CustomErrorCode.USAGE_CONFLICT_USER)
+            val spaceId = userCurrentUsages.spaceUsageInfo?.spaceId
+            if (spaceId != null) {
+                val space = spaceJpaRepository.findById(spaceId).orElse(null)
+                if (space != null && !space.allowMultiSpaceBooking) {
+                    throw CustomException(CustomErrorCode.USAGE_CONFLICT_USER)
+                }
+            }
         }
     }
 
